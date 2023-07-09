@@ -2,7 +2,7 @@
   <h1 align="center">
     <img src="https://github.com/nishantarora23/Innovators-Soen6011summer2023/assets/42149632/a69d81a1-b247-43ec-a578-bc63f88bb742" alt="CareerConnect Logo" width="350px">
   </h1>
-</p><br>
+</p>
 
 ## Project Description
 ### Overview
@@ -21,6 +21,49 @@ CareerConnect is a comprehensive web-based career services platform which is aim
 - Development team with expertise in web application development, user experience design, and database management.
 - Tools and technologies to create the platform.
 - Servers and infrastructure to host the platform.
+
+## Core Features of CareerConnect
+<table>
+  <tr>
+    <th>S.No.</th>
+    <th>Core Feature (Epic)</th>
+    <th>Issue ID</th>
+    <th>Description</th>
+	<th>Priority</th>
+  </tr>
+  <tr>
+    <td>1.</td>
+    <td>Authentication and Registration</td>
+    <td><a href="https://github.com/nishantarora23/Innovators-Soen6011summer2023/issues/7">#7</a></td>
+    <td>This core feature aims to implement a comprehensive authentication and registration system for CareerConnect web application, allowing employers, students, and admins to securely access and manage their accounts.</td>
+	<td>Highest</td>
+  </tr>
+  <tr>
+    <td>2.</td>
+    <td>User Profile and custom dashboard</td>
+    <td><a href="https://github.com/nishantarora23/Innovators-Soen6011summer2023/issues/8">#8</a></td>
+    <td>This core feature aims to develop a user profile and custom dashboard functionality within our CareerConnect web application to enhance the user experience and provide tailored features for employers, students, and admins.</td>
+	<td>Highest</td>
+  </tr>
+  <tr>
+    <td>3.</td>
+    <td>Browsing and Tracking Application by Employee/Student/Admin</td>
+    <td><a href="https://github.com/nishantarora23/Innovators-Soen6011summer2023/issues/9">#9</a></td>
+    <td>This core feature focuses on enhancing the browsing and tracking capabilities within our CareerConnect web application for employees, students, and admins. It aims to provide efficient and user-friendly features for browsing candidates, job offers, and tracking job postings and applications.</td>
+	<td>Highest</td>
+  </tr>
+  <tr>
+    <td>4.</td>
+    <td>Resume creation and management</td>
+    <td><a href="https://github.com/nishantarora23/Innovators-Soen6011summer2023/issues/10">#10</a></td>
+    <td>This core feature focuses on developing resume creation and management capabilities within our CareerConnect web application. It aims to provide candidates with the ability to build, update, delete, and upload their resumes for job applications.</td>
+	<td>Highest</td>
+  </tr>
+</table>
+<p align="center">
+    <i> Table. 1 Core Features of CareerConnect </i>
+    <br/>
+  </p>
 
 ### Team Members and Roles
 <table>
@@ -95,6 +138,7 @@ CareerConnect will leverage a combination of modern technologies to ensure effic
     <br/>
   </p>
 
+#### Languages and Techniques
 - **Front-End Development: React**
 <br>The user interface of the application will be developed using the React JavaScript library. React provides a component-based architecture that enables modular and reusable code, resulting in a more efficient development process. Its virtual DOM rendering and state management capabilities enhance the performance and responsiveness of the application, ensuring a smooth user experience.
 
@@ -154,6 +198,6 @@ CareerConnect will leverage a combination of modern technologies to ensure effic
   </tr>
 </table>
 <p align="center">
-    <i> Table. 2 Utilization of Tools to build CareerConnect</i>
+    <i> Table. 3 Utilization of Tools to build CareerConnect</i>
     <br/>
   </p>
