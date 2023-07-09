@@ -22,6 +22,45 @@ CareerConnect is a comprehensive web-based career services platform which is aim
 - Tools and technologies to create the platform.
 - Servers and infrastructure to host the platform.
 
+## Core Features of CareerConnect
+<table>
+  <tr>
+    <th>S.No.</th>
+    <th>Core Feature (Epic)</th>
+    <th>Issue ID</th>
+    <th>Description</th>
+	<th>Priority</th>
+  </tr>
+  <tr>
+    <td>1.</td>
+    <td>Authentication and Registration</td>
+    <td><a href="https://github.com/nishantarora23/Innovators-Soen6011summer2023/issues/7">#7</a></td>
+    <td>This core feature aims to implement a comprehensive authentication and registration system for CareerConnect web application, allowing employers, students, and admins to securely access and manage their accounts.</td>
+	<td>Highest</td>
+  </tr>
+  <tr>
+    <td>2.</td>
+    <td>User Profile and custom dashboard</td>
+    <td><a href="https://github.com/nishantarora23/Innovators-Soen6011summer2023/issues/8">#8</a></td>
+    <td>This core feature aims to develop a user profile and custom dashboard functionality within our CareerConnect web application to enhance the user experience and provide tailored features for employers, students, and admins.</td>
+	<td>Highest</td>
+  </tr>
+  <tr>
+    <td>3.</td>
+    <td>Browsing and Tracking Application by Employee/Student/Admin</td>
+    <td><a href="https://github.com/nishantarora23/Innovators-Soen6011summer2023/issues/9">#9</a></td>
+    <td>This core feature focuses on enhancing the browsing and tracking capabilities within our CareerConnect web application for employees, students, and admins. It aims to provide efficient and user-friendly features for browsing candidates, job offers, and tracking job postings and applications.</td>
+	<td>Highest</td>
+  </tr>
+  <tr>
+    <td>4.</td>
+    <td>Resume creation and management</td>
+    <td><a href="https://github.com/nishantarora23/Innovators-Soen6011summer2023/issues/10">#10</a></td>
+    <td>This core feature focuses on developing resume creation and management capabilities within our CareerConnect web application. It aims to provide candidates with the ability to build, update, delete, and upload their resumes for job applications.</td>
+	<td>Highest</td>
+  </tr>
+</table>
+
 ## Team Members and Roles
 
 ## Project Approach and Technology
