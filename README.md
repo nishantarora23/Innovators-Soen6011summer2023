@@ -1,9 +1,8 @@
 <p align="center">
   <h1 align="center">
-    <img src="https://github.com/nishantarora23/sample/assets/42149632/952dc1e4-e383-4b64-b701-51952cf52b6d" alt="CareerConnect Logo" width="350px">
+    <img src="https://github.com/nishantarora23/Innovators-Soen6011summer2023/assets/42149632/a69d81a1-b247-43ec-a578-bc63f88bb742" alt="CareerConnect Logo" width="350px">
   </h1>
 </p><br>
-
 
 ## Project Description
 ### Overview
@@ -42,7 +41,7 @@ We will follow an Agile development approach to allow for flexibility and adapta
 ### Technology
 CareerConnect will leverage a combination of modern technologies to ensure efficient development, seamless integration, and effective project management. The following technologies have been chosen based on their compatibility, industry standards, and proven track record:
 
-![Technology stack and Architectural Diagram](https://github.com/nishantarora23/sample/assets/42149632/977ed92d-e21b-4b71-88c9-c0e495ca9006)
+![Technology stack and Architectural Diagram](https://github.com/nishantarora23/Innovators-Soen6011summer2023/assets/42149632/e345c0a4-ff72-4213-986c-1d33ea820f84)
  <p align="center">
     <i> Fig. 1 Technology Stack and Architecture Diagram</i>
     <br/>
