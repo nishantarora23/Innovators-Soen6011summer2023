@@ -67,6 +67,10 @@ CareerConnect is a comprehensive web-based career services platform which is aim
     <td>nishantarora23</td>
   </tr>
 </table>
+<p align="center">
+    <i> Table. 1 Team Details for CareerConnect </i>
+    <br/>
+  </p>
 
 ## Project Approach and Technology
 ### Project Approach
