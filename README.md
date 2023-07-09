@@ -2,7 +2,7 @@
   <h1 align="center">
     <img src="https://github.com/nishantarora23/Innovators-Soen6011summer2023/assets/42149632/a69d81a1-b247-43ec-a578-bc63f88bb742" alt="CareerConnect Logo" width="350px">
   </h1>
-</p><br>
+</p>
 
 ## Project Description
 ### Overview
@@ -60,6 +60,10 @@ CareerConnect is a comprehensive web-based career services platform which is aim
 	<td>Highest</td>
   </tr>
 </table>
+<p align="center">
+    <i> Table. 1 Core Features of CareerConnect </i>
+    <br/>
+  </p>
 
 ## Team Members and Roles
 
@@ -86,6 +90,7 @@ CareerConnect will leverage a combination of modern technologies to ensure effic
     <br/>
   </p>
 
+#### Languages and Techniques
 - **Front-End Development: React**
 <br>The user interface of the application will be developed using the React JavaScript library. React provides a component-based architecture that enables modular and reusable code, resulting in a more efficient development process. Its virtual DOM rendering and state management capabilities enhance the performance and responsiveness of the application, ensuring a smooth user experience.
 
@@ -145,6 +150,6 @@ CareerConnect will leverage a combination of modern technologies to ensure effic
   </tr>
 </table>
 <p align="center">
-    <i> Table. 2 Utilization of Tools to build CareerConnect</i>
+    <i> Table. 3 Utilization of Tools to build CareerConnect</i>
     <br/>
   </p>
