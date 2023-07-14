@@ -1,0 +1,29 @@
+@import '../../variables.scss';
+
+.footer-container {
+  height: 170px;
+
+  .footer-section-container {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    border-right: 1px solid $grey-02;
+    padding: $spacing-03;
+
+    .footer-title-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: $spacing-03;
+    
+      svg {
+        margin-right: $spacing-02;
+      }
+
+      .footer-title {
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
