@@ -5,7 +5,10 @@ import Models.User;
 import java.sql.*;
 ;
 import java.text.ParseException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class UserDAO {
 
@@ -14,6 +17,7 @@ public class UserDAO {
     static String uname = "root";
     static String pass = "password";
 
+    private static String GET_USER_QUERY = "SELECT * FROM users WHERE username = ? AND password = ?";
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -102,5 +106,46 @@ public class UserDAO {
         }
 
         return userList;
+    }
+
+    public static User getUser(String username, String password){
+        User user = null;
+        try (Connection connection = DriverManager.getConnection(url, uname, pass)) {
+            PreparedStatement statement = connection.prepareStatement(GET_USER_QUERY);
+            statement.setString(1, username);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String retrievedUsername = resultSet.getString("USERNAME");
+                String retrievedPassword = resultSet.getString("PASSWORD");
+                String retrievedFullName = resultSet.getString("FULLNAME");
+                String retrievedUserRole = resultSet.getString("USER_ROLE");
+                String retrievedRoleId = resultSet.getString("ROLE_ID");
+                String retrievedEmail = resultSet.getString("EMAIL");
+                String retrievedAddress = resultSet.getString("ADDRESS");
+                Date retrievedDOB = getConvertedDate(resultSet.getString("DOB"));
+                String retrievedCompanyName = resultSet.getString("COMPANY_NAME");
+                String retrievedCollegeName = resultSet.getString("COLLEGE_NAME");
+                user = new User(retrievedFullName, retrievedUsername, retrievedPassword, retrievedUserRole, retrievedEmail, retrievedAddress, retrievedDOB, retrievedCompanyName);
+                if(retrievedUserRole.equals("Student")){
+                    user.setCollegeName(retrievedCollegeName);
+                }
+                user.setRoleId(retrievedRoleId);
+            }
+
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
+    private static Date getConvertedDate(String dateString) throws ParseException {
+        String pattern = "yyyy-MM-dd";
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        Date date = dateFormat.parse(dateString);
+        return date;
     }
 }
