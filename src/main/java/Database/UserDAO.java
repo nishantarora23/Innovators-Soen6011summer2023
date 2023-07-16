@@ -22,8 +22,8 @@ public class UserDAO {
         }
     }
     public UserDAO() {
-        String query1 = "CREATE DATABASE soen6011";
-        String query ="CREATE TABLE soen6011.users (\n" +
+        String query1 = "CREATE DATABASE IF NOT EXISTS soen6011";
+        String query ="CREATE TABLE IF NOT EXISTS soen6011.users (\n" +
                 "  ID int NOT NULL AUTO_INCREMENT,\n" +
                 "  FULLNAME varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
                 "  USERNAME varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
