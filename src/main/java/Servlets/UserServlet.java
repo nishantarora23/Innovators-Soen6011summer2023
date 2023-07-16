@@ -12,9 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 @WebServlet("/users")
 public class UserServlet extends HttpServlet {
+    static UserDAO userDAO = new UserDAO();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         StringBuilder payload = new StringBuilder();
         BufferedReader reader = request.getReader();
@@ -23,7 +25,6 @@ public class UserServlet extends HttpServlet {
         while ((line = reader.readLine()) != null) {
             payload.append(line);
         }
-
         String payloadData = payload.toString();
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setDateFormat("yyyy-MM-dd"); // Set your desired date format pattern
@@ -42,9 +43,15 @@ public class UserServlet extends HttpServlet {
             }
         }
        try {
-            UserDAO.addUser(user);
+            userDAO.addUser(user);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        try {
+            ArrayList<User> users = userDAO.getAllUser();
+            System.out.println(users.get(0).getFullName());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         response.setStatus(HttpServletResponse.SC_OK);
     }
