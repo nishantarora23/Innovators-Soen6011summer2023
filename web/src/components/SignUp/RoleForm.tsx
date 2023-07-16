@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { injectIntl } from 'react-intl';
-import { Button, Grid, Typography } from '@mui/material';
-import { Business, Person } from '@mui/icons-material';
-import { User, RoleType } from '../../types';
-import './SignUp.scss';
-import './RoleForm.scss';
+import { useEffect, useState } from "react";
+import { injectIntl } from "react-intl";
+import { Button, Grid, Typography } from "@mui/material";
+import { Business, Person } from "@mui/icons-material";
+import { User, RoleType } from "../../types";
+import "./SignUp.scss";
+import "./RoleForm.scss";
 
 type Props = {
   intl: any;
@@ -16,22 +16,23 @@ type Props = {
 
 const RoleForm = ({ page, setPage, formData, setFormData, intl }: Props) => {
   const [userRole, setUserRole] = useState(
-    formData['userRole'] ? formData['userRole'] : RoleType.STUDENT
+    formData["userRole"] ? formData["userRole"] : RoleType.STUDENT
   );
 
   useEffect(() => {
     setFormData({
       //reset form data
       ...{
-        fullName: '',
-        email: '',
-        password: '',
+        fullName: "",
+        email: "",
+        password: "",
         userRole: RoleType.STUDENT,
-        dob: new Date().toISOString().split('T')[0],
-        cName: '',
-        username: ''
+        dob: new Date().toISOString().split("T")[0],
+        cName: "",
+        username: "",
+        collegeName: "",
       },
-      userRole: userRole
+      userRole: userRole,
     });
   }, [setFormData, userRole]);
 
@@ -39,33 +40,41 @@ const RoleForm = ({ page, setPage, formData, setFormData, intl }: Props) => {
     <Grid className="form-card">
       <Typography variant="h1">
         {intl.formatMessage({
-          id: 'roleForm.title'
+          id: "roleForm.title",
         })}
       </Typography>
       <Typography variant="h2">
         {intl.formatMessage({
-          id: 'roleForm.label'
+          id: "roleForm.label",
         })}
       </Typography>
       <Grid container justifyContent="space-around">
         <Grid
           item
           xs={3}
-          className={`role-card-container ${userRole === RoleType.STUDENT ? 'selected' : ''}`}
+          className={`role-card-container ${
+            userRole === RoleType.STUDENT ? "selected" : ""
+          }`}
         >
           <Button size="large" onClick={() => setUserRole(RoleType.STUDENT)}>
             <Person />
-            <Typography>{intl.formatMessage({ id: 'role.student' })}</Typography>
+            <Typography>
+              {intl.formatMessage({ id: "role.student" })}
+            </Typography>
           </Button>
         </Grid>
         <Grid
           item
           xs={3}
-          className={`role-card-container ${userRole === RoleType.EMPLOYER ? 'selected' : ''}`}
+          className={`role-card-container ${
+            userRole === RoleType.EMPLOYER ? "selected" : ""
+          }`}
         >
           <Button size="large" onClick={() => setUserRole(RoleType.EMPLOYER)}>
             <Business />
-            <Typography>{intl.formatMessage({ id: 'role.employer' })}</Typography>
+            <Typography>
+              {intl.formatMessage({ id: "role.employer" })}
+            </Typography>
           </Button>
         </Grid>
       </Grid>
@@ -77,7 +86,7 @@ const RoleForm = ({ page, setPage, formData, setFormData, intl }: Props) => {
           }}
         >
           {intl.formatMessage({
-            id: 'userForm.button.next'
+            id: "userForm.button.next",
           })}
         </Button>
       </Grid>

@@ -18,6 +18,7 @@
   "userForm.form.label.dob": "Date of Birth*",
   "userForm.form.label.cName": "Company Name*",
   "userForm.form.label.cEmail": "Company Email*",
+  "userForm.form.label.collegeName":"College/University Name*",
   "userForm.form.error.address.required": "Address is required",
   "userForm.form.error.fullName.required": "Name is required",
   "userForm.form.error.username.required": "Username is required",

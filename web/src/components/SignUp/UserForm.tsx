@@ -1,9 +1,9 @@
-import React from 'react';
-import { injectIntl } from 'react-intl';
-import { Button, Grid, TextField, Typography } from '@mui/material';
-import { Controller, useForm } from 'react-hook-form';
-import { RoleType, User } from '../../types';
-import './SignUp.scss';
+import React from "react";
+import { injectIntl } from "react-intl";
+import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Controller, useForm } from "react-hook-form";
+import { RoleType, User } from "../../types";
+import "./SignUp.scss";
 
 type Props = {
   intl: any;
@@ -15,7 +15,7 @@ type Props = {
 
 const RoleForm = ({ page, setPage, formData, setFormData, intl }: Props) => {
   const { control, handleSubmit, getValues } = useForm({
-    reValidateMode: 'onBlur'
+    reValidateMode: "onBlur",
   });
 
   const onSubmit = (data: any) => {
@@ -25,47 +25,60 @@ const RoleForm = ({ page, setPage, formData, setFormData, intl }: Props) => {
 
   const USER_FIELDS = [
     {
-      id: 'username',
-      type: 'text',
-      rules: { required: true }
+      id: "username",
+      type: "text",
+      rules: { required: true },
     },
     {
-      id: 'fullName',
-      type: 'text',
-      rules: { required: true }
+      id: "fullName",
+      type: "text",
+      rules: { required: true },
     },
     {
-      id: 'email',
-      type: 'email',
-      rules: { required: true, pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/ }
+      id: "email",
+      type: "email",
+      rules: {
+        required: true,
+        pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+      },
     },
     {
-      id: 'address',
-      type: 'text',
-      rules: { required: true }
+      id: "address",
+      type: "text",
+      rules: { required: true },
     },
     {
-      id: 'password',
-      type: 'password',
-      rules: { required: true }
+      id: "password",
+      type: "password",
+      rules: { required: true },
     },
     {
-      id: 'confirmPassword',
-      type: 'password',
-      rules: { required: true, validate: (value: string) => getValues('password') === value }
+      id: "confirmPassword",
+      type: "password",
+      rules: {
+        required: true,
+        validate: (value: string) => getValues("password") === value,
+      },
     },
     {
-      id: 'dob',
-      type: 'date',
-      rules: { required: true }
-    }
+      id: "dob",
+      type: "date",
+      rules: { required: true },
+    },
   ];
 
-  if (formData['userRole'] === RoleType.EMPLOYER) {
+  if (formData["userRole"] === RoleType.EMPLOYER) {
     USER_FIELDS.push({
-      id: 'cName',
-      type: 'text',
-      rules: { required: true }
+      id: "cName",
+      type: "text",
+      rules: { required: true },
+    });
+  }
+  if (formData["userRole"] === RoleType.STUDENT) {
+    USER_FIELDS.push({
+      id: "collegeName",
+      type: "text",
+      rules: { required: true },
     });
   }
 
@@ -74,12 +87,12 @@ const RoleForm = ({ page, setPage, formData, setFormData, intl }: Props) => {
       <Grid container className="form-card">
         <Typography variant="h1">
           {intl.formatMessage({
-            id: 'userForm.title'
+            id: "userForm.title",
           })}
         </Typography>
         <Typography variant="h2">
           {intl.formatMessage({
-            id: 'userForm.label'
+            id: "userForm.label",
           })}
         </Typography>
         <Grid component="form" container spacing={3}>
@@ -97,15 +110,19 @@ const RoleForm = ({ page, setPage, formData, setFormData, intl }: Props) => {
                       {...field}
                       fullWidth
                       variant="outlined"
-                      label={intl.formatMessage({ id: `userForm.form.label.${key.id}` })}
+                      label={intl.formatMessage({
+                        id: `userForm.form.label.${key.id}`,
+                      })}
                       error={error !== undefined}
                       type={key.type}
                       helperText={
                         error
                           ? intl.formatMessage({
-                              id: `userForm.form.error.${key.id}.${[error.type]}`
+                              id: `userForm.form.error.${key.id}.${[
+                                error.type,
+                              ]}`,
                             })
-                          : ''
+                          : ""
                       }
                     />
                   )}
@@ -117,12 +134,16 @@ const RoleForm = ({ page, setPage, formData, setFormData, intl }: Props) => {
         <Grid container className="button-container">
           <Button variant="contained" onClick={() => setPage(page - 1)}>
             {intl.formatMessage({
-              id: 'userForm.button.back'
+              id: "userForm.button.back",
             })}
           </Button>
-          <Button variant="contained" type="submit" onClick={handleSubmit(onSubmit)}>
+          <Button
+            variant="contained"
+            type="submit"
+            onClick={handleSubmit(onSubmit)}
+          >
             {intl.formatMessage({
-              id: 'userForm.button.next'
+              id: "userForm.button.next",
             })}
           </Button>
         </Grid>
