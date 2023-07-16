@@ -6,6 +6,7 @@ export type User = {
   dob: string;
   cName: string;
   username: string;
+  collegeName: string;
 };
 
 export enum RoleType {
@@ -19,16 +20,4 @@ export type Auth = {
   password: string;
 };
 
-export type AssessmentForm = {
-  username: string;
-  email: string;
-  ques1: string;
-  ques2: string;
-  ques3: string;
-  ques4: string;
-  ques5: string;
-  ques6: string;
-  ques7: string;
-  ques8: string;
-  ques9: string;
-};
+
