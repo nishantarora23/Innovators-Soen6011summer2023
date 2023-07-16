@@ -6,6 +6,7 @@ export type User = {
   dob: string;
   cName: string;
   username: string;
+  collegeName: string;
 };
 
 export enum RoleType {

@@ -28,6 +28,7 @@
   "userForm.form.error.confirmPassword.validate": "Passwords do not match",
   "userForm.form.error.email.pattern": "Invalid email address",
   "userForm.form.error.cName.required": "Company Name is required",
+  "userForm.form.error.collgeName.required":"College/University Name",
   "userForm.createUser.success": "Successfully created user",
   "userForm.createUser.error": "An error occured while trying to create user",
   "authForm.form.label.username": "Username",
