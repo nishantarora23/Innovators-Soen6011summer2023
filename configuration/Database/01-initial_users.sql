@@ -1,3 +1,5 @@
+CREATE DATABASE soen6011;
+
 CREATE TABLE `soen6011`.`users` (
   `ID` int NOT NULL AUTO_INCREMENT,
   `FULLNAME` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
