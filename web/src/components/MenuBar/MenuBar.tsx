@@ -19,7 +19,7 @@ type Props = {
 };
 
 const MenuBar = ({ intl, title, noBtn }: Props) => {
-  const isLoggedIn = false;
+  const isLoggedIn = Boolean(getUserName());
   const userRole = getUserRole();
 
   const MENU_ITEMS = {
