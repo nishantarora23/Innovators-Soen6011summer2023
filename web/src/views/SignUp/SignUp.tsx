@@ -90,10 +90,10 @@ const SignUp = ({ intl }: Props) => {
         })}
         open={isError}
       />
-      <MenuBar
+      {/* <MenuBar
         title={intl.formatMessage({ id: "global.app_title" })}
         noBtn={true}
-      />
+      /> */}
       <Grid container className="sign-up-container">
         <LoadingSpinner isOpen={loading} />
         <Grid container justifyContent="left">
