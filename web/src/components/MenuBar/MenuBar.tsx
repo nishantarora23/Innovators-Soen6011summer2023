@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import { AppBar, Grid, Box, Toolbar, Button, Typography, IconButton, Avatar } from '@mui/material';
 import {
   LogoutOutlined,
-  LocalHospitalOutlined,
-  MasksOutlined,
-  PsychologyAltOutlined,
-  AdminPanelSettingsOutlined
+  Work,
+  // SchoolIcon
 } from '@mui/icons-material';
-import { getUserName, getUserRole, getFullName } from '../../services/userInfoService';
+
+import { getUserName, getUserRole, getFullName, getIsLoggedIn } from '../../services/userInfoService';
 import './MenuBar.scss';
 import { indigo } from '@mui/material/colors';
+import Logo from '../../assets/HeaderLogo.png';
 
 type Props = {
   intl: any;
@@ -19,10 +19,16 @@ type Props = {
 };
 
 const MenuBar = ({ intl, title, noBtn }: Props) => {
-  const isLoggedIn = Boolean(getUserName());
+  const isLoggedIn = false;
   const userRole = getUserRole();
 
   const MENU_ITEMS = {
+    Student: [
+      {
+        id: 'dashboard',
+        link: 'student/home'
+      }
+    ],
     Patient: [
       {
         id: 'dashboard',
@@ -76,15 +82,14 @@ const MenuBar = ({ intl, title, noBtn }: Props) => {
                 </Typography>
               ))}
           </Grid>
-          <Typography className="menu-bar-title">{title}</Typography>
+          <img src={Logo} alt="Logo" height="70" style={{ margin: '10px' }} />
+          {/* <Typography className="menu-bar-title">{title}</Typography> */}
           <Grid container>
             {isLoggedIn && (
               <Grid container className="userProfile-container end-container">
                 <Avatar sx={{ bgcolor: indigo[100], width: '30px', height: '30px' }}>
-                  {userRole === 'Doctor' && <LocalHospitalOutlined color="primary" />}
-                  {userRole === 'Counsellor' && <PsychologyAltOutlined color="primary" />}
-                  {userRole === 'Patient' && <MasksOutlined color="primary" />}
-                  {userRole === 'Manager' && <AdminPanelSettingsOutlined color="primary" />}
+                  {userRole === 'Student' && <Work color="primary" />}
+                  {userRole === 'Employer' && <Work color="primary" />}
                 </Avatar>
                 <Typography>{getFullName()}</Typography>
                 <IconButton color="secondary" component={Link} to={'/'} onClick={doLogout}>
