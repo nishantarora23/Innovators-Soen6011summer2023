@@ -3,6 +3,8 @@ import LandingPage from './LandingPage/LandingPage';
 import Login from './Login/Login';
 import SignUp from './SignUp/SignUp';
 import AdminDashboard from "./AdminDashboard/AdminDashboard";
+import Home from './Student/Home/Home'
+
 
 const AppRoutes = () => {
   return (
@@ -11,7 +13,11 @@ const AppRoutes = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
+
         <Route path="admin" element={<AdminDashboard />} />
+
+        <Route path="student/home" element={<Home />} />
+
       </Routes>
     </BrowserRouter>
   );

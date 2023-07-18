@@ -31,3 +31,11 @@ export function setUserRole(userRole: string) {
 export function getUserRole() {
   return localStorage.getItem('userRole');
 }
+
+export function setIsLoggedIn(isLoggedIn: boolean) {
+  localStorage.setItem('isLoggedIn', isLoggedIn.toString());
+}
+
+export function getIsLoggedIn() {
+  return localStorage.getItem('isLoggedIn') === 'true';
+}
