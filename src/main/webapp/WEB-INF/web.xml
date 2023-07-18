@@ -22,6 +22,7 @@
         <servlet-class>Servlets.LoginServlet</servlet-class>
     </servlet>
 
+
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/</url-pattern>
