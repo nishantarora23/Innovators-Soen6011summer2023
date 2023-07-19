@@ -16,7 +16,7 @@ export function getFullName() {
   return localStorage.getItem('fullName');
 }
 
-export function getUserName() {
+export function getUserName(): string | null {
   return localStorage.getItem('username');
 }
 
@@ -38,4 +38,16 @@ export function setIsLoggedIn(isLoggedIn: boolean) {
 
 export function getIsLoggedIn() {
   return localStorage.getItem('isLoggedIn') === 'true';
+}
+
+export function getCompany(){
+  return localStorage.getItem('COMPANY_NAME');
+}
+
+export function getAddress(){
+  return localStorage.getItem('address');
+}
+
+export function getDOB(){
+  return localStorage.getItem('dob');
 }

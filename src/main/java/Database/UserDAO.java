@@ -1,5 +1,6 @@
 package Database;
 
+import Commons.Helper;
 import Models.User;
 
 import java.sql.*;
@@ -13,10 +14,6 @@ import java.util.Date;
 public class UserDAO {
 
     // Insert user data into the users table
-    static String url = "jdbc:mysql://Localhost:3306/soen6011";
-    static String uname = "root";
-    static String pass = "password";
-
     private static String GET_USER_QUERY = "SELECT * FROM users WHERE username = ? AND password = ?";
     static {
         try {
@@ -24,8 +21,6 @@ public class UserDAO {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-    public UserDAO() {
         String query1 = "CREATE DATABASE IF NOT EXISTS soen6011";
         String query ="CREATE TABLE IF NOT EXISTS soen6011.users (\n" +
                 "  ID int NOT NULL AUTO_INCREMENT,\n" +
@@ -39,16 +34,16 @@ public class UserDAO {
                 "  DOB date DEFAULT NULL,\n" +
                 "  COMPANY_NAME varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
                 "  COLLEGE_NAME varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
-                "  PRIMARY KEY (ID)\n" +
+                "  PRIMARY KEY (USERNAME)\n" +
                 ")";
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://Localhost:3306/",uname,pass)) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://Localhost:3306/", Helper.uname,Helper.pass)) {
             PreparedStatement statement1 = connection.prepareStatement(query1);
             statement1.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        try (Connection connection = DriverManager.getConnection(url,uname,pass)) {
+        try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -58,7 +53,7 @@ public class UserDAO {
 
     public static void addUser(User user) throws SQLException {
 
-        try (Connection connection = DriverManager.getConnection(url,uname,pass)) {
+        try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
             String sql = "INSERT INTO soen6011.users (FULLNAME,USERNAME,PASSWORD,USER_ROLE,ROLE_ID,EMAIL,ADDRESS,DOB,\n" +
                     "COMPANY_NAME,COLLEGE_NAME) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -71,17 +66,17 @@ public class UserDAO {
             statement.setString(6, user.getEmail());
             statement.setString(7, user.getAddress());
             statement.setDate(8, user.getDob());
-            statement.setString(9, user.getCompanyName());
+            statement.setString(9, user.getcName());
             statement.setString(10,user.getCollegeName());
 
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
     }}
-    public ArrayList<User> getAllUser() throws SQLException {
+    public static ArrayList<User> getAllUser() throws SQLException {
         ArrayList<User> userList = new ArrayList<>();
 
-        try (Connection connection = DriverManager.getConnection(url, uname, pass)) {
+        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
             String sql = "SELECT * FROM soen6011.users";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
@@ -96,7 +91,7 @@ public class UserDAO {
                 user.setEmail(resultSet.getString("EMAIL"));
                 user.setAddress(resultSet.getString("ADDRESS"));
                 user.setDob(resultSet.getDate("DOB"));
-                user.setCompanyName(resultSet.getString("COMPANY_NAME"));
+                user.setcName(resultSet.getString("COMPANY_NAME"));
                 user.setCollegeName(resultSet.getString("COLLEGE_NAME"));
 
                 userList.add(user);
@@ -110,7 +105,7 @@ public class UserDAO {
 
     public static User getUser(String username, String password){
         User user = null;
-        try (Connection connection = DriverManager.getConnection(url, uname, pass)) {
+        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
             PreparedStatement statement = connection.prepareStatement(GET_USER_QUERY);
             statement.setString(1, username);
             statement.setString(2, password);
@@ -127,7 +122,7 @@ public class UserDAO {
                 Date retrievedDOB = getConvertedDate(resultSet.getString("DOB"));
                 String retrievedCompanyName = resultSet.getString("COMPANY_NAME");
                 String retrievedCollegeName = resultSet.getString("COLLEGE_NAME");
-                user = new User(retrievedFullName, retrievedUsername, retrievedPassword, retrievedUserRole, retrievedEmail, retrievedAddress, retrievedDOB, retrievedCompanyName);
+                user = new User(retrievedFullName, retrievedUsername, retrievedPassword, retrievedUserRole, retrievedEmail, retrievedAddress, retrievedDOB, retrievedCompanyName,retrievedCollegeName);
                 if(retrievedUserRole.equals("Student")){
                     user.setCollegeName(retrievedCollegeName);
                 }
@@ -140,7 +135,38 @@ public class UserDAO {
 
         return user;
     }
+    public static User getUser(String username){
+        String GET_USER_QUERY = "SELECT * FROM users WHERE username = ?";
+        User user = null;
+        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
+            PreparedStatement statement = connection.prepareStatement(GET_USER_QUERY);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
 
+            while (resultSet.next()) {
+                String retrievedUsername = resultSet.getString("USERNAME");
+                String retrievedPassword = resultSet.getString("PASSWORD");
+                String retrievedFullName = resultSet.getString("FULLNAME");
+                String retrievedUserRole = resultSet.getString("USER_ROLE");
+                String retrievedRoleId = resultSet.getString("ROLE_ID");
+                String retrievedEmail = resultSet.getString("EMAIL");
+                String retrievedAddress = resultSet.getString("ADDRESS");
+                Date retrievedDOB = getConvertedDate(resultSet.getString("DOB"));
+                String retrievedCompanyName = resultSet.getString("COMPANY_NAME");
+                String retrievedCollegeName = resultSet.getString("COLLEGE_NAME");
+                user = new User(retrievedFullName, retrievedUsername, retrievedPassword, retrievedUserRole, retrievedEmail, retrievedAddress, retrievedDOB, retrievedCompanyName, retrievedCollegeName);
+                if(retrievedUserRole.equals("Student")){
+                    user.setCollegeName(retrievedCollegeName);
+                }
+                user.setRoleId(retrievedRoleId);
+            }
+
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
     private static Date getConvertedDate(String dateString) throws ParseException {
         String pattern = "yyyy-MM-dd";
 
