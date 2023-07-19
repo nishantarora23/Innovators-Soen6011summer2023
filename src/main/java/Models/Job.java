@@ -10,7 +10,7 @@ public class Job {
     private String description;
     private String deadline;
     private String contractType;
-    private String employer;
+    private String employerName;
 
     public Job(int ID, String title, String salaryRange, String responsibilities, String qualifications,
                String location, String description, String deadline, String contractType, String employerID) {
@@ -99,11 +99,11 @@ public class Job {
         this.contractType = contractType;
     }
 
-    public void setEmployer(String employer) {
-        this.employer = employer;
+    public void setEmployerName(String employerName) {
+        this.employerName = employerName;
     }
 
-    public String getEmployer() {
-        return employer;
+    public String getEmployerName() {
+        return employerName;
     }
 }
