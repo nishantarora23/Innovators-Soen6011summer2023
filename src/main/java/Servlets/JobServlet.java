@@ -2,7 +2,6 @@ package Servlets;
 
 import Commons.Helper;
 import Database.JobDAO;
-import Database.UserDAO;
 import Models.Job;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -10,6 +9,7 @@ import com.google.gson.GsonBuilder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,9 +17,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 @WebServlet("/jobOffer")
-public class JobServlet {
+public class JobServlet extends HttpServlet {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String payloadData = Helper.getPayload(request);
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setDateFormat("yyyy-MM-dd"); // Set your desired date format pattern
@@ -33,19 +34,25 @@ public class JobServlet {
         catch (Exception e)
         {
             response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
-            throw e;
+            throw new RuntimeException(e);
         }
         response.setStatus(HttpServletResponse.SC_OK);
     }
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        ArrayList<Job> jobs = JobDAO.getAllJobs();
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ArrayList<Job> jobs = null;
+        try {
+            jobs = JobDAO.getAllJobs();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(jobs);
 
         // Set the content type of the response
         response.setContentType("application/json");
-
+        System.out.println(json);
         // Write the JSON to the response
         response.getWriter().write(json);
     }
