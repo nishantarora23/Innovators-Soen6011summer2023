@@ -26,13 +26,15 @@ const AddJobOfferForm = ({ formData, setFormData, intl }: Props) => {
     const onSubmit = (data: any) => {
       const addJobOffer = async () => {
         console.log(data);
-        data.employerName = getUserName();
+
+        data.username = getUserName();
         await setErrorAdding(false);
         await setLoading(true);
         await setFormData({ ...formData, ...data });
-        await addJobOfferHelper(data)
+        await addJobOfferHelper(JSON.stringify(data))
           .then((response: any) => {
             alert("Job offer added");
+            navigate('/employer/home');
           })
           .catch((err: any) => {
             console.log(err);

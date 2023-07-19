@@ -16,5 +16,5 @@ export const deleteUser = (username: string) => {
 
 
 export const addJobOfferHelper = (data: any) => {
-  return axios.post(`${API_URL}/AddJob`, data);
+  return axios.post(`${API_URL}/jobOffer`, data);
 }
