@@ -38,27 +38,11 @@ const LoginForm = ({ formData, setFormData, intl }: Props) => {
             const role = response.data.userRole.toLowerCase();
             navigate(`/${role}/home`);
           } else {
-            setUserInfo({
-              "username": "satya",
-              "fullName": "satya subudhi",
-              "email": "satyasubudhi089@unisys.com",
-              "userRole": "Student"
-            });
-            setIsLoggedIn(true);
-            navigate(`/student/home`);
             setLoginError(true);
           }
         })
         .catch((err: any) => {
           console.log(err);
-          setUserInfo({
-            "username": "satya",
-            "fullName": "satya subudhi",
-            "email": "satyasubudhi089@unisys.com",
-            "userRole": "Student"
-          });
-          setIsLoggedIn(true);
-          navigate(`/student/home`);
           setLoginError(true);
         })
         .finally(() => {

@@ -2,6 +2,10 @@ interface UserInfo {
   [x: string]: string;
 }
 
+export function getUserInfo(key: string) {
+  return localStorage.getItem(key);
+}
+
 export function setUserInfo(userInfo: UserInfo) {
   for (const key in userInfo) {
     localStorage.setItem(key, userInfo[key]);
