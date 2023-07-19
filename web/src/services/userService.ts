@@ -13,3 +13,8 @@ export const getAllUsers = () => {
 export const deleteUser = (username: string) => {
   return axios.delete(`${API_URL}/users?username=${username}`);
 };
+
+
+export const addJobOfferHelper = (data: any) => {
+  return axios.post(`${API_URL}/AddJob`, data);
+}
