@@ -26,6 +26,7 @@ const AddJobOfferForm = ({ formData, setFormData, intl }: Props) => {
     const onSubmit = (data: any) => {
       const addJobOffer = async () => {
         console.log(data);
+
         data.username = getUserName();
         await setErrorAdding(false);
         await setLoading(true);

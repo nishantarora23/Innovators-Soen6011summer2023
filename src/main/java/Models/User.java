@@ -9,14 +9,13 @@ public class User {
     private String password;
     private String userRole;
     private Date dob;
-    private String companyName;
     private String username;
     private String address;
     private String collegeName;
     private String roleId;
     private String cName;
 
-    public User(String fullName, String username, String password, String userRole, String email, String address, java.util.Date dob, String companyName) throws ParseException {
+    public User(String fullName, String username, String password, String userRole, String email, String address, java.util.Date dob, String companyName, String collegeName) throws ParseException {
         this.fullName = fullName;
         this.username = username;
         this.password = password;
@@ -24,7 +23,8 @@ public class User {
         this.email = email;
         this.address = address;
         this.dob = dob;
-        this.companyName = companyName;
+        this.cName = companyName;
+        this.collegeName = collegeName;
     }
     public User()
     {
@@ -63,9 +63,6 @@ public class User {
         this.collegeName = collegeName;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
 
     public String getRoleId() {
         return roleId;
@@ -113,10 +110,5 @@ public class User {
     public java.sql.Date getDob() {
         return new java.sql.Date(dob.getTime());
     }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
 
 }
