@@ -1,0 +1,10 @@
+@import "../../variables.scss";
+
+.pageContainer {
+  width: calc(100% - 240px);
+  left: 240px;
+  padding: 0 $spacing-06;
+  box-sizing: border-box;
+  position: absolute;
+  text-align: left;
+}

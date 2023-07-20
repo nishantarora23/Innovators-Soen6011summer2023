@@ -1,0 +1,19 @@
+@import "../../variables.scss";
+
+.iconWrapper {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-bottom: -7.2rem;
+  margin-right: -2.7rem;
+
+  //   absolute bottom-0 ltr:right-0 rtl:left-0 w-96 h-96 -m-24
+
+  .icon {
+    opacity: 0.4;
+    fill: transparent;
+    stroke: $purple-03;
+    height: 150px;
+    width: 150px;
+  }
+}
