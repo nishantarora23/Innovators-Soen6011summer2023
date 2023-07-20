@@ -4,6 +4,8 @@
   </h1>
 </p>
 
+<b>Sprint-2 Demo Video:</b> https://drive.google.com/file/d/1W2_ynBl5aP2xL4GvVYX186Hs0J5dYY99/view?usp=sharing
+
 ## Project Description
 ### Overview
 CareerConnect is a comprehensive web-based career services platform which is aimed to provide user-friendly and centralized tools to both employers and job seekers in the job search process.
