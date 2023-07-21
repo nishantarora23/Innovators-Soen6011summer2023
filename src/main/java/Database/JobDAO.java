@@ -58,8 +58,6 @@ public class JobDAO {
                 statement.setString(8, job.getContractType());
                 statement.setString(9, job.getUsername());
                 statement.executeUpdate();
-
-            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -94,30 +92,32 @@ public class JobDAO {
         return jobList;
     }
 
-    public static Job getJob(String username){
+    public static ArrayList<Job> getJob(String username){
         String GET_JOB_QUERY = "SELECT * FROM JOBS WHERE username = ?";
-        Job job = null;
+        ArrayList<Job> jobList = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
             PreparedStatement statement = connection.prepareStatement(GET_JOB_QUERY);
-
-            statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
-            job = new Job();
-            job.setContractType(resultSet.getString("CONTRACT_TYPE"));
-            job.setDeadline(resultSet.getString("DEADLINE"));
-            job.setDescription(resultSet.getString("DESCRIPTION"));
-            job.setID(Integer.parseInt(resultSet.getString("ID")));
-            job.setLocation(resultSet.getString("LOCATION"));
-            job.setQualifications(resultSet.getString("QUALIFICATIONS"));
-            job.setResponsibilities(resultSet.getString("RESPONSIBILITIES"));
-            job.setUsername(resultSet.getString("EMPLOYER"));
-            job.setSalaryRange(resultSet.getString("SALARY_RANGE"));
-            job.setTitle(resultSet.getString("TITLE"));
 
-            } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            while (resultSet.next()) {
+                Job job = new Job();
+                job.setContractType(resultSet.getString("CONTRACT_TYPE"));
+                job.setDeadline(resultSet.getString("DEADLINE"));
+                job.setDescription(resultSet.getString("DESCRIPTION"));
+                job.setID(Integer.parseInt(resultSet.getString("ID")));
+                job.setLocation(resultSet.getString("LOCATION"));
+                job.setQualifications(resultSet.getString("QUALIFICATIONS"));
+                job.setResponsibilities(resultSet.getString("RESPONSIBILITIES"));
+                job.setUsername(resultSet.getString("EMPLOYER"));
+                job.setSalaryRange(resultSet.getString("SALARY_RANGE"));
+                job.setTitle(resultSet.getString("TITLE"));
+
+                jobList.add(job);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        return job;
+        return jobList;
     }
 }

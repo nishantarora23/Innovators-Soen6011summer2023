@@ -3,9 +3,11 @@ package Servlets;
 import Commons.Helper;
 import Database.JobDAO;
 import Models.Job;
+import Models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,8 +43,18 @@ public class JobServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ArrayList<Job> jobs = null;
+
+        String payloadData = Helper.getPayload(request);
+        JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
         try {
-            jobs = JobDAO.getAllJobs();
+            if(jsonPayload==null) {
+                jobs = JobDAO.getAllJobs();
+            }
+            else
+            {
+                String username = jsonPayload.get("username").getAsString();
+                jobs = JobDAO.getJob(username);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
