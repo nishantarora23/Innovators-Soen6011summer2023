@@ -18,3 +18,15 @@ export const deleteUser = (username: string) => {
 export const addJobOfferHelper = (data: any) => {
   return axios.post(`${API_URL}/jobOffer`, data);
 }
+
+export const getMyJobOffers = (data: any) => {
+  return axios.get(`${API_URL}/jobOffer?username=${data}`);
+}
+
+export const deleteJobOffer = (id: string | number) => {
+  return axios.delete(`${API_URL}/jobOffer?username=${id}`);
+};
+
+export const getJobOfferById = (id: string | number) => {
+  return axios.get(`${API_URL}/jobOffer?id=${id}`);
+}

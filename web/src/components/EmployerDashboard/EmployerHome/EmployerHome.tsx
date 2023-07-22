@@ -14,7 +14,7 @@ import {
 import CreateIcon from '@mui/icons-material/Create';
 import PersonIcon from '@mui/icons-material/Person';
 
-const StudentHome = () => {
+const EmployerHome = () => {
   const company = getCompany();
   const navigate = useNavigate();
   return (
@@ -34,7 +34,7 @@ const StudentHome = () => {
             <div>
               <Button
                 component={Link}
-                to={""}
+                to={"/employer/jobOffers"}
                 color="primary"
                 sx={{ fontSize: "1.1rem" }}
               >
@@ -101,4 +101,4 @@ const StudentHome = () => {
   );
 };
 
-export default injectIntl(StudentHome);
+export default injectIntl(EmployerHome);

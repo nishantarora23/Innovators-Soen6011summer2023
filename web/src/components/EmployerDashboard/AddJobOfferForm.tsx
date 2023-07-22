@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Auth } from "../../types";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -9,43 +9,70 @@ import { addJobOfferHelper } from "../../services/userService";
 import MenuBar from "../MenuBar/MenuBar";
 import { getUserName } from "../../services/userInfoService";
 
+import { getJobOfferById } from "../../services/userService";
+
 type Props = {
     intl: any;
     formData: Auth;
     setFormData: React.Dispatch<Auth>;
+    jobId?: string;
   };
 
-const AddJobOfferForm = ({ formData, setFormData, intl }: Props) => {
+const AddJobOfferForm = ({ formData, setFormData, intl, jobId  }: Props) => {
     const [loading, setLoading] = useState(false);
+    const [jobOffer, setJobOffer] = useState('');
     const [isErrorAdding, setErrorAdding] = useState(false);
-    const { control, handleSubmit } = useForm({
+    const { control, handleSubmit, setValue } = useForm({
       reValidateMode: 'onBlur'
     });
     const navigate = useNavigate();
+
+    useEffect(() => {
+      // If the component is in "edit" mode, fetch the job offer data and pre-populate the form fields
+      const fetchJobOfferData = async () => {
+        if (jobId) {
+          try {
+            setLoading(true);
+            const jobOfferData: any = await getJobOfferById(jobId); // Fetch job offer data by id
+            // Pre-populate the form fields with the existing job offer data
+            Object.entries(jobOfferData).forEach(([key, value]) => {
+              setValue(key, value);
+            });
+          } catch (error) {
+            console.error("Error fetching job offer data:", error);
+          } finally {
+            setLoading(false);
+          }
+        }
+      };
+      fetchJobOfferData();
+    }, [jobId, setValue]);
   
     const onSubmit = (data: any) => {
-      const addJobOffer = async () => {
-        console.log(data);
-
+      const addOrUpdateJobOffer = async () => {
         data.username = getUserName();
         await setErrorAdding(false);
         await setLoading(true);
         await setFormData({ ...formData, ...data });
-        await addJobOfferHelper(JSON.stringify(data))
-          .then((response: any) => {
-            alert("Job offer added");
-            navigate('/employer/home');
-          })
-          .catch((err: any) => {
-            console.log(err);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      };
   
-      addJobOffer();
+        try {
+          if (jobId) {
+            // await updateJobOfferHelper(jobId, JSON.stringify(data));
+            // alert("Job offer updated");
+          } else {
+            await addJobOfferHelper(JSON.stringify(data));
+            alert("Job offer added");
+          }
+          navigate('/employer/home');
+        } catch (err) {
+          console.error("Error adding/updating job offer:", err);
+        } finally {
+          setLoading(false);
+        }
+  
+        addOrUpdateJobOffer();
     };
+  }
   
     const ADD_JOB_OFFERS_FIELDS = [
       {
