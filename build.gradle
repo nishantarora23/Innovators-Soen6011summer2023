@@ -11,20 +11,37 @@ repositories {
     mavenCentral()
 }
 
+// Define a custom property to specify the desired Java versions
+ext {
+    javaVersion14 = JavaVersion.VERSION_14
+    javaVersion11 = JavaVersion.VERSION_11
+}
+
+// Define a method to get the available Java version
+def getAvailableJavaVersion() {
+    if (JavaVersion.current() >= javaVersion14) {
+        return javaVersion14
+    } else if (JavaVersion.current() >= javaVersion11) {
+        return javaVersion11
+    } else {
+        throw new GradleException("No compatible Java version found.")
+    }
+}
+
+// Set sourceCompatibility and targetCompatibility dynamically based on the available Java version
+sourceCompatibility = getAvailableJavaVersion()
+targetCompatibility = getAvailableJavaVersion()
+
 dependencies {
     providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
     implementation 'log4j:log4j:1.2.17'
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
-    implementation 'mysql:mysql-connector-java:8.0.11'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
     useJUnitPlatform()
 }
-
-sourceCompatibility = JavaVersion.VERSION_14
-targetCompatibility = JavaVersion.VERSION_14
