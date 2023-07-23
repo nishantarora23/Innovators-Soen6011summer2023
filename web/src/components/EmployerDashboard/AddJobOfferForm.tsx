@@ -69,9 +69,8 @@ const AddJobOfferForm = ({ formData, setFormData, intl, jobId  }: Props) => {
         } finally {
           setLoading(false);
         }
-  
-        addOrUpdateJobOffer();
-    };
+    }
+    addOrUpdateJobOffer();
   }
   
     const ADD_JOB_OFFERS_FIELDS = [
