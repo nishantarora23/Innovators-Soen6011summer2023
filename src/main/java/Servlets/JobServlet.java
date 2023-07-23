@@ -27,10 +27,10 @@ public class JobServlet extends HttpServlet {
         gsonBuilder.setDateFormat("yyyy-MM-dd"); // Set your desired date format pattern
         Gson gson = gsonBuilder.create();
 
-        String action = request.getParameter("ACTION");
+        JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
+        String action = jsonPayload.get("ACTION").getAsString();
         System.out.println("Action :" + action);
         if("REMOVE".equals(action)){
-            JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
             try
             {
                 JobDAO.remove(jsonPayload.get("id").getAsString());
@@ -43,7 +43,6 @@ public class JobServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
         }
         else if("Update".equals(action)){
-            JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
             Job job = JobDAO.getJobId(jsonPayload.get("id").getAsString());
             if(jsonPayload.get("contractType").getAsString() != null)
             {
