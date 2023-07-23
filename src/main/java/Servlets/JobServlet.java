@@ -27,10 +27,10 @@ public class JobServlet extends HttpServlet {
         gsonBuilder.setDateFormat("yyyy-MM-dd"); // Set your desired date format pattern
         Gson gson = gsonBuilder.create();
 
-        String action = request.getParameter("ACTION");
+        JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
+        String action = jsonPayload.get("ACTION").getAsString();
         System.out.println("Action :" + action);
         if("REMOVE".equals(action)){
-            JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
             try
             {
                 JobDAO.remove(jsonPayload.get("id").getAsString());
@@ -43,7 +43,6 @@ public class JobServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
         }
         else if("Update".equals(action)){
-            JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
             Job job = JobDAO.getJobId(jsonPayload.get("id").getAsString());
             if(jsonPayload.get("contractType").getAsString() != null)
             {
@@ -113,22 +112,29 @@ public class JobServlet extends HttpServlet {
 
         String payloadData = Helper.getPayload(request);
         JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
+        String json=null;
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
             if(jsonPayload==null) {
                 jobs = JobDAO.getAllJobs();
+                json = objectMapper.writeValueAsString(jobs);
             }
             else
             {
                 String username = jsonPayload.get("username").getAsString();
-                jobs = JobDAO.getJob(username);
+                if(username!=null) {
+                    jobs = JobDAO.getJob(username);
+                    json = objectMapper.writeValueAsString(jobs);
+                }
+                String id = jsonPayload.get("id").getAsString();
+                if(id!=null) {
+                    Job job = JobDAO.getJobId(id);
+                    json = objectMapper.writeValueAsString(job);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(jobs);
-
         // Set the content type of the response
         response.setContentType("application/json");
         System.out.println(json);
