@@ -17,7 +17,7 @@ const AddJobOffer = ({ intl }: Props) => {
   });
 
   const addJobOffer = useMemo(() => {
-    return [<AddJobOfferForm formData={formData} setFormData={setFormData} />];
+    return [<AddJobOfferForm formData={formData} setFormData={setFormData}/>];
   }, [formData]);
 
   return (

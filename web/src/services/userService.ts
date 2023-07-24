@@ -19,12 +19,23 @@ export const addJobOfferHelper = (data: any) => {
   return axios.post(`${API_URL}/jobOffer`, data);
 }
 
-export const getMyJobOffers = (data: any) => {
-  return axios.get(`${API_URL}/jobOffer?username=${data}`);
+export const updateJobOfferHelper = (data: any) => {
+  data.ACTION = "Update";
+  return axios.post(`${API_URL}/jobOffer`, data);
+}
+
+
+export const getMyJobOffers = (username: any) => {
+  const data = { username: username };
+  return axios.get(`${API_URL}/jobOffer`, {params: data});
 }
 
 export const deleteJobOffer = (id: string | number) => {
-  return axios.delete(`${API_URL}/jobOffer?username=${id}`);
+  const payload = {
+    ACTION: "REMOVE",
+    id: id,
+  };
+  return axios.post(`${API_URL}/jobOffer`, JSON.stringify(payload));
 };
 
 export const getJobOfferById = (id: string | number) => {

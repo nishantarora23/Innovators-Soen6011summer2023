@@ -10,7 +10,7 @@ import {
   Chip,
 } from "@mui/material";
 import { getCompany, getFullName, getAddress, getEmail, getDOB} from "../../../services/userInfoService";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Bookmark
 } from "@mui/icons-material";
@@ -85,11 +85,25 @@ const styles = {
   },
 };
 
+interface JobOffer {
+  id?: any;
+  company?: string;
+  title?: string;
+  contract_type?: string;
+  salar_range?: string;
+  description?: string;
+  location?: string;
+};
+
+interface JobOffers{
+  jobOffers: JobOffer[];
+}
+
 const EmployerJobOffers = () => {
   const company = getCompany();
   const navigate = useNavigate();
 
-  const [myJobOffers, setJobOffers] = useState([]);
+  const [myJobOffers, setJobOffers] = useState<JobOffer[]>([]);
 
   const jobRecommendations = [
     {
@@ -116,13 +130,13 @@ const EmployerJobOffers = () => {
 
   useEffect(() => {
     const username = JSON.stringify(getUserName());
-    // getMyJobOffers(username)
-    //   .then((res) => {setJobOffers(res.data); console.log(res)})
-    //   .catch((err) => console.log(err));
+    getMyJobOffers(username)
+      .then((res) => {setJobOffers(res.data); console.log(res)})
+      .catch((err) => console.log(err));
   }, []);
 
   const handleDelete = (id: string | number) => {
-    deleteJobOffer(JSON.stringify(id))
+    deleteJobOffer(id)
       .then((res) => alert("Job Offer has been Deleted"))
       .catch(err => console.log(err));
   }
@@ -190,7 +204,7 @@ const EmployerJobOffers = () => {
           >
             <div>
               <Box sx={styles.cardContainer}>
-                {jobRecommendations.map((offer) => (
+                {myJobOffers?.map((offer : JobOffer) => (
                   <Card key={offer.id} sx={styles.card}>
                     <Typography variant="subtitle1">{offer.company}</Typography>
                     <Typography variant="body2">{offer.title}</Typography>
