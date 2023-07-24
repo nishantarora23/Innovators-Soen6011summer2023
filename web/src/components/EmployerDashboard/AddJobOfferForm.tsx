@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Auth } from "../../types";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LoadingSpinner from "../common/LoadingSpinner/LoadingSpinner";
 import { Button, Grid, TextField, TextareaAutosize } from "@mui/material";
 import { injectIntl } from "react-intl";
-import { addJobOfferHelper } from "../../services/userService";
+import { addJobOfferHelper, updateJobOfferHelper } from "../../services/userService";
 import MenuBar from "../MenuBar/MenuBar";
 import { getUserName } from "../../services/userInfoService";
 
@@ -18,14 +18,32 @@ type Props = {
     jobId?: string;
   };
 
-const AddJobOfferForm = ({ formData, setFormData, intl, jobId  }: Props) => {
+  interface JobOffer {
+    id?: any;
+    company?: string;
+    title?: string;
+    contract_type?: string;
+    salar_range?: string;
+    description?: string;
+    location?: string;
+  };
+
+const AddJobOfferForm = ({ formData, setFormData, intl}: Props) => {
     const [loading, setLoading] = useState(false);
-    const [jobOffer, setJobOffer] = useState('');
+    const [jobOffer, setJobOffer] = useState<JobOffer>();
+    const {jobId} = useParams();
     const [isErrorAdding, setErrorAdding] = useState(false);
     const { control, handleSubmit, setValue } = useForm({
       reValidateMode: 'onBlur'
     });
     const navigate = useNavigate();
+
+    const handleFieldChange = (fieldId: string, value: string) => {
+      setJobOffer((prevJobOffer) => ({
+        ...prevJobOffer,
+        [fieldId]: value,
+      }));
+    };
 
     useEffect(() => {
       // If the component is in "edit" mode, fetch the job offer data and pre-populate the form fields
@@ -38,6 +56,7 @@ const AddJobOfferForm = ({ formData, setFormData, intl, jobId  }: Props) => {
             Object.entries(jobOfferData).forEach(([key, value]) => {
               setValue(key, value);
             });
+            setJobOffer(jobOfferData.data?.[0]);
           } catch (error) {
             console.error("Error fetching job offer data:", error);
           } finally {
@@ -57,13 +76,14 @@ const AddJobOfferForm = ({ formData, setFormData, intl, jobId  }: Props) => {
   
         try {
           if (jobId) {
-            // await updateJobOfferHelper(jobId, JSON.stringify(data));
-            // alert("Job offer updated");
+            await updateJobOfferHelper(jobOffer)
+            .then((res) => navigate('/employer/home'))
+            .catch(err => console.log(err));
           } else {
-            await addJobOfferHelper(JSON.stringify(data));
-            alert("Job offer added");
+            await addJobOfferHelper(JSON.stringify(data))
+            .then((res) => navigate('/employer/home'))
+            .catch(err => console.log(err));
           }
-          navigate('/employer/home');
         } catch (err) {
           console.error("Error adding/updating job offer:", err);
         } finally {
@@ -77,22 +97,22 @@ const AddJobOfferForm = ({ formData, setFormData, intl, jobId  }: Props) => {
       {
         id: 'title',
         type: 'text',
-        rules: { required: true }
+        rules: { required: !jobOffer && true }
       },
       {
         id: 'description',
         type: 'textarea',
-        rules: { required: true }
+        rules: { required: !jobOffer && true }
       },
       {
         id: 'qualifications',
         type: 'text',
-        rules: { required: true }
+        rules: { required: !jobOffer && true }
       },
       {
         id: 'responsibilities',
         type: 'text',
-        rules: { required: true }
+        rules: { required: !jobOffer && true }
       },
       {
         id: 'location',
@@ -142,9 +162,10 @@ const AddJobOfferForm = ({ formData, setFormData, intl, jobId  }: Props) => {
                           key={field}
                           className="fullWidthTextarea MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-19tru32-MuiInputBase-root-MuiOutlinedInput-root"
                           minRows={12}
+                          value={jobOffer && jobOffer[key.id as keyof JobOffer]} // Access the value from the jobOffer object using key.id as the key
                           variant="outlined"
-                          aria-label={intl.formatMessage({ id: `employerForm.addJobOffer.label.${key.id}` })}
-                          placeholder={intl.formatMessage({ id: `employerForm.addJobOffer.label.${key.id}` })}
+                          aria-label={!jobOffer && intl.formatMessage({ id: `employerForm.addJobOffer.label.${key.id}` })}
+                          placeholder={!jobOffer && intl.formatMessage({ id: `employerForm.addJobOffer.label.${key.id}` })}
                           error={error !== undefined}
                           label={intl.formatMessage({ id: `employerForm.addJobOffer.label.${key.id}` })}
                           helperText={
@@ -154,6 +175,7 @@ const AddJobOfferForm = ({ formData, setFormData, intl, jobId  }: Props) => {
                                 })
                               : ''
                           }
+                          onChange={(e) => handleFieldChange(key.id, e.target.value)}
                         />
                       );
                     } else {
@@ -161,8 +183,9 @@ const AddJobOfferForm = ({ formData, setFormData, intl, jobId  }: Props) => {
                         <TextField
                           {...field}
                           fullWidth
+                          value={jobOffer && jobOffer[key.id as keyof JobOffer]} // Access the value from the jobOffer object using key.id as the key
                           variant="outlined"
-                          label={intl.formatMessage({ id: `employerForm.addJobOffer.label.${key.id}` })}
+                          label={ !jobOffer && intl.formatMessage({ id: `employerForm.addJobOffer.label.${key.id}` })}
                           error={error !== undefined}
                           type={key.type}
                           helperText={
@@ -172,7 +195,7 @@ const AddJobOfferForm = ({ formData, setFormData, intl, jobId  }: Props) => {
                                 })
                               : ''
                           }
-                        />
+                          onChange={(e) => handleFieldChange(key.id, e.target.value)}                        />
                       );
                     }
                   }}
@@ -185,7 +208,7 @@ const AddJobOfferForm = ({ formData, setFormData, intl, jobId  }: Props) => {
           <Grid container className="button-container" spacing={3}>
             <Button variant="contained" type="submit" onClick={handleSubmit(onSubmit)}>
               {intl.formatMessage({
-                id: 'employerForm.addJobOffer.button.add'
+                id: jobOffer? 'employerForm.addJobOffer.button.update' : 'employerForm.addJobOffer.button.add'
               })}
             </Button>
           </Grid>

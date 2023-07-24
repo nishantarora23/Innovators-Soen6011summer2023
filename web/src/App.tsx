@@ -9,7 +9,7 @@ function App() {
     <Grid container direction="column">
       <Header></Header>
       <AppRoutes></AppRoutes>
-      <Footer></Footer>
+      {/* <Footer></Footer> */}
     </Grid>
   );
 }
