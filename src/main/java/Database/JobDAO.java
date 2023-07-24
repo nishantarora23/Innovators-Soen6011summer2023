@@ -128,17 +128,18 @@ public class JobDAO {
             PreparedStatement statement = connection.prepareStatement(GET_JOB_QUERY);
             statement.setString(1, id);
             ResultSet resultSet = statement.executeQuery();
-            job.setContractType(resultSet.getString("CONTRACT_TYPE"));
-            job.setDeadline(resultSet.getString("DEADLINE"));
-            job.setDescription(resultSet.getString("DESCRIPTION"));
-            job.setID(Integer.parseInt(resultSet.getString("ID")));
-            job.setLocation(resultSet.getString("LOCATION"));
-            job.setQualifications(resultSet.getString("QUALIFICATIONS"));
-            job.setResponsibilities(resultSet.getString("RESPONSIBILITIES"));
-            job.setUsername(resultSet.getString("EMPLOYER"));
-            job.setSalaryRange(resultSet.getString("SALARY_RANGE"));
-            job.setTitle(resultSet.getString("TITLE"));
-
+            if(resultSet.next()){
+                job.setContractType(resultSet.getString("CONTRACT_TYPE"));
+                job.setDeadline(resultSet.getString("DEADLINE"));
+                job.setDescription(resultSet.getString("DESCRIPTION"));
+                job.setID(Integer.parseInt(resultSet.getString("ID")));
+                job.setLocation(resultSet.getString("LOCATION"));
+                job.setQualifications(resultSet.getString("QUALIFICATIONS"));
+                job.setResponsibilities(resultSet.getString("RESPONSIBILITIES"));
+                job.setUsername(resultSet.getString("EMPLOYER"));
+                job.setSalaryRange(resultSet.getString("SALARY_RANGE"));
+                job.setTitle(resultSet.getString("TITLE"));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -158,7 +159,7 @@ public class JobDAO {
     public static void update(Job job) {
         try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
             String query = "Update jobs set TITLE=? , SALARY_RANGE=?, RESPONSIBILITIES=?, QUALIFICATIONS=?, LOCATION=?, " +
-                    "DESCRIPTION=?, DEADLINE=?, CONTRACT_TYPE=?, EMPLOYER=?) WHERE Id = ?";
+                    "DESCRIPTION=?, DEADLINE=?, CONTRACT_TYPE=?, EMPLOYER=? WHERE Id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, job.getTitle());
             statement.setString(2, job.getSalaryRange());
