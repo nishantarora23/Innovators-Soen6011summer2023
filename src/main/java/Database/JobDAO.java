@@ -93,7 +93,7 @@ public class JobDAO {
     }
 
     public static ArrayList<Job> getJob(String username){
-        String GET_JOB_QUERY = "SELECT * FROM JOBS WHERE username = ?";
+        String GET_JOB_QUERY = "SELECT * FROM JOBS WHERE employer = ?";
         ArrayList<Job> jobList = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
             PreparedStatement statement = connection.prepareStatement(GET_JOB_QUERY);
