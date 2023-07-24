@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Set;
 
 @WebServlet("/jobOffer")
 public class JobServlet extends HttpServlet {
@@ -109,25 +111,22 @@ public class JobServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ArrayList<Job> jobs = null;
-
-        String payloadData = Helper.getPayload(request);
-        JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
         String json=null;
         ObjectMapper objectMapper = new ObjectMapper();
+        String username = request.getParameter("username");
+        String id = request.getParameter("id");
         try {
-            if(jsonPayload==null) {
+            if(id==null && username==null) {
                 jobs = JobDAO.getAllJobs();
                 json = objectMapper.writeValueAsString(jobs);
             }
             else
             {
-                String username = jsonPayload.get("username").getAsString();
                 if(username!=null) {
                     jobs = JobDAO.getJob(username);
                     json = objectMapper.writeValueAsString(jobs);
                 }
-                String id = jsonPayload.get("id").getAsString();
-                if(id!=null) {
+                else{
                     Job job = JobDAO.getJobId(id);
                     json = objectMapper.writeValueAsString(job);
                 }
