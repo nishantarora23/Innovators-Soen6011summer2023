@@ -46,39 +46,39 @@ public class JobServlet extends HttpServlet {
         }
         else if("Update".equals(action)){
             Job job = JobDAO.getJobId(jsonPayload.get("id").getAsString());
-            if(jsonPayload.get("contractType").getAsString() != null)
+            if(!jsonPayload.get("contractType").isJsonNull())
             {
                 job.setContractType(jsonPayload.get("contractType").getAsString());
             }
-            if(jsonPayload.get("deadline").getAsString() != null)
+            if(!jsonPayload.get("deadline").isJsonNull())
             {
                 job.setDeadline(jsonPayload.get("deadline").getAsString());
             }
-            if(jsonPayload.get("description").getAsString() != null)
+            if(!jsonPayload.get("description").isJsonNull())
             {
                 job.setDescription(jsonPayload.get("description").getAsString());
             }
-            if(jsonPayload.get("location").getAsString() != null)
+            if(!jsonPayload.get("location").isJsonNull())
             {
                 job.setLocation(jsonPayload.get("location").getAsString());
             }
-            if(jsonPayload.get("qualifications").getAsString() != null)
+            if(!jsonPayload.get("qualifications").isJsonNull())
             {
                 job.setQualifications(jsonPayload.get("qualifications").getAsString());
             }
-            if(jsonPayload.get("responsibilities").getAsString() != null)
+            if(!jsonPayload.get("responsibilities").isJsonNull())
             {
                 job.setResponsibilities(jsonPayload.get("responsibilities").getAsString());
             }
-            if(jsonPayload.get("username").getAsString() != null)
+            if(!jsonPayload.get("username").isJsonNull())
             {
                 job.setUsername(jsonPayload.get("username").getAsString());
             }
-            if(jsonPayload.get("title").getAsString() != null)
+            if(!jsonPayload.get("title").isJsonNull())
             {
                 job.setTitle(jsonPayload.get("title").getAsString());
             }
-            if(jsonPayload.get("salaryRange").getAsString() != null)
+            if(!jsonPayload.get("salaryRange").isJsonNull())
             {
                 job.setSalaryRange(jsonPayload.get("salaryRange").getAsString());
             }
