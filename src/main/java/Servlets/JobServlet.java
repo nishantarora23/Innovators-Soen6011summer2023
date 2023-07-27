@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Set;
 
 @WebServlet("/jobOffer")
 public class JobServlet extends HttpServlet {
@@ -45,7 +43,7 @@ public class JobServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
         }
         else if("Update".equals(action)){
-            Job job = JobDAO.getJobId(jsonPayload.get("id").getAsString());
+            Job job = JobDAO.getJobId(jsonPayload.get("id").getAsInt());
             if(!jsonPayload.get("contractType").isJsonNull())
             {
                 job.setContractType(jsonPayload.get("contractType").getAsString());
@@ -127,7 +125,7 @@ public class JobServlet extends HttpServlet {
                     json = objectMapper.writeValueAsString(jobs);
                 }
                 else{
-                    Job job = JobDAO.getJobId(id);
+                    Job job = JobDAO.getJobId(Integer.parseInt(id));
                     json = objectMapper.writeValueAsString(job);
                 }
             }
