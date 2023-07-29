@@ -11,8 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @WebServlet("/application")
 public class ApplicationServlet extends HttpServlet {
@@ -59,32 +58,51 @@ public class ApplicationServlet extends HttpServlet {
             }
             response.setStatus(HttpServletResponse.SC_OK);
         }
+        else if("SELECT".equals(action)){
+            try
+            {
+                 ApplicationDao.updateStatus(jsonPayload.get("username").getAsString(),jsonPayload.get("jobId").getAsInt(),jsonPayload.get("status").getAsString());
+                  }
+            catch (Exception e)
+            {
+                response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+                throw new RuntimeException(e);
+            }
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
     }
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String json=null;
         ObjectMapper objectMapper = new ObjectMapper();
         String username = request.getParameter("username");
         String id = request.getParameter("id");
+        String action=request.getParameter("action");
         try {
-                if(username!=null) {
+            switch (action) {
+                case "getApllications" -> {
                     ArrayList<Integer> jobIds = ApplicationDao.getAllApplications(username);
                     ArrayList<Job> appliedJobs = new ArrayList<>();
-                    for(int jobId : jobIds)
-                    {
+                    for (int jobId : jobIds) {
                         appliedJobs.add(JobDAO.getJobId(jobId));
                     }
                     json = objectMapper.writeValueAsString(appliedJobs);
                 }
-                else{
+                case "getApplicants" -> {
                     ArrayList<User> applicants = new ArrayList<>();
                     ArrayList<String> usernames = ApplicationDao.getAllApplicants(Integer.parseInt(id));
-                    for(String user : usernames)
-                    {
+                    for (String user : usernames) {
                         applicants.add(UserDAO.getUser(user));
                     }
                     json = objectMapper.writeValueAsString(applicants);
+                    break;
                 }
+                case "getNotifications" -> {
+                    HashMap<Integer,String> notifications = new HashMap<>();
+                    notifications = ApplicationDao.getNotifications(username);
+                    json = objectMapper.writeValueAsString(notifications);
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

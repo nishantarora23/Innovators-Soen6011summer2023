@@ -8,12 +8,14 @@ public class JobApplication {
     int jobId;
     Date submissionDate;
     String status;
+    Boolean notify;
 
     public JobApplication(String username, int jobId, Date submissionDate, String status) {
         this.username = username;
         this.jobId = jobId;
         this.submissionDate = submissionDate;
         this.status = status;
+        this.notify=Boolean.FALSE;
     }
     public JobApplication()
     {}
@@ -48,5 +50,13 @@ public class JobApplication {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Boolean getNotify() {
+        return notify;
+    }
+
+    public void setNotify(Boolean notify) {
+        this.notify = notify;
     }
 }
