@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LandingPage from './LandingPage/LandingPage';
 import Login from './Login/Login';
 import SignUp from './SignUp/SignUp';
-import AdminDashboard from "./AdminDashboard/AdminDashboard";
 import Home from './Student/Home/Home'
 import AddJobOffer from './AddJobOffer/AddJobOffer';
 import EmployerBaseHome from './EmployerDashboard/Home';
@@ -16,7 +15,6 @@ const AppRoutes = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
-        <Route path="admin" element={<AdminDashboard />} />
         <Route path="student/home" element={<Home />} />
         <Route path="/employer/addJobOffer/:id?" element={<AddJobOffer />} />
         <Route path="/employer/home" element={<EmployerBaseHome />} />
