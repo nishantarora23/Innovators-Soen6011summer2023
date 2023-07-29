@@ -54,7 +54,7 @@ const EmployerHome = () => {
             <div>
               <Button
                 component={Link}
-                to={""}
+                to={"/employer/Applicants"}
                 color="primary"
                 sx={{ fontSize: "1.1rem" }}
               >

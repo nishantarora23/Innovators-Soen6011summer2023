@@ -16,17 +16,36 @@ export const deleteUser = (username: string) => {
 
 
 export const addJobOfferHelper = (data: any) => {
+  data.ACTION = "Add"
   return axios.post(`${API_URL}/jobOffer`, data);
 }
 
-export const getMyJobOffers = (data: any) => {
-  return axios.get(`${API_URL}/jobOffer?username=${data}`);
-}
-
 export const deleteJobOffer = (id: string | number) => {
-  return axios.delete(`${API_URL}/jobOffer?username=${id}`);
+  const payload = {
+    ACTION: "REMOVE",
+    id: id,
+  };
+  return axios.post(`${API_URL}/jobOffer`, JSON.stringify(payload));
 };
 
 export const getJobOfferById = (id: string | number) => {
   return axios.get(`${API_URL}/jobOffer?id=${id}`);
+}
+export const updateJobOfferHelper = (data: any) => {
+  data.ACTION = "Update";
+  return axios.post(`${API_URL}/jobOffer`, data);
+}
+
+
+export const getMyJobOffers = (username: any) => {
+  const data = { username: username };
+  return axios.get(`${API_URL}/jobOffer`, {params: data});
+}
+
+export const getApplicats = (username: string, id: string | number | undefined) => {
+  return axios.get(`${API_URL}/application?username=${username}`);
+}
+
+export const getApplicantResume = (username: string) => {
+  return axios.get(`${API_URL}/resume?username=${username}`, {responseType: 'blob'});
 }
