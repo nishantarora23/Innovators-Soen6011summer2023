@@ -10,6 +10,7 @@ import EmployeeJobOffers from '../components/EmployerDashboard/EmployerJobOffers
 import ApplicantsComponent from './Applicants/Applicants';
 
 
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -19,10 +20,15 @@ const AppRoutes = () => {
         <Route path="signup" element={<SignUp />} />
         {/* <Route path="admin" element={<AdminDashboard />} /> */}
         <Route path="student/home" element={<Home />} />
+
+        <Route path="/employer/addJobOffer" element={<AddJobOffer />} />
+        <Route path="/employer/home" element={<EmployerBaseHome />} />
+
         <Route path="/employer/addJobOffer/:jobId?" element={<AddJobOffer />} />
         <Route path="/employer/home" element={<EmployerBaseHome />} />
         <Route path="/employer/jobOffers" element={<EmployeeJobOffers />} />
         <Route path="/employer/applicants/:id?" element={<ApplicantsComponent />} />
+
       </Routes>
     </BrowserRouter>
   );
