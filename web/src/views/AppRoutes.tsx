@@ -7,6 +7,7 @@ import Home from './Student/Home/Home'
 import AddJobOffer from './AddJobOffer/AddJobOffer';
 import EmployerBaseHome from './EmployerDashboard/Home';
 import EmployeeJobOffers from '../components/EmployerDashboard/EmployerJobOffers/EmployeeJobOffers';
+import ApplicantsComponent from './Applicants/Applicants';
 
 
 const AppRoutes = () => {
@@ -21,6 +22,7 @@ const AppRoutes = () => {
         <Route path="/employer/addJobOffer/:jobId?" element={<AddJobOffer />} />
         <Route path="/employer/home" element={<EmployerBaseHome />} />
         <Route path="/employer/jobOffers" element={<EmployeeJobOffers />} />
+        <Route path="/employer/applicants/:id?" element={<ApplicantsComponent />} />
       </Routes>
     </BrowserRouter>
   );

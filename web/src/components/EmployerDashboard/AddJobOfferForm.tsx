@@ -39,10 +39,14 @@ const AddJobOfferForm = ({ formData, setFormData, intl}: Props) => {
     const navigate = useNavigate();
 
     const handleFieldChange = (fieldId: string, value: string) => {
-      setJobOffer((prevJobOffer) => ({
-        ...prevJobOffer,
-        [fieldId]: value,
-      }));
+      if(jobOffer){
+        setJobOffer((prevJobOffer) => ({
+          ...prevJobOffer,
+          [fieldId]: value,
+        }));
+      }else{
+        setValue(fieldId, value);
+      }
     };
 
     useEffect(() => {
@@ -56,7 +60,7 @@ const AddJobOfferForm = ({ formData, setFormData, intl}: Props) => {
             Object.entries(jobOfferData).forEach(([key, value]) => {
               setValue(key, value);
             });
-            setJobOffer(jobOfferData.data?.[0]);
+            setJobOffer(jobOfferData.data);
           } catch (error) {
             console.error("Error fetching job offer data:", error);
           } finally {
@@ -77,10 +81,10 @@ const AddJobOfferForm = ({ formData, setFormData, intl}: Props) => {
         try {
           if (jobId) {
             await updateJobOfferHelper(jobOffer)
-            .then((res) => navigate('/employer/home'))
+            .then((res) => navigate('/employer/jobOffers'))
             .catch(err => console.log(err));
           } else {
-            await addJobOfferHelper(JSON.stringify(data))
+            await addJobOfferHelper(data)
             .then((res) => navigate('/employer/home'))
             .catch(err => console.log(err));
           }
@@ -132,15 +136,18 @@ const AddJobOfferForm = ({ formData, setFormData, intl}: Props) => {
       }
     ];
 
-    const navigateToDashboard = (): void => {
-      navigate('/employer/home');
+    const navigateBackwards = (): void => {
+      if(jobOffer)
+        navigate('/employer/jobOffers');
+      else
+        navigate('/employer/home');
     }
   
     return (
       <>
         <LoadingSpinner isOpen={loading} />
         <Grid container className="add-offer-card">
-            <Button  className="backButton" variant="contained" onClick={navigateToDashboard}>
+            <Button  className="backButton" variant="contained" onClick={navigateBackwards}>
                   {intl.formatMessage({
                     id: 'employerForm.addJobOffer.button.back'
                   })}

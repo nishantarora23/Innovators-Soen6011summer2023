@@ -16,14 +16,21 @@
         <servlet-name>UserServlet</servlet-name>
         <servlet-class>Servlets.UserServlet</servlet-class>
     </servlet>
-
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>Servlets.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>JobServlet</servlet-name>
-        <servlet-class>JobServlet</servlet-class>
+        <servlet-class>Servlets.JobServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ApplicationServlet</servlet-name>
+        <servlet-class>Servlets.ApplicationServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ResumeServlet</servlet-name>
+        <servlet-class>Servlets.ResumeServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -39,6 +46,15 @@
         <servlet-name>JobServlet</servlet-name>
         <url-pattern>/jobOffer/</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ApplicationServlet</servlet-name>
+        <url-pattern>/application/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ResumeServlet</servlet-name>
+        <url-pattern>/resume/</url-pattern>
+    </servlet-mapping>
+
     <filter>
         <filter-name>CORSFilter</filter-name>
         <filter-class>CORSFilter</filter-class>
