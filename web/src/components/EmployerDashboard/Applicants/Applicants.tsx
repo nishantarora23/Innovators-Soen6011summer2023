@@ -19,10 +19,10 @@ import PersonIcon from '@mui/icons-material/Person';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-import { getMyJobOffers, deleteJobOffer } from "../../../services/userService";
+import { getMyJobOffers, deleteJobOffer, getApplicats, getApplicantResume } from "../../../services/userService";
 import { getUserName } from "../../../services/userInfoService";
 
-import './EmployerJobOffers.scss';
+import './Applicants.scss';
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -85,68 +85,90 @@ const styles = {
   },
 };
 
-interface JobOffer {
+interface Applicants {
   id?: any;
-  company?: string;
-  title?: string;
-  contract_type?: string;
-  salar_range?: string;
-  description?: string;
-  location?: string;
+  fullName?: string;
+  username?: string;
+  password?: string;
+  user_role?: string;
+  role_id?: string;
+  email?: string;
+  address?: string;
+  dob?: string;
+  college_name?: string;
 };
 
-interface JobOffers{
-  jobOffers: JobOffer[];
-}
 
-const EmployerJobOffers = () => {
+const Applicants = () => {
   const company = getCompany();
   const navigate = useNavigate();
 
-  const [myJobOffers, setJobOffers] = useState<JobOffer[]>([]);
-
-  const jobRecommendations = [
-    {
-      id: 1,
-      title: "Frontend Developer",
-      company: "Tech Co.",
-      location: "Montreal",
-      description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      salar_range: "70,000 - 80,000",
-      responsibilities: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      contract_type: "Fulltime"
-    },
-    {
-      id: 2,
-      title: "SQL Developer",
-      company: "Tech Co.",
-      location: "Toronto",
-      description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      salar_range: "70,000 - 80,000",
-      responsibilities: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      contract_type: "Fulltime"
-    },
-  ];
+  const [applicants, setApplicants] = useState<Applicants[]>([]);
 
   useEffect(() => {
-    const username = getUserName();
-    getMyJobOffers(username)
-      .then((res) => {setJobOffers(res.data); console.log(res)})
-      .catch((err) => console.log(err));
+    const username :any = getUserName();
+    const mockedApplicants = [
+      {
+        id: 1, 
+        fullName: 'Sam Smith',
+        username: 'samSmith08',
+        user_role: 'Student',
+        role_id: '654',
+        email: 'sam26@gmail.com',
+        address: '1998 Boul De Maisoneuve Montreal',
+        dob: '1997-03-09',
+        college_name: 'Concordia University'
+      },
+      {
+        id: 2, 
+        fullName: 'Sam Smith',
+        username: 'samSmith08',
+        user_role: 'Student',
+        role_id: '654',
+        email: 'sam26@gmail.com',
+        address: '1998 Boul De Maisoneuve Montreal',
+        dob: '1997-03-09',
+        college_name: 'Concordia University'
+      },
+      {
+        id: 3, 
+        fullName: 'Sam Smith',
+        username: 'samSmith08',
+        user_role: 'Student',
+        role_id: '654',
+        email: 'sam26@gmail.com',
+        address: '1998 Boul De Maisoneuve Montreal',
+        dob: '1997-03-09',
+        college_name: 'Concordia University'
+      }
+    ];
+    getApplicats(username, undefined)
+      .then((res) => {
+        res.data.length ? setApplicants(res.data) : setApplicants(mockedApplicants);
+      })
+      .catch(err => console.error(err));
   }, []);
 
-  const handleDelete = (id: string | number): void => {
-    deleteJobOffer(id)
-      .then((res) => {alert("Job Offer has been Deleted"); navigate("/employer/jobOffers")})
-      .catch(err => console.log(err));
+  const handleReject = (id: string | number) => {
+    console.log("Hello");
   }
 
-  const handleNavigateToApplicants = (id: string | number): void => {
-    navigate(`/employer/Applicants/:${id}`)
+  const handleViewResume =  async (username : string | undefined) => {
+    if(username){
+      getApplicantResume(username)
+        .then(res => {
+          const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
+          const pdfUrl = URL.createObjectURL(pdfBlob);
+
+          // Open the PDF in a new tab
+          window.open(pdfUrl, '_blank');
+        })
+        .catch(err => console.error(err));
+    }
   }
 
-  const handleEdit = (id : string | number) => {
-    navigate(`/employer/addJobOffer/${id}`);
+  const handleAcceptApplicant = (id : string) => {
+    console.log("Hello");
   }
 
   return (
@@ -166,7 +188,7 @@ const EmployerJobOffers = () => {
             <div>
               <Button
                 component={Link}
-                to={""}
+                to={"/employer/jobOffers"}
                 color="primary"
                 sx={{ fontSize: "1.1rem" }}
               >
@@ -208,18 +230,18 @@ const EmployerJobOffers = () => {
           >
             <div>
               <Box sx={styles.cardContainer}>
-              {myJobOffers?.map((offer : JobOffer) => (
-                    <Card key={offer.id} sx={styles.card}>
-                    <Typography variant="subtitle1">{offer.company}</Typography>
-                    <Typography variant="body2">{offer.title}</Typography>
-                    <Typography className="location" variant="body2"> <LocationOnIcon/> {offer.location}</Typography>
-                    <Typography variant="subtitle1"> <AttachMoneyIcon />{offer.salar_range}</Typography>
-                    <Typography variant="body2">{offer.contract_type}</Typography>
-                    <Typography variant="body2">{offer.description}</Typography>
+                {applicants?.map((offer : Applicants) => (
+                  <Card key={offer.id} sx={styles.card}>
+                    <Typography variant="subtitle1">{offer.fullName}</Typography>
+                    <Typography variant="body2">{offer.user_role}</Typography>
+                    <Typography className="location" variant="body2"> {offer.email}</Typography>
+                    <Typography variant="subtitle1"> <LocationOnIcon/>{offer.address}</Typography>
+                    <Typography variant="body2">{offer.dob}</Typography>
+                    <Typography variant="body2">{offer.college_name}</Typography>
                     <Stack direction="row" spacing={1}>
-                      <Chip label="Edit" color="primary" onClick={() => handleEdit(offer.id)}/>
-                      <Chip label="View applicants for this Job" color="info" onClick={() => handleNavigateToApplicants(offer.id)}/>
-                      <Chip label="Delete" color="error" onClick={() => handleDelete(offer.id)}/>
+                      <Chip label="View Resume" color="primary" onClick={() => handleViewResume(offer.username)}/>
+                      <Chip label="Reject" color="warning" onClick={() => handleReject(offer.id)}/>
+                      <Chip label="Accept Application" color="success" onClick={() => handleAcceptApplicant(offer.id)}/>
                     </Stack>
                   </Card>
                ))}
@@ -232,4 +254,4 @@ const EmployerJobOffers = () => {
   );
 };
 
-export default injectIntl(EmployerJobOffers);
+export default injectIntl(Applicants);

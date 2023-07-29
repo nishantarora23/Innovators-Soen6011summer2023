@@ -25,7 +25,7 @@ import { indigo } from "@mui/material/colors";
 import { useState } from "react";
 import JobsList from "../../Jobs/Jobs";
 import StudentDetails from "../Details/StudentDetails";
-import { QUICK_CV_URL } from "../../../constants";
+// import { QUICK_CV_URL } from "../../../constants";
 
 const StudentHome = () => {
   const navigate = useNavigate();
@@ -157,7 +157,7 @@ const StudentHome = () => {
                 to={""}
                 color="primary"
                 onClick={() => {
-                  window.open(QUICK_CV_URL, "_blank");
+                  // window.open(QUICK_CV_URL, "_blank");
                 }}
                 sx={{ fontSize: "1.1rem" }}
               >

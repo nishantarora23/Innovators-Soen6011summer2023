@@ -8,9 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 @WebServlet("/resume")
 public class ResumeServlet  extends HttpServlet {
@@ -18,14 +16,36 @@ public class ResumeServlet  extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
-        String prefix = System.getProperty("user.dir")+"/main/resources/resume/";
-        System.out.println(prefix+username+".pdf");
-        File file = new File(prefix+username+".pdf");
-        PDDocument document = PDDocument.load(file);
-        PDStream pdfStream = new PDStream(document);
-        InputStream inputStream = pdfStream.createInputStream();
-        response.getOutputStream().write(inputStream.readAllBytes());
-        response.setStatus(HttpServletResponse.SC_OK);
+        String prefix = System.getProperty("user.dir") + "/resources/resume/";
+        String filename = username + ".pdf";
+
+        File file = new File(prefix, filename);
+
+        if (!file.exists()) {
+            // Handle the case when the file does not exist
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        try (PDDocument document = PDDocument.load(file);
+             InputStream inputStream = new FileInputStream(file)) {
+
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "inline; filename=" + filename);
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            OutputStream outputStream = response.getOutputStream();
+
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            // Handle any potential IO exceptions
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
