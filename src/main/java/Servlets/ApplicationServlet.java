@@ -4,6 +4,7 @@ import Commons.Helper;
 import Database.ApplicationDao;
 import Database.JobDAO;
 import Database.UserDAO;
+import Models.JobApplication;
 import Models.Job;
 import Models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +31,10 @@ public class ApplicationServlet extends HttpServlet {
         JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
         String action = jsonPayload.get("ACTION").getAsString();
 
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setDateFormat("yyyy-MM-dd"); // Set your desired date format pattern
+        Gson gson = gsonBuilder.create();
+
         if("REMOVE".equals(action)){
             try
             {
@@ -44,7 +49,8 @@ public class ApplicationServlet extends HttpServlet {
         } else if("ADD".equals(action)){
             try
             {
-                ApplicationDao.addApplication(jsonPayload.get("username").getAsString(),jsonPayload.get("jobId").getAsInt());
+                JobApplication application = gson.fromJson(payloadData, JobApplication.class);
+                ApplicationDao.addApplication(application);
             }
             catch (Exception e)
             {
