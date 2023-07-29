@@ -16,6 +16,7 @@ export const deleteUser = (username: string) => {
 
 
 export const addJobOfferHelper = (data: any) => {
+  data.ACTION = "Add"
   return axios.post(`${API_URL}/jobOffer`, data);
 }
 
@@ -28,6 +29,14 @@ export const updateJobOfferHelper = (data: any) => {
 export const getMyJobOffers = (username: any) => {
   const data = { username: username };
   return axios.get(`${API_URL}/jobOffer`, {params: data});
+}
+
+export const getApplicats = (username: string, id: string | number | undefined) => {
+  return axios.get(`${API_URL}/application?username=${username}`);
+}
+
+export const getApplicantResume = (username: string) => {
+  return axios.get(`${API_URL}/resume?username=${username}`, {responseType: 'blob'});
 }
 
 export const deleteJobOffer = (id: string | number) => {
