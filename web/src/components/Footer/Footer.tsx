@@ -10,7 +10,7 @@ type Props = {
 
 const Footer = ({ intl }: Props) => {
   return (
-    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+    <Paper sx={{ position: 'relative', bottom: 0, left: 0, right: 0 }} elevation={3}>
       <BottomNavigation className="footer-container">
         <Grid container>
           <Grid item xs={4} className="footer-section-container">
