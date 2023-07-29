@@ -121,12 +121,12 @@ public class JobDAO {
 
         return jobList;
     }
-    public static Job getJobId(String id){
+    public static Job getJobId(int id){
         String GET_JOB_QUERY = "SELECT * FROM JOBS WHERE ID = ?";
         Job job = new Job();
         try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
             PreparedStatement statement = connection.prepareStatement(GET_JOB_QUERY);
-            statement.setString(1, id);
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
                 job.setContractType(resultSet.getString("CONTRACT_TYPE"));
