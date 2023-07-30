@@ -25,6 +25,7 @@ public class JobDAO {
                 "  DEADLINE varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
                 "  CONTRACT_TYPE varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
                 "  EMPLOYER varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
+                "  STATUS varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT \"active\",\n" +
                 "  PRIMARY KEY (ID)\n" +
                 ")";
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://Localhost:3306/", Helper.uname,Helper.pass)) {
@@ -159,7 +160,7 @@ public class JobDAO {
     public static void update(Job job) {
         try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
             String query = "Update jobs set TITLE=? , SALARY_RANGE=?, RESPONSIBILITIES=?, QUALIFICATIONS=?, LOCATION=?, " +
-                    "DESCRIPTION=?, DEADLINE=?, CONTRACT_TYPE=?, EMPLOYER=? WHERE Id = ?";
+                    "DESCRIPTION=?, DEADLINE=?, CONTRACT_TYPE=?, EMPLOYER=?, STATUS=? WHERE Id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, job.getTitle());
             statement.setString(2, job.getSalaryRange());
@@ -171,6 +172,7 @@ public class JobDAO {
             statement.setString(8, job.getContractType());
             statement.setString(9, job.getUsername());
             statement.setString(10, Integer.toString(job.getID()));
+            statement.setString(11,job.getStatus());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

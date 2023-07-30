@@ -13,7 +13,7 @@ public class JobTest {
     public static void setUp() {
         // Create a new instance of Job before running the tests
         job = new Job(1, "Software Engineer", "60,000 - 80,000", "Design, develop, test, review",
-                "Masters in Computer Science", "Montreal, QC, CA", "Looking a Software Engineer", "2023-08-31", "Full-time", "Robert");
+                "Masters in Computer Science", "Montreal, QC, CA", "Looking a Software Engineer", "2023-08-31", "Full-time", "Robert","Active");
     }
 
     @Test
