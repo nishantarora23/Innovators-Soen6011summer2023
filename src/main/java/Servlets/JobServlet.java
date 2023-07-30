@@ -80,6 +80,10 @@ public class JobServlet extends HttpServlet {
             {
                 job.setSalaryRange(jsonPayload.get("salaryRange").getAsString());
             }
+            if(!jsonPayload.get("status").isJsonNull())
+            {
+                job.setStatus(jsonPayload.get("status").getAsString());
+            }
             try
             {
                 JobDAO.update(job);
@@ -109,6 +113,7 @@ public class JobServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ArrayList<Job> jobs = null;
+        System.out.println("inside get");
         String json=null;
         ObjectMapper objectMapper = new ObjectMapper();
         String username = request.getParameter("username");
