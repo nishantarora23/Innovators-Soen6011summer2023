@@ -80,7 +80,7 @@ public class ApplicationServlet extends HttpServlet {
         String action=request.getParameter("action");
         try {
             switch (action) {
-                case "getApllications" -> {
+                case "getApllications" : {
                     ArrayList<Integer> jobIds = ApplicationDao.getAllApplications(username);
                     ArrayList<Job> appliedJobs = new ArrayList<>();
                     for (int jobId : jobIds) {
@@ -88,7 +88,7 @@ public class ApplicationServlet extends HttpServlet {
                     }
                     json = objectMapper.writeValueAsString(appliedJobs);
                 }
-                case "getApplicants" -> {
+                case "getApplicants" : {
                     ArrayList<User> applicants = new ArrayList<>();
                     ArrayList<String> usernames = ApplicationDao.getAllApplicants(Integer.parseInt(id));
                     for (String user : usernames) {
@@ -97,7 +97,7 @@ public class ApplicationServlet extends HttpServlet {
                     json = objectMapper.writeValueAsString(applicants);
                     break;
                 }
-                case "getNotifications" -> {
+                case "getNotifications" : {
                     HashMap<Integer,String> notifications = new HashMap<>();
                     notifications = ApplicationDao.getNotifications(username);
                     json = objectMapper.writeValueAsString(notifications);
