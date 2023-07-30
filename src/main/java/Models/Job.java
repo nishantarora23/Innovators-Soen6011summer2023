@@ -12,8 +12,10 @@ public class Job {
     private String contractType;
     private String username;
 
+    private String status = "active";
+
     public Job(int ID, String title, String salaryRange, String responsibilities, String qualifications,
-               String location, String description, String deadline, String contractType, String employerID) {
+               String location, String description, String deadline, String contractType, String employerID,String status) {
         this.ID = ID;
         this.title = title;
         this.salaryRange = salaryRange;
@@ -23,6 +25,8 @@ public class Job {
         this.description = description;
         this.deadline = deadline;
         this.contractType = contractType;
+        this.username = employerID;
+        this.status =status;
     }
     public Job()
     {}
@@ -105,5 +109,13 @@ public class Job {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
