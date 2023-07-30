@@ -19,7 +19,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-import { getMyJobOffers, deleteJobOffer, getApplicats, getApplicantResume } from "../../../services/userService";
+import { getMyJobOffers, deleteJobOffer, getApplicats, getApplicantResume, selectCandidateForInterview, deleteApplication, rejectApplication } from "../../../services/userService";
 import { getUserName } from "../../../services/userInfoService";
 
 import './Applicants.scss';
@@ -103,54 +103,29 @@ const Applicants = () => {
   const company = getCompany();
   const navigate = useNavigate();
 
+  const { id } = useParams();
+
   const [applicants, setApplicants] = useState<Applicants[]>([]);
 
   useEffect(() => {
     const username :any = getUserName();
-    const mockedApplicants = [
-      {
-        id: 1, 
-        fullName: 'Sam Smith',
-        username: 'samSmith08',
-        user_role: 'Student',
-        role_id: '654',
-        email: 'sam26@gmail.com',
-        address: '1998 Boul De Maisoneuve Montreal',
-        dob: '1997-03-09',
-        college_name: 'Concordia University'
-      },
-      {
-        id: 2, 
-        fullName: 'Sam Smith',
-        username: 'samSmith08',
-        user_role: 'Student',
-        role_id: '654',
-        email: 'sam26@gmail.com',
-        address: '1998 Boul De Maisoneuve Montreal',
-        dob: '1997-03-09',
-        college_name: 'Concordia University'
-      },
-      {
-        id: 3, 
-        fullName: 'Sam Smith',
-        username: 'samSmith08',
-        user_role: 'Student',
-        role_id: '654',
-        email: 'sam26@gmail.com',
-        address: '1998 Boul De Maisoneuve Montreal',
-        dob: '1997-03-09',
-        college_name: 'Concordia University'
-      }
-    ];
-    getApplicats(username, undefined)
+    getApplicats(username, id?.charAt(1))
       .then((res) => {
-        res.data.length ? setApplicants(res.data) : setApplicants(mockedApplicants);
+        setApplicants(res.data);
       })
       .catch(err => console.error(err));
   }, []);
 
-  const handleReject = (id: string | number) => {
-    console.log("Hello");
+  const handleReject = (username: any) => {
+    rejectApplication(username, id?.charAt(1))
+        .then(res => console.log(res))
+        .catch(err => console.error(err));
+  }
+
+  const handleDelete = (username: any) => {
+    deleteApplication(username, id?.charAt(1))
+        .then((res) => console.log(res))
+        .catch(err => console.error(err))
   }
 
   const handleViewResume =  async (username : string | undefined) => {
@@ -160,15 +135,16 @@ const Applicants = () => {
           const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
           const pdfUrl = URL.createObjectURL(pdfBlob);
 
-          // Open the PDF in a new tab
           window.open(pdfUrl, '_blank');
         })
         .catch(err => console.error(err));
     }
   }
 
-  const handleAcceptApplicant = (id : string) => {
-    console.log("Hello");
+  const handleAcceptApplicant = (username : any) => {
+    selectCandidateForInterview(username, id?.charAt(1))
+        .then((res) => console.log(res))
+        .catch(err => console.error(err))
   }
 
   return (
@@ -241,7 +217,8 @@ const Applicants = () => {
                     <Stack direction="row" spacing={1}>
                       <Chip label="View Resume" color="primary" onClick={() => handleViewResume(offer.username)}/>
                       <Chip label="Reject" color="warning" onClick={() => handleReject(offer.id)}/>
-                      <Chip label="Accept Application" color="success" onClick={() => handleAcceptApplicant(offer.id)}/>
+                      <Chip label="Accept Application" color="success" onClick={() => handleAcceptApplicant(offer.username)}/>
+                      <Chip label="Accept Application" color="error" onClick={() => handleDelete(offer.username)}/>
                     </Stack>
                   </Card>
                ))}
