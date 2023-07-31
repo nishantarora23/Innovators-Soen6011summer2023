@@ -19,7 +19,7 @@ public class AdminDAO {
 	        } catch (ClassNotFoundException e) {
 	            throw new RuntimeException(e);
 	        }
-	        try (Connection connection = DriverManager.getConnection("jdbc:mysql://Localhost:3306/", Helper.uname,Helper.pass)) {
+	        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
 	           
 	        } catch (SQLException e) {
 	            e.printStackTrace();
