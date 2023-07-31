@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { injectIntl } from "react-intl";
-import MenuBar from "../../components/MenuBar/MenuBar";
+// import MenuBar from "../../components/MenuBar/MenuBar";
 import Footer from "../../components/Footer/Footer";
-import StatCard from "../../components/StatCard/StatCard";
 import "./AdminDashboard.scss";
-import { Person, Store } from "@mui/icons-material";
 import {
   Box,
   Drawer,
@@ -14,23 +12,41 @@ import {
   ListItemText,
   Toolbar,
 } from "@mui/material";
-import { FALSE } from "sass";
+
+// Pages
 import AdminHome from "./AdminHome";
+import JobPosting from "./JobPosting";
+import CandidateApplications from "./CandidateApplications";
 
 type Props = {
   intl: any;
 };
 
-const Page = () => {
+const EmptyPage = ({ selectedView }: { selectedView: string }) => {
   return (
     <div className="pageContainer">
-      <h1>Page to be done.</h1>
+      <h1>{selectedView}</h1>
+      <p>No content available for this page.</p>
     </div>
   );
 };
 
 const AdminDashboard = ({ intl }: Props) => {
   const [selectedView, setSelectedView] = useState("Home");
+
+  const getPageContent = (selectedView: string) => {
+    switch (selectedView) {
+      case "Home":
+        return <AdminHome />;
+      case "Job Posting":
+        return <JobPosting />;
+      case "Candidate Applications":
+        return <CandidateApplications />;
+      default:
+        return <EmptyPage selectedView={selectedView} />;
+    }
+  };
+
   return (
     <>
       {/* <MenuBar
@@ -66,9 +82,7 @@ const AdminDashboard = ({ intl }: Props) => {
           )}
         </List>
       </Drawer>
-
-      {selectedView === "Home" ? <AdminHome /> : <Page />}
-      <Footer />
+      {getPageContent(selectedView)}
     </>
   );
 };

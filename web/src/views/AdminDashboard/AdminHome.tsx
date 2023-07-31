@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { Box } from "@mui/material";
 import StatCard from "../../components/StatCard/StatCard";
 import { Person, Store } from "@mui/icons-material";
-import StudentsTable from "../../components/StudentsTable/StudentsTable";
-import EmployersTable from "../../components/EmployersTable/EmployersTable";
+
+import Students from "./Students";
+import Employers from "./Employers";
+
+import "./AdminDashboard.scss";
 
 const AdminHome = () => {
   const [selectedType, setSelectedType] = useState("");
@@ -12,12 +15,12 @@ const AdminHome = () => {
     <div className="pageContainer">
       {selectedType ? (
         selectedType === "Students Enrolled" ? (
-          <StudentsTable
+          <Students
             selectedType={selectedType}
             setSelectedType={setSelectedType}
           />
         ) : (
-          <EmployersTable
+          <Employers
             selectedType={selectedType}
             setSelectedType={setSelectedType}
           />
