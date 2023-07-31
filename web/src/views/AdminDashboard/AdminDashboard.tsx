@@ -5,6 +5,7 @@ import Footer from "../../components/Footer/Footer";
 import "./AdminDashboard.scss";
 import {
   Box,
+  Divider,
   Drawer,
   List,
   ListItem,
@@ -47,6 +48,10 @@ const AdminDashboard = ({ intl }: Props) => {
     }
   };
 
+  const logout = () => {
+    console.log("Logout!");
+  };
+
   return (
     <>
       {/* <MenuBar
@@ -80,6 +85,12 @@ const AdminDashboard = ({ intl }: Props) => {
               </ListItem>
             )
           )}
+          <Divider />
+          <ListItem disablePadding>
+            <ListItemButton onClick={logout}>
+              <ListItemText primary="Logout" />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
       {getPageContent(selectedView)}
