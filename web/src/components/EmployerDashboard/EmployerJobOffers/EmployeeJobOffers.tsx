@@ -105,29 +105,6 @@ const EmployerJobOffers = () => {
 
   const [myJobOffers, setJobOffers] = useState<JobOffer[]>([]);
 
-  const jobRecommendations = [
-    {
-      id: 1,
-      title: "Frontend Developer",
-      company: "Tech Co.",
-      location: "Montreal",
-      description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      salar_range: "70,000 - 80,000",
-      responsibilities: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      contract_type: "Fulltime"
-    },
-    {
-      id: 2,
-      title: "SQL Developer",
-      company: "Tech Co.",
-      location: "Toronto",
-      description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      salar_range: "70,000 - 80,000",
-      responsibilities: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      contract_type: "Fulltime"
-    },
-  ];
-
   useEffect(() => {
     const username = getUserName();
     getMyJobOffers(username)
@@ -143,6 +120,10 @@ const EmployerJobOffers = () => {
 
   const handleNavigateToApplicants = (id: string | number): void => {
     navigate(`/employer/Applicants/:${id}`)
+  }
+
+  const handleNavigateToJobDetails = (id: any) => {
+    navigate(`/employer/jobOffers/:${id}`);
   }
 
   const handleEdit = (id : string | number) => {
@@ -219,7 +200,9 @@ const EmployerJobOffers = () => {
                     <Stack direction="row" spacing={1}>
                       <Chip label="Edit" color="primary" onClick={() => handleEdit(offer.id)}/>
                       <Chip label="View applicants for this Job" color="info" onClick={() => handleNavigateToApplicants(offer.id)}/>
+                      <Chip label="View application" color="info" onClick={() => handleNavigateToJobDetails(offer.id)}/>
                       <Chip label="Delete" color="error" onClick={() => handleDelete(offer.id)}/>
+
                     </Stack>
                   </Card>
                ))}

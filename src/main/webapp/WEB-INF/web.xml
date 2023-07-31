@@ -32,6 +32,10 @@
         <servlet-name>ResumeServlet</servlet-name>
         <servlet-class>Servlets.ResumeServlet</servlet-class>
     </servlet>
+ <servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>Servlets.AdminServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
@@ -51,6 +55,10 @@
         <url-pattern>/application/</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+<servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/admin/*</url-pattern>
+    </servlet-mapping>
         <servlet-name>ResumeServlet</servlet-name>
         <url-pattern>/resume/</url-pattern>
     </servlet-mapping>
