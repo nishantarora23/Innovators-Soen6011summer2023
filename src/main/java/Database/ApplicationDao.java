@@ -25,14 +25,14 @@ public class ApplicationDao {
                 "  NOTIFY BOOLEAN DEFAULT FALSE, \n"+
                 "  PRIMARY KEY (ID)\n" +
                 ")";
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://Localhost:3306/", Helper.uname,Helper.pass)) {
+        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
             PreparedStatement statement1 = connection.prepareStatement(drop);
             statement1.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://Localhost:3306/", Helper.uname,Helper.pass)) {
+        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
             PreparedStatement statement1 = connection.prepareStatement(query1);
             statement1.executeUpdate();
         } catch (SQLException e) {
