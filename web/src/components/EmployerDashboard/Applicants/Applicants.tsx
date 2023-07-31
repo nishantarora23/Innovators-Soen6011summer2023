@@ -184,11 +184,11 @@ const Applicants = () => {
             <div>
               <Button
                 component={Link}
-                to={"/employer/Applicants"}
+                to={"/employer/home"}
                 color="primary"
                 sx={{ fontSize: "1.1rem" }}
               >
-                <PersonIcon sx={{ marginRight: "10px" }} /> Applicants
+                <PersonIcon sx={{ marginRight: "10px" }} /> Home
               </Button>
             </div>
           </Card>

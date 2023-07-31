@@ -113,6 +113,7 @@ public class JobDAO {
                 job.setUsername(resultSet.getString("EMPLOYER"));
                 job.setSalaryRange(resultSet.getString("SALARY_RANGE"));
                 job.setTitle(resultSet.getString("TITLE"));
+                job.setStatus(resultSet.getString("STATUS"));
 
                 jobList.add(job);
             }
@@ -171,8 +172,8 @@ public class JobDAO {
             statement.setString(7, job.getDeadline());
             statement.setString(8, job.getContractType());
             statement.setString(9, job.getUsername());
-            statement.setString(10, Integer.toString(job.getID()));
-            statement.setString(11,job.getStatus());
+            statement.setString(10,job.getStatus());
+            statement.setString(11, Integer.toString(job.getID()));
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
