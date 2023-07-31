@@ -113,8 +113,9 @@ const EmployerJobOffers = () => {
 
   const handleDelete = (id: string | number): void => {
     deleteJobOffer(id)
-      .then((res) => {alert("Job Offer has been Deleted"); navigate("/employer/jobOffers")})
+      .then((res) => {alert("Job Offer has been Deleted"); window.location.reload()})
       .catch(err => console.log(err));
+    
   }
 
   const handleNavigateToApplicants = (id: string | number): void => {
@@ -166,11 +167,11 @@ const EmployerJobOffers = () => {
             <div>
               <Button
                 component={Link}
-                to={"/employer/Applicants"}
+                to={"/employer/home"}
                 color="primary"
                 sx={{ fontSize: "1.1rem" }}
               >
-                <PersonIcon sx={{ marginRight: "10px" }} /> Applicants
+                <PersonIcon sx={{ marginRight: "10px" }} /> Home
               </Button>
             </div>
           </Card>
