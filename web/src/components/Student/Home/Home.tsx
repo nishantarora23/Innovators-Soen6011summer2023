@@ -183,21 +183,7 @@ const StudentHome = () => {
                   setScreen("jobs");
                 }}
               >
-                <Notifications sx={{ marginRight: "10px" }} /> Job alerts
-              </Button>
-            </div>
-            <div className="menus">
-              <Button
-                component={Link}
-                to={""}
-                color="primary"
-                sx={{ fontSize: "1.1rem" }}
-                onClick={() => {
-                  setScreen("skills");
-                }}
-              >
-                <AssignmentTurnedIn sx={{ marginRight: "10px" }} /> Skill
-                assessments
+                <Notifications sx={{ marginRight: "10px" }} /> Job Listings
               </Button>
             </div>
             <div className="menus">
