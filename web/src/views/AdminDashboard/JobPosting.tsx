@@ -127,21 +127,7 @@ const JobPosting = () => {
     <div className="pageContainer">
       <Table
         columns={columns}
-        tableData={[
-          {
-            title: "Developer",
-            salaryRange: "100k-150k",
-            responsibilities: "responsibilitises",
-            qualifications: "qualifications",
-            location: "Montreal",
-            description: "test job offer",
-            deadline: "August 10",
-            contractType: "permanent",
-            username: "nav",
-            status: "active",
-            id: 1,
-          },
-        ]}
+        tableData={tableData}
         handleSaveRecord={handleSaveRecord}
         handleDeleteRecord={handleDeleteRecord}
         title={"Job Posting"}
