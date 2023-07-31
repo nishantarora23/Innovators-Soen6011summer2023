@@ -16,14 +16,32 @@ const CandidateApplications = () => {
 
   const columns = useMemo<MRT_ColumnDef[]>(
     () => [
+      // address
+//: 
+// "123 Driver Lane"
+// company_name
+// : 
+// "Amazon"
+// dob
+// : 
+// "1975-10-22"
+// email
+// : 
+// "gustavo.fring@gmail.com"
+// id
+// : 
+// "2"
+// name
+// : 
+// "Gustavo Fring"
       {
-        accessorKey: "name.firstName", //access nested data with dot notation
-        header: "First Name",
+        accessorKey: "name", //access nested data with dot notation
+        header: "Name",
         size: 150,
       },
       {
-        accessorKey: "name.lastName",
-        header: "Last Name",
+        accessorKey: "email",
+        header: "Email",
         size: 150,
       },
       {
@@ -32,20 +50,15 @@ const CandidateApplications = () => {
         size: 200,
       },
       {
-        accessorKey: "city",
-        header: "City",
+        accessorKey: "dob",
+        header: "Date of Birth",
         size: 150,
       },
       {
-        accessorKey: "state",
-        header: "State",
+        accessorKey: "company_name",
+        header: "Comapny Name",
         size: 150,
-        editSelectOptions: [
-          { text: "test", value: "test" },
-          { text: "test1", value: "test1" },
-          { text: "test2", value: "test2" },
-        ],
-        editVariant: "select",
+        
       },
     ],
     []

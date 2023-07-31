@@ -14,7 +14,7 @@ type TableProps = {
 
 const Employers = ({ selectedType, setSelectedType }: TableProps) => {
   const [tableData, setTableData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [fetchedData, setFetchedData] = useState(false);
 
   const columns = useMemo<MRT_ColumnDef[]>(

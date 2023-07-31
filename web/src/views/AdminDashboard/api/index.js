@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8081";
+const BASE_URL = "http://localhost:8080";
 
 // Students Enrolled
 
@@ -19,10 +19,10 @@ export const fetchStudentEnrolled = async () => {
 };
 
 export const updateStudent = async (payload) => {
-  let URL = `${BASE_URL}/careerconnect/admin/listOfStudent`;
+  let URL = `${BASE_URL}/careerconnect/admin/updateStudent`;
   try {
     const response = await fetch(URL, {
-      method: "PATCH",
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -42,7 +42,7 @@ export const updateStudent = async (payload) => {
 };
 
 export const deleteStudent = async (studentId) => {
-  let URL = `${BASE_URL}/careerconnect/admin/listOfStudent/${studentId}`;
+  let URL = `${BASE_URL}/careerconnect/admin/deleteStudent/${studentId}`;
   try {
     const response = await fetch(URL, {
       method: "DELETE",
@@ -76,10 +76,10 @@ export const fetchEmployersRegistered = async () => {
 };
 
 export const updateEmployer = async (payload) => {
-  let URL = `${BASE_URL}/careerconnect/admin/listOfEmployer`;
+  let URL = `${BASE_URL}/careerconnect/admin/updateEmployer`;
   try {
     const response = await fetch(URL, {
-      method: "PATCH",
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -98,7 +98,7 @@ export const updateEmployer = async (payload) => {
 };
 
 export const deleteEmployer = async (employerId) => {
-  let URL = `${BASE_URL}/careerconnect/admin/listOfEmployer/${employerId}`;
+  let URL = `${BASE_URL}/careerconnect/admin/deleteEmployer/${employerId}`;
   try {
     const response = await fetch(URL, {
       method: "DELETE",
