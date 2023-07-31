@@ -67,7 +67,7 @@ const StudentHome = () => {
       formData.append('email', getEmail() ?? "");
       formData.append('userRole', getUserRole() ?? "");
       formData.append('resume', event.target.files[0]);
-      axios.post(`${API_URL}/upload-resume`, formData).then(() => {
+      axios.post(`${API_URL}/upload-resume/${getUserName()}`, formData).then(() => {
         setResumeSnackbar({
           open: true,
           severity: "success",
