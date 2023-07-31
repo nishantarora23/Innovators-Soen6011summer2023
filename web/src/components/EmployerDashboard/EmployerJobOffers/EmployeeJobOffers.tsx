@@ -9,7 +9,7 @@ import {
   Stack,
   Chip,
 } from "@mui/material";
-import { getCompany, getFullName, getAddress, getEmail, getDOB} from "../../../services/userInfoService";
+import { getCompany, getUserName, getFullName, getAddress, getEmail, getDOB} from "../../../services/userInfoService";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Bookmark
@@ -20,7 +20,6 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 import { getMyJobOffers, deleteJobOffer } from "../../../services/userService";
-import { getUserName } from "../../../services/userInfoService";
 
 import './EmployerJobOffers.scss';
 import { useEffect, useState } from "react";

@@ -6,7 +6,7 @@ import solidPlugin from "vite-plugin-solid";
 
 export default defineConfig({
   server: {
-    port: 3000
+    port: 3001
   },
   preview: {
     port: 8000

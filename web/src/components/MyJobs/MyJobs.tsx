@@ -4,15 +4,9 @@ import { Box, Button, CardContent, Modal, Typography } from "@mui/material";
 import { TouchApp, Work } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import Snackbar from "@mui/material/Snackbar";
-import MuiAlert, { AlertColor } from "@mui/material/Alert";
+import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
 import { API_URL } from "../../constants";
-
-export interface EasyApplyResponseSnackbar {
-  open: boolean;
-  severity: AlertColor;
-  message: string;
-}
 
 export interface JobInfo {
   title: string;
@@ -23,7 +17,7 @@ export interface JobInfo {
   deadline: string;
 }
 
-const JobsList = () => {
+const MyJobInfo = () => {
   const [open, setOpen] = useState(false);
   const [selectedJobInfo, setSelectedJobInfo] = useState<JobInfo>({
     title: "",
@@ -34,16 +28,10 @@ const JobsList = () => {
     deadline: "",
   });
   const [jobsList, setJobsList] = useState<Array<JobInfo>>([]);
-  const [easyApplyResponseSnackbar, setEasyApplyResponseSnackbar] =
-    useState<EasyApplyResponseSnackbar>({
-      open: false,
-      severity: "info",
-      message: "",
-    });
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/jobOffer`)
+      .get(`${API_URL}/applied-jobs`)
       .then((response) => {
         setJobsList(response?.data ?? []);
       })
@@ -61,29 +49,8 @@ const JobsList = () => {
     setOpen(false);
   };
 
-  const handleEasyApply = (payload: JobInfo) => {
-    axios.post(`${API_URL}/easy-apply`, payload).then(() => {
-      setEasyApplyResponseSnackbar({
-        open: true,
-        severity: "success",
-        message: "Applied for job sucessfully."
-      });
-    }).catch(() => {
-      setEasyApplyResponseSnackbar({
-        open: true,
-        severity: "error",
-        message: "Job apply failed."
-      });
-    });
-  };
-
   return (
     <>
-      <Snackbar open={easyApplyResponseSnackbar.open} autoHideDuration={3000}>
-        <MuiAlert severity={easyApplyResponseSnackbar.severity}>
-          {easyApplyResponseSnackbar.message}
-        </MuiAlert>
-      </Snackbar>
       <Box component="div" sx={{ marginTop: "20px" }}>
         {jobsList?.length > 0 &&
           jobsList.map((jobInfo) => {
@@ -131,7 +98,7 @@ const JobsList = () => {
                       handleOpen();
                     }}
                   >
-                    <TouchApp sx={{ marginRight: "10px" }} /> Apply
+                    <TouchApp sx={{ marginRight: "10px" }} /> View
                   </Button>
                 </Box>
               </CardContent>
@@ -181,7 +148,7 @@ const JobsList = () => {
                 marginTop: "10px",
               }}
             >
-              Apply before: {selectedJobInfo?.deadline}
+              Interview Schduled on: {selectedJobInfo?.deadline}
             </Typography>
           )}
           <Typography
@@ -191,22 +158,10 @@ const JobsList = () => {
             About the job
           </Typography>
           <Typography>{selectedJobInfo?.description}</Typography>
-          <Box component="div" sx={{ float: "right" }}>
-            <Button
-              variant="contained"
-              onClick={() => {handleEasyApply(selectedJobInfo)}}
-              sx={{ marginRight: "20px" }}
-            >
-              Easy Apply
-            </Button>
-            <Button variant="contained" onClick={handleClose}>
-              Save
-            </Button>
-          </Box>
         </Box>
       </Modal>
     </>
   );
 };
 
-export default injectIntl(JobsList);
+export default injectIntl(MyJobInfo);
