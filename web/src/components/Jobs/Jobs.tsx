@@ -7,6 +7,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertColor } from "@mui/material/Alert";
 import axios from "axios";
 import { API_URL } from "../../constants";
+import { getFullName, getUserName } from "../../services/userInfoService";
 
 export interface EasyApplyResponseSnackbar {
   open: boolean;
@@ -21,6 +22,7 @@ export interface JobInfo {
   location: string;
   qualifications: string;
   deadline: string;
+  id: string;
 }
 
 const JobsList = () => {
@@ -32,6 +34,7 @@ const JobsList = () => {
     location: "",
     qualifications: "",
     deadline: "",
+    id : ""
   });
   const [jobsList, setJobsList] = useState<Array<JobInfo>>([]);
   const [easyApplyResponseSnackbar, setEasyApplyResponseSnackbar] =
@@ -62,7 +65,13 @@ const JobsList = () => {
   };
 
   const handleEasyApply = (payload: JobInfo) => {
-    axios.post(`${API_URL}/easy-apply`, payload).then(() => {
+    const objectPayload = {
+      jobid : payload.id,
+      username : getUserName(),
+      applicant : getFullName(),
+      action : 'ADD'
+    }
+    axios.post(`${API_URL}/application`, objectPayload).then(() => {
       setEasyApplyResponseSnackbar({
         open: true,
         severity: "success",
