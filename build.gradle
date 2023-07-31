@@ -33,7 +33,7 @@ sourceCompatibility = getAvailableJavaVersion()
 targetCompatibility = getAvailableJavaVersion()
 
 dependencies {
-    implementation 'mysql:mysql-connector-java:8.0.11'
+    implementation 'com.mysql:mysql-connector-j:8.1.0'
     implementation 'org.json:json:20220924'
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
     implementation 'log4j:log4j:1.2.17'
