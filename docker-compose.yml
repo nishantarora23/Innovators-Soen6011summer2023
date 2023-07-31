@@ -9,6 +9,9 @@ services:
     volumes:
       - ./careerconnect.war:/usr/local/tomcat/webapps/careerconnect.war
       - ./mysql-connector-j-8.1.0.jar:/usr/local/tomcat/lib/mysql-connector-j-8.1.0.jar
+    depends_on:
+      - mysql
+    command: ["/bin/bash", "-c", "sleep 30 && catalina.sh run"]
     restart: always
 
   mysql:
