@@ -53,7 +53,7 @@ const AdminDashboard = ({ intl }: Props) => {
   };
 
   return (
-    <>
+    <div style={{ height: "calc(100vh - 170px - 90px)" }}>
       {/* <MenuBar
         title={intl.formatMessage({ id: "global.app_title" })}
         noBtn={true}
@@ -65,7 +65,7 @@ const AdminDashboard = ({ intl }: Props) => {
           "& .MuiDrawer-paper": {
             width: 240,
             boxSizing: "border-box",
-            zIndex: -1,
+            zIndex: 0,
           },
         }}
         variant="permanent"
@@ -94,7 +94,7 @@ const AdminDashboard = ({ intl }: Props) => {
         </List>
       </Drawer>
       {getPageContent(selectedView)}
-    </>
+    </div>
   );
 };
 
