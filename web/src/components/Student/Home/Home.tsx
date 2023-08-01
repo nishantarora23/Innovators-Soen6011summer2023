@@ -11,7 +11,7 @@ import {
   Avatar,
   IconButton,
 } from "@mui/material";
-import { getFullName, getUserInfo } from "../../../services/userInfoService";
+import { getFullName, getUserName, getEmail, getUserRole } from "../../../services/userInfoService";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Article,
@@ -20,20 +20,68 @@ import {
   AssignmentTurnedIn,
   Person4,
   LogoutOutlined,
+  CloudUpload,
+  Home
 } from "@mui/icons-material";
 import { indigo } from "@mui/material/colors";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertColor } from '@mui/material/Alert';
 import { useState } from "react";
 import JobsList from "../../Jobs/Jobs";
+import MyJobs from "../../MyJobs/MyJobs";
 import StudentDetails from "../Details/StudentDetails";
-// import { QUICK_CV_URL } from "../../../constants";
+import { QUICK_CV_URL, API_URL } from "../../../constants";
+import axios from "axios";
+import "./Home.css";
+
+export interface ResumeSnackbar {
+  open: boolean;
+  severity: AlertColor;
+  message: string;
+}
 
 const StudentHome = () => {
   const navigate = useNavigate();
   const [screen, setScreen] = useState("home");
+  const [resumeSnackbar, setResumeSnackbar] = useState<ResumeSnackbar>({
+    open: false,
+    severity: "info",
+    message: ""
+  });
 
   const doLogout = () => {
     localStorage.clear();
     navigate("/login");
+  };
+
+  const handleFileUpload = () => {
+    document.getElementById("fileInput")?.click();
+  };
+
+  const handleFileChange = (event: any) => {
+    console.log(event);
+    if (event?.target?.files?.length) {
+      const formData = new FormData();
+      formData.append('username', getUserName() ?? "");
+      formData.append('fullName', getFullName() ?? "");
+      formData.append('email', getEmail() ?? "");
+      formData.append('userRole', getUserRole() ?? "");
+      formData.append('resume', event.target.files[0]);
+      axios.post(`${API_URL}/upload-resume/${getUserName()}`, formData).then(() => {
+        setResumeSnackbar({
+          open: true,
+          severity: "success",
+          message: "Resume uploaded sucessfully."
+        });
+      }).catch((error) => {
+        setResumeSnackbar({
+          open: true,
+          severity: "error",
+          message: "Resume uploaded failed."
+        });
+        console.log(error);
+      });
+    }
   };
 
   return (
@@ -89,6 +137,7 @@ const StudentHome = () => {
       >
         <Grid item xs={12} sm={6} md={5} lg={3}>
           <Card
+            className="sidemenu"
             sx={{
               textAlign: "left",
               margin: "25px",
@@ -98,7 +147,7 @@ const StudentHome = () => {
               height: "calc(100vh - 350px)",
             }}
           >
-            <div>
+            <div className="menus">
               <Button
                 component={Link}
                 to={""}
@@ -108,10 +157,10 @@ const StudentHome = () => {
                   setScreen("home");
                 }}
               >
-                <Bookmark sx={{ marginRight: "10px" }} /> Home
+                <Home sx={{ marginRight: "10px" }} /> Home
               </Button>
             </div>
-            <div>
+            <div className="menus">
               <Button
                 component={Link}
                 to={""}
@@ -124,7 +173,7 @@ const StudentHome = () => {
                 <Bookmark sx={{ marginRight: "10px" }} /> My Jobs
               </Button>
             </div>
-            <div>
+            <div className="menus">
               <Button
                 component={Link}
                 to={""}
@@ -134,35 +183,45 @@ const StudentHome = () => {
                   setScreen("jobs");
                 }}
               >
-                <Notifications sx={{ marginRight: "10px" }} /> Job alerts
+                <Notifications sx={{ marginRight: "10px" }} /> Job Listings
               </Button>
             </div>
-            <div>
-              <Button
-                component={Link}
-                to={""}
-                color="primary"
-                sx={{ fontSize: "1.1rem" }}
-                onClick={() => {
-                  setScreen("skills");
-                }}
-              >
-                <AssignmentTurnedIn sx={{ marginRight: "10px" }} /> Skill
-                assessments
-              </Button>
-            </div>
-            <div>
+            <div className="menus">
               <Button
                 component={Link}
                 to={""}
                 color="primary"
                 onClick={() => {
-                  // window.open(QUICK_CV_URL, "_blank");
+                  window.open(QUICK_CV_URL, "_blank");
                 }}
                 sx={{ fontSize: "1.1rem" }}
               >
                 <Article sx={{ marginRight: "10px" }} /> Resume Builder
               </Button>
+            </div>
+            <div className="menus">
+              <Button
+                component={Link}
+                to={""}
+                color="primary"
+                onClick={handleFileUpload}
+                sx={{ fontSize: "1.1rem" }}
+              >
+                <CloudUpload sx={{ marginRight: "10px" }} /> Upload a Resume
+              </Button>
+              <input
+                id="fileInput"
+                className="custom-file-input"
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={handleFileChange}
+                hidden
+              />
+              <Snackbar open={resumeSnackbar.open} autoHideDuration={3000}>
+                <MuiAlert severity={resumeSnackbar.severity}>
+                  {resumeSnackbar.message}
+                </MuiAlert>
+              </Snackbar>
             </div>
           </Card>
         </Grid>
@@ -183,6 +242,25 @@ const StudentHome = () => {
                 <Box sx={{ flexGrow: 1 }}>
                   <StudentDetails />
                 </Box>
+              </>
+            )}
+            {screen === "my-jobs" && (
+              <>
+                <CardContent>
+                  <Typography
+                    sx={{
+                      fontSize: "1.75rem",
+                      textTransform: "capitalize",
+                      fontWeight: "600",
+                    }}
+                  >
+                    Applied Jobs
+                  </Typography>
+                  <Typography sx={{ color: "#868686" }}>
+                    Jobs you have applied
+                  </Typography>
+                  <MyJobs></MyJobs>
+                </CardContent>
               </>
             )}
             {screen === "jobs" && (

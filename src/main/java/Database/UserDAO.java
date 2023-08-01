@@ -4,7 +4,6 @@ import Commons.Helper;
 import Models.User;
 
 import java.sql.*;
-;
 import java.text.ParseException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class UserDAO {
                 "  COLLEGE_NAME varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
                 "  PRIMARY KEY (USERNAME)\n" +
                 ")";
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://Localhost:3306/", Helper.uname,Helper.pass)) {
+        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
             PreparedStatement statement1 = connection.prepareStatement(query1);
             statement1.executeUpdate();
         } catch (SQLException e) {

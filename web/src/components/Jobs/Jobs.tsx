@@ -3,21 +3,57 @@ import { Box, Button, CardContent, Modal, Typography } from "@mui/material";
 
 import { TouchApp, Work } from "@mui/icons-material";
 import { useState, useEffect } from "react";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertColor } from "@mui/material/Alert";
 import axios from "axios";
 import { API_URL } from "../../constants";
+import { getFullName, getUserName } from "../../services/userInfoService";
+
+export interface EasyApplyResponseSnackbar {
+  open: boolean;
+  severity: AlertColor;
+  message: string;
+}
+
+export interface JobInfo {
+  title: string;
+  description: string;
+  username: string;
+  location: string;
+  qualifications: string;
+  deadline: string;
+  id: string;
+}
 
 const JobsList = () => {
   const [open, setOpen] = useState(false);
-  const [selectedJobInfo, setSelectedJobInfo] = useState();
-  const [jobsList, setJobsList] = useState([]);
+  const [selectedJobInfo, setSelectedJobInfo] = useState<JobInfo>({
+    title: "",
+    description: "",
+    username: "",
+    location: "",
+    qualifications: "",
+    deadline: "",
+    id : ""
+  });
+  const [jobsList, setJobsList] = useState<Array<JobInfo>>([]);
+  const [easyApplyResponseSnackbar, setEasyApplyResponseSnackbar] =
+    useState<EasyApplyResponseSnackbar>({
+      open: false,
+      severity: "info",
+      message: "",
+    });
 
   useEffect(() => {
-    axios.get(`${API_URL}/jobOffer`).then((response) => {
-      setJobsList(response?.data ?? []);
-    }).catch((error) => {
-      setJobsList([]);
-      console.log(error);
-    });
+    axios
+      .get(`${API_URL}/jobOffer`)
+      .then((response) => {
+        setJobsList(response?.data ?? []);
+      })
+      .catch((error) => {
+        setJobsList([]);
+        console.log(error);
+      });
   }, []);
 
   const handleOpen = () => {
@@ -28,14 +64,41 @@ const JobsList = () => {
     setOpen(false);
   };
 
+  const handleEasyApply = (payload: JobInfo) => {
+    const objectPayload = {
+      jobid : payload.id,
+      username : getUserName(),
+      applicant : getFullName(),
+      ACTION : 'ADD'
+    }
+    axios.post(`${API_URL}/application`, objectPayload).then(() => {
+      setEasyApplyResponseSnackbar({
+        open: true,
+        severity: "success",
+        message: "Applied for job sucessfully."
+      });
+    }).catch(() => {
+      setEasyApplyResponseSnackbar({
+        open: true,
+        severity: "error",
+        message: "Job apply failed."
+      });
+    });
+  };
+
   return (
     <>
+      <Snackbar open={easyApplyResponseSnackbar.open} autoHideDuration={3000}>
+        <MuiAlert severity={easyApplyResponseSnackbar.severity}>
+          {easyApplyResponseSnackbar.message}
+        </MuiAlert>
+      </Snackbar>
       <Box component="div" sx={{ marginTop: "20px" }}>
         {jobsList?.length > 0 &&
           jobsList.map((jobInfo) => {
             return (
               <CardContent
-                key={jobInfo.id}
+                key={jobInfo.username}
                 sx={{
                   borderBottom: "1px solid #868686",
                 }}
@@ -123,8 +186,8 @@ const JobsList = () => {
           {selectedJobInfo?.deadline && (
             <Typography
               sx={{
-                fontSize:"1.1rem",
-                marginTop: "10px"
+                fontSize: "1.1rem",
+                marginTop: "10px",
               }}
             >
               Apply before: {selectedJobInfo?.deadline}
@@ -137,10 +200,10 @@ const JobsList = () => {
             About the job
           </Typography>
           <Typography>{selectedJobInfo?.description}</Typography>
-          <Box variant="div" sx={{ float: "right" }}>
+          <Box component="div" sx={{ float: "right" }}>
             <Button
               variant="contained"
-              onClick={handleClose}
+              onClick={() => {handleEasyApply(selectedJobInfo)}}
               sx={{ marginRight: "20px" }}
             >
               Easy Apply
