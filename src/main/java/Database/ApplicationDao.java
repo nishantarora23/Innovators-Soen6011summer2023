@@ -194,7 +194,7 @@ public class ApplicationDao {
         return status;
     }
     public static void updateStatus(String applicant, int jobId,String status) {
-        String query = "Update applications set STATUS=?, Notify=true WHERE APPLICANT = ? and JOBID = ?";
+        String query = "Update applications set STATUS=?, Notify=true WHERE STUDENT_USERNAME = ? and JOBID = ?";
         try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, status);
