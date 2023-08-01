@@ -83,7 +83,7 @@ public class JobDAO {
                 job.setUsername(resultSet.getString("EMPLOYER"));
                 job.setSalaryRange(resultSet.getString("SALARY_RANGE"));
                 job.setTitle(resultSet.getString("TITLE"));
-
+                job.setStatus(resultSet.getString("STATUS"));
                 jobList.add(job);
             }
         } catch (SQLException e) {
@@ -141,6 +141,7 @@ public class JobDAO {
                 job.setUsername(resultSet.getString("EMPLOYER"));
                 job.setSalaryRange(resultSet.getString("SALARY_RANGE"));
                 job.setTitle(resultSet.getString("TITLE"));
+                job.setStatus(resultSet.getString("STATUS"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
