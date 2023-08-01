@@ -40,6 +40,10 @@
         <servlet-name>AdminServlet</servlet-name>
         <servlet-class>Servlets.AdminServlet</servlet-class>
     </servlet>
+	<servlet>
+        <servlet-name>MyJobsServlet</servlet-name>
+        <servlet-class>Servlets.MyJobsServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
@@ -69,6 +73,10 @@
 	<servlet-mapping>
         <servlet-name>UploadServlet</servlet-name>
         <url-pattern>/upload-resume/*</url-pattern>
+    </servlet-mapping>
+	<servlet-mapping>
+        <servlet-name>MyJobsServlet</servlet-name>
+        <url-pattern>/my-jobs/*</url-pattern>
     </servlet-mapping>
 
     <filter>

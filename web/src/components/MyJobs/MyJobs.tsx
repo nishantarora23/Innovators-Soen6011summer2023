@@ -1,5 +1,5 @@
 import { injectIntl } from "react-intl";
-import { Box, Button, CardContent, Modal, Typography } from "@mui/material";
+import { Box, Button, CardContent, Modal, Typography, withTheme } from "@mui/material";
 
 import { TouchApp, Work } from "@mui/icons-material";
 import { useState, useEffect } from "react";
@@ -7,6 +7,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
 import { API_URL } from "../../constants";
+import { getUserName } from "../../services/userInfoService";
 
 export interface JobInfo {
   title: string;
@@ -15,6 +16,9 @@ export interface JobInfo {
   location: string;
   qualifications: string;
   deadline: string;
+  submissionDate: string;
+  jobstatus: string;
+  id:string;
 }
 
 const MyJobInfo = () => {
@@ -26,12 +30,17 @@ const MyJobInfo = () => {
     location: "",
     qualifications: "",
     deadline: "",
+    submissionDate: "",
+    jobstatus: "",
+    id:""
   });
   const [jobsList, setJobsList] = useState<Array<JobInfo>>([]);
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/applied-jobs`)
+      .post(`${API_URL}/my-jobs`,{
+        username : getUserName()
+      })
       .then((response) => {
         setJobsList(response?.data ?? []);
       })
@@ -48,6 +57,21 @@ const MyJobInfo = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const deleteMyJob = (jobInfo : JobInfo) => {
+    axios
+      .post(`${API_URL}/my-jobs`,{
+        username : getUserName(),
+        jobId : jobInfo.id
+      })
+      .then((response) => {
+        setJobsList(response?.data ?? []);
+      })
+      .catch((error) => {
+        setJobsList([]);
+        console.log(error);
+      });
+  }
 
   return (
     <>
@@ -70,6 +94,19 @@ const MyJobInfo = () => {
                   }}
                 >
                   {jobInfo.title}
+                  <Box component="span"
+                  sx={{
+                    textTransform: "capitalize",
+                    backgroundColor: jobInfo.jobstatus === "Accepted" ? 'green' : (jobInfo.jobstatus === "Rejected" ? '#C41E3A' : '#e1ad01'),
+                    color:'white',
+                    fontSize: "1.25rem",
+                    padding:"5px 15px",
+                    borderRadius:"10px",
+                    marginLeft : "10px"
+                  }}
+                >
+                {jobInfo.jobstatus}
+                </Box>
                 </Typography>
                 <Typography
                   sx={{
@@ -79,6 +116,7 @@ const MyJobInfo = () => {
                 >
                   {jobInfo.username}
                 </Typography>
+      
                 <Typography
                   sx={{
                     textTransform: "capitalize",
@@ -88,11 +126,21 @@ const MyJobInfo = () => {
                 >
                   {jobInfo.location}
                 </Typography>
+                <Typography
+                  sx={{
+                    textTransform: "capitalize",
+                    fontSize: "1.25rem",
+                  }}
+                >
+               Submitted on {jobInfo.submissionDate}
+                </Typography>
+
                 <Box component="div" sx={{ marginTop: "20px" }}>
                   <Button
                     variant="contained"
                     color="primary"
-                    sx={{ fontSize: "1.1rem" }}
+                    sx={{ fontSize: "1.1rem",
+                        marginRight : "15px"}}
                     onClick={() => {
                       setSelectedJobInfo(jobInfo);
                       handleOpen();
@@ -100,6 +148,18 @@ const MyJobInfo = () => {
                   >
                     <TouchApp sx={{ marginRight: "10px" }} /> View
                   </Button>
+
+                  <Button
+                    variant="contained"
+                    color= "info"
+                    sx={{ fontSize: "1.1rem" }}
+                    onClick={() => {
+                      deleteMyJob(jobInfo);
+                    }}
+                  >
+                    <TouchApp sx={{ marginRight: "10px" }} /> DELETE JOB
+                  </Button>
+
                 </Box>
               </CardContent>
             );
