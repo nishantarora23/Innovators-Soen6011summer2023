@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  tomcat:
+    image: tomcat:8.5.91-jdk11
+    container_name: tomcat
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./careerconnect.war:/usr/local/tomcat/webapps/careerconnect.war
+      - ./mysql-connector-j-8.1.0.jar:/usr/local/tomcat/lib/mysql-connector-j-8.1.0.jar
+    depends_on:
+      - mysql
+    command: ["/bin/bash", "-c", "sleep 30 && catalina.sh run"]
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306"
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: admin123
+    volumes:
+      - ./01-initial_users.sql:/docker-entrypoint-initdb.d/01-initial_users.sql
+    restart: always

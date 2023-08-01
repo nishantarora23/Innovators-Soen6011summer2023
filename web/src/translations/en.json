@@ -50,6 +50,7 @@
   "employerForm.addJobOffer.label.deadline": "Deadline to Apply",
   "employerForm.addJobOffer.button.add": "Add Job Offer",
   "employerForm.addJobOffer.button.back":"Back",
+  "employerForm.addJobOffer.button.update": "Update Job Offer",
   "employerForm.addJobOffer.error.title.required": "Job title is required",
   "employerForm.addJobOffer.error.description.required": "Description is required",
   "employerForm.addJobOffer.error.qualifications.required": "Qualifications is required",

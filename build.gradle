@@ -1,4 +1,6 @@
 plugins {
+	id 'com.adarshr.test-logger' version '3.2.0'
+	id 'org.unbroken-dome.test-sets' version '4.0.0'
     id 'java'
     id 'war'
 }
@@ -10,11 +12,65 @@ repositories {
     mavenCentral()
 }
 
+// Define a custom property to specify the desired Java versions
+ext {
+    javaVersion14 = JavaVersion.VERSION_14
+    javaVersion11 = JavaVersion.VERSION_11
+}
+
+// Define a method to get the available Java version
+def getAvailableJavaVersion() {
+    if (JavaVersion.current() >= javaVersion14) {
+        return javaVersion14
+    } else if (JavaVersion.current() >= javaVersion11) {
+        return javaVersion11
+    } else {
+        throw new GradleException("No compatible Java version found.")
+    }
+}
+
+// Set sourceCompatibility and targetCompatibility dynamically based on the available Java version
+sourceCompatibility = getAvailableJavaVersion()
+targetCompatibility = getAvailableJavaVersion()
+
+sourceSets {
+    intTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+configurations {
+    intTestImplementation.extendsFrom implementation
+    intTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+tasks.withType(Test) {
+    reports.html.destination = file("${reporting.baseDir}/${name}")
+}
+
 dependencies {
-    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'com.mysql:mysql-connector-j:8.1.0'
+    implementation 'org.json:json:20220924'
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
     implementation 'log4j:log4j:1.2.17'
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
+    implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.1'
+	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+
+    providedCompile group: 'org.springframework', name: 'spring-core', version: '5.2.5.RELEASE'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.3.1'
+	testImplementation 'junit:junit:4.13.2'
 }
-sourceCompatibility = JavaVersion.VERSION_14
-targetCompatibility = JavaVersion.VERSION_14
+
+test {
+    useJUnitPlatform()
+}
+
+testSets {
+    integrationTest
+}
