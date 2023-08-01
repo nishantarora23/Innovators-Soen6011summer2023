@@ -5,8 +5,8 @@ import Database.ApplicationDao;
 import Database.JobDAO;
 import Database.UserDAO;
 import Models.JobApplication;
-import Models.Job;
 import Models.MyJob;
+import Models.Job;
 import Models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @WebServlet("/application")
 public class ApplicationServlet extends HttpServlet {
@@ -57,6 +59,30 @@ public class ApplicationServlet extends HttpServlet {
             {
                 response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
                 throw new RuntimeException(e);
+            }
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else if("ADD".equalsIgnoreCase(action)){
+            try
+            {
+            	JobApplication application = new JobApplication();
+            	System.out.println(jsonPayload);
+            	application.setApplicantname(jsonPayload.get("applicant").getAsString());
+            	application.setJobId(Integer.valueOf(jsonPayload.get("jobid").getAsString()));
+            	application.setStudentUserName(jsonPayload.get("username").getAsString());
+            	LocalDate today = LocalDate.now();
+
+                 // Format the date to "YYYY-MM-DD"
+                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                 String todayDateString = today.format(formatter);
+                 application.setSubmissionDate(todayDateString);
+                 application.setStatus("PENDING");
+                 application.setNotify(false);
+                ApplicationDao.addApplication(application);
+            }
+            catch (Exception e)
+            {
+                response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+                System.out.println(e.getMessage());
             }
             response.setStatus(HttpServletResponse.SC_OK);
         }

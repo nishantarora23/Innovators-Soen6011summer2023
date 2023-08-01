@@ -45,16 +45,20 @@ public class ApplicationDao {
     public static void addApplication(JobApplication application) throws SQLException {
 
         try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
-            String query = "INSERT INTO applications (APPLICANT, JOBID,SUBMISSIONDATE,STATUS,NOTIFY,STUDENT_USERNAME) VALUES (?, ?,?, ?,?)";
+            String query = "INSERT INTO applications (APPLICANT, JOBID,SUBMISSIONDATE,STATUS,NOTIFY,student_username) VALUES (?, ?,?, ?,?,?)";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, application.getUsername());
+            System.out.println(application);
+            statement.setString(1, application.getApplicantname());
             statement.setInt(2, application.getJobId());
-            statement.setDate(3,application.getSubmissionDate());
+            statement.setString(3,application.getSubmissionDate());
             statement.setString(4,application.getStatus());
             statement.setBoolean(5, application.getNotify());
-            statement.executeUpdate();
+            statement.setString(6, application.getStudentUserName());
+            int n = statement.executeUpdate();
+            System.out.println("executed "+n);
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println(e);
             throw e;
         }
     }
@@ -140,8 +144,8 @@ public class ApplicationDao {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 JobApplication application = new JobApplication();
-                application.setUsername(resultSet.getString("APPLICANT"));
-                application.setSubmissionDate(resultSet.getDate("SUBMISSIONDATE"));
+                application.setApplicantname(resultSet.getString("APPLICANT"));
+                application.setSubmissionDate(resultSet.getString("SUBMISSIONDATE"));
                 application.setJobId(Integer.parseInt(resultSet.getString("JOBID")));
                 application.setStatus(resultSet.getString("STATUS"));
                 application.setNotify(resultSet.getBoolean("NOTIFY"));
@@ -154,7 +158,7 @@ public class ApplicationDao {
         return applications;
     }
     public static void remove(String applicant, int jobId) {
-        String DELETE_QUERY = "DELETE FROM applications WHERE APPLICANT = ? and JOBID = ?";
+        String DELETE_QUERY = "DELETE FROM applications WHERE STUDENT_USERNAME = ? and JOBID = ?";
         try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
             PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
             statement.setString(1, applicant);
