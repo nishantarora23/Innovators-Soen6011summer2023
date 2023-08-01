@@ -32,6 +32,18 @@
         <servlet-name>ResumeServlet</servlet-name>
         <servlet-class>Servlets.ResumeServlet</servlet-class>
     </servlet>
+	<servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>Servlets.UploadServlet</servlet-class>
+    </servlet>
+	<servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>Servlets.AdminServlet</servlet-class>
+    </servlet>
+	<servlet>
+        <servlet-name>MyJobsServlet</servlet-name>
+        <servlet-class>Servlets.MyJobsServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
@@ -49,10 +61,22 @@
     <servlet-mapping>
         <servlet-name>ApplicationServlet</servlet-name>
         <url-pattern>/application/</url-pattern>
+    </servlet-mapping>   
+	<servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/admin/*</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
+	<servlet-mapping>
         <servlet-name>ResumeServlet</servlet-name>
         <url-pattern>/resume/</url-pattern>
+    </servlet-mapping>
+	<servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/upload-resume/*</url-pattern>
+    </servlet-mapping>
+	<servlet-mapping>
+        <servlet-name>MyJobsServlet</servlet-name>
+        <url-pattern>/my-jobs/*</url-pattern>
     </servlet-mapping>
 
     <filter>

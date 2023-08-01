@@ -147,7 +147,7 @@ type Props = {
       <>
         <LoadingSpinner isOpen={loading} />
         <Grid container className="add-offer-card">
-            <Button  className="backButton" variant="contained" onClick={navigateBackwards}>
+            <Button  className="backButton" variant="contained" onClick={navigateBackwards} sx = {{marginBottom : "10px"}}>
                   {intl.formatMessage({
                     id: 'employerForm.addJobOffer.button.back'
                   })}
@@ -213,8 +213,8 @@ type Props = {
               );
             })}
           </Grid>
-          <Grid container className="button-container" spacing={3}>
-            <Button variant="contained" type="submit" onClick={handleSubmit(onSubmit)}>
+          <Grid container className="button-container" spacing={3} sx = {{float: "right"}}>
+            <Button variant="contained" type="submit" onClick={handleSubmit(onSubmit)} sx = {{marginTop : "30px"}}>
               {intl.formatMessage({
                 id: jobOffer? 'employerForm.addJobOffer.button.update' : 'employerForm.addJobOffer.button.add'
               })}

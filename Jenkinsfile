@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+		node {
+		    label "master"
+			customWorkspace "D://careerconnect"
+		}
+	}
     
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
@@ -22,24 +27,34 @@ pipeline {
 
         stage('Package') {
             steps {
-                bat 'mkdir artifact'
-                bat 'xcopy web artifact\\web\\ /Y /E'
-                bat 'xcopy resume artifact\\resume\\ /Y /E'
-                bat 'xcopy build\\libs\\*.war artifact\\ /Y /E'
-                bat '"C:\\Program Files\\7-Zip\\7z" a -tzip artifacts.zip artifact\\*'
-                bat 'mkdir unit_test_report'
-                bat 'xcopy build\\reports\\tests\\test\\* unit_test_report\\ /Y /E'
-                bat '"C:\\Program Files\\7-Zip\\7z" a -tzip unit_test_report.zip unit_test_report\\*'
+                bat 'xcopy "configuration\\package.bat" "D://careerconnect" /Y'
+                bat 'package.bat'
+            }
+        }
+        
+        stage('Integration Test') {
+            steps {
+                bat 'curl -o "artifact/mysql-connector-j-8.1.0.jar" -L "https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.1.0/mysql-connector-j-8.1.0.jar"'
+                bat 'rename D:\\careerconnect\\artifact\\careerconnect-1.0-SNAPSHOT.war careerconnect.war'
+                bat 'docker-compose -f artifact\\docker-compose.yml up -d'
+                bat 'ping 127.0.0.1 -n 40  1>nul'
+                bat 'gradle integrationTest'
+                bat 'docker-compose -f artifact\\docker-compose.yml down'
+                bat 'echo y | docker system prune -a'
+                
             }
         }
     }
     post {
         always {
+             bat 'mkdir unit_int_test_report'
+             bat 'xcopy build\\reports\\* unit_int_test_report\\ /Y /E'
+             bat '"C:\\Program Files\\7-Zip\\7z" a -tzip unit_int_test_report.zip unit_int_test_report\\*'
              emailext body: '''${SCRIPT, template="groovy-html.template"}''',
              mimeType: 'text/html',
              subject: "Build ${currentBuild.currentResult}: ${env.JOB_NAME}: #${env.BUILD_NUMBER}",
-             to: "aroranish23@gmail.com, merlinmary08@gmail.com, karran1697@gmail.com, gaganpandher04@gmail.com, kaurnav4199@gmail.com, navjotkamboj0206@gmail.com",
-             attachmentsPattern: '**/unit_test_report.zip'
+             to: "aroranish23@gmail.com",
+             attachmentsPattern: '**/unit_int_test_report.zip'
         }
     }
 }

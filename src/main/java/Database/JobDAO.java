@@ -7,40 +7,40 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class JobDAO {
-    static {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        String query1 = "CREATE DATABASE IF NOT EXISTS soen6011";
-        String query ="CREATE TABLE IF NOT EXISTS soen6011.jobs (\n" +
-                "  ID int NOT NULL AUTO_INCREMENT,\n" +
-                "  TITLE varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
-                "  SALARY_RANGE varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
-                "  RESPONSIBILITIES varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
-                "  QUALIFICATIONS varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
-                "  LOCATION varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
-                "  DESCRIPTION varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
-                "  DEADLINE varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
-                "  CONTRACT_TYPE varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
-                "  EMPLOYER varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
-                "  STATUS varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT \"active\",\n" +
-                "  PRIMARY KEY (ID)\n" +
-                ")";
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://Localhost:3306/", Helper.uname,Helper.pass)) {
-            PreparedStatement statement1 = connection.prepareStatement(query1);
-            statement1.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public static void initialize() {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            String query1 = "CREATE DATABASE IF NOT EXISTS soen6011";
+            String query = "CREATE TABLE IF NOT EXISTS soen6011.jobs (\n" +
+                    "  ID int NOT NULL AUTO_INCREMENT,\n" +
+                    "  TITLE varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                    "  SALARY_RANGE varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                    "  RESPONSIBILITIES varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                    "  QUALIFICATIONS varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                    "  LOCATION varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
+                    "  DESCRIPTION varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
+                    "  DEADLINE varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
+                    "  CONTRACT_TYPE varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
+                    "  EMPLOYER varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
+                    "  STATUS varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT \"active\",\n" +
+                    "  PRIMARY KEY (ID)\n" +
+                    ")";
+            try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
+                PreparedStatement statement1 = connection.prepareStatement(query1);
+                statement1.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+            try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
     }
 
     public static void addJob(Job job) throws SQLException {
