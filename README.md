@@ -4,7 +4,6 @@
   </h1>
 </p>
 
-<b>Sprint-2 Demo Video:</b> https://drive.google.com/file/d/1W2_ynBl5aP2xL4GvVYX186Hs0J5dYY99/view?usp=sharing
 
 ## Project Description
 ### Overview
