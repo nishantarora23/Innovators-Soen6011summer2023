@@ -34,22 +34,23 @@ public class ApplicationServlet extends HttpServlet {
         gsonBuilder.setDateFormat("yyyy-MM-dd"); // Set your desired date format pattern
         Gson gson = gsonBuilder.create();
 
-        if("REMOVE".equals(action)){
+        if("REMOVE".equalsIgnoreCase(action)){
             try
             {
                 ApplicationDao.remove(jsonPayload.get("username").getAsString(),jsonPayload.get("jobId").getAsInt());
-            }
-            catch (Exception e)
-            {
-                response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
-                throw new RuntimeException(e);
-            }
-            response.setStatus(HttpServletResponse.SC_OK);
-        } else if("ADD".equals(action)){
-            try
-            {
-                JobApplication application = gson.fromJson(payloadData, JobApplication.class);
-                ApplicationDao.addApplication(application);
+                ArrayList<MyJob> appliedJobs = new ArrayList<>();
+                ObjectMapper objectMapper = new ObjectMapper();
+                String json=null;
+        		try {
+        			appliedJobs = ApplicationDao.getMyJobs(jsonPayload.get("username").getAsString());
+        			json = objectMapper.writeValueAsString(appliedJobs);
+        	        response.setContentType("application/json");
+        	        // Write the JSON to the response
+        	        response.getWriter().write(json);
+        		} catch (SQLException e) {
+        			// TODO Auto-generated catch block
+        			e.printStackTrace();
+        		}
             }
             catch (Exception e)
             {
