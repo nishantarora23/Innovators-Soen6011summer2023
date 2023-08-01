@@ -118,13 +118,13 @@ const Applicants = () => {
 
   const handleReject = (username: any) => {
     rejectApplication(username, id?.charAt(1))
-        .then(res => console.log(res))
+        .then(res => {console.log(res); window.location.reload()})
         .catch(err => console.error(err));
   }
 
   const handleDelete = (username: any) => {
     deleteApplication(username, id?.charAt(1))
-        .then((res) => console.log(res))
+        .then((res) => {console.log(res); window.location.reload()})
         .catch(err => console.error(err))
   }
 
@@ -218,7 +218,7 @@ const Applicants = () => {
                       <Chip label="View Resume" color="primary" onClick={() => handleViewResume(offer.username)}/>
                       <Chip label="Reject" color="warning" onClick={() => handleReject(offer.id)}/>
                       <Chip label="Accept Application" color="success" onClick={() => handleAcceptApplicant(offer.username)}/>
-                      <Chip label="Accept Application" color="error" onClick={() => handleDelete(offer.username)}/>
+                      <Chip label="Delete Application" color="error" onClick={() => handleDelete(offer.username)}/>
                     </Stack>
                   </Card>
                ))}
