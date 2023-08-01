@@ -8,11 +8,15 @@ import {
   Box,
   Stack,
   Chip,
+  IconButton,
+  Avatar
 } from "@mui/material";
 import { getCompany, getUserName, getFullName, getAddress, getEmail, getDOB} from "../../../services/userInfoService";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  Bookmark
+  Bookmark,
+  Person4,
+LogoutOutlined,
 } from "@mui/icons-material";
 import CreateIcon from '@mui/icons-material/Create';
 import PersonIcon from '@mui/icons-material/Person';
@@ -23,6 +27,7 @@ import { getMyJobOffers, deleteJobOffer } from "../../../services/userService";
 
 import './EmployerJobOffers.scss';
 import { useEffect, useState } from "react";
+import { indigo } from "@mui/material/colors";
 import axios from "axios";
 
 const styles = {
@@ -88,8 +93,8 @@ interface JobOffer {
   id?: any;
   company?: string;
   title?: string;
-  contract_type?: string;
-  salar_range?: string;
+  contractType?: string;
+  salaryRange?: string;
   description?: string;
   location?: string;
 };
@@ -130,8 +135,55 @@ const EmployerJobOffers = () => {
     navigate(`/employer/addJobOffer/${id}`);
   }
 
+  const doLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
   return (
     <>
+    <Grid
+        container
+        className="userProfile-container end-container"
+        sx={{
+          justifyContent: "flex-end",
+          marginTop: "-60px",
+          zIndex: 9999,
+        }}
+      >
+        <Avatar
+          sx={{
+            bgcolor: indigo[100],
+            width: "40px",
+            height: "40px",
+            marginTop: "-5px",
+            marginRight: "10px",
+          }}
+        >
+          <Person4 color="primary" />
+        </Avatar>
+        <Typography variant="h6" sx={{ color: indigo[100] }}>
+          {getFullName()}
+        </Typography>
+        <IconButton
+          color="secondary"
+          component={Link}
+          to={"/"}
+          onClick={doLogout}
+          sx={{
+            marginRight: "50px",
+            color: indigo[100],
+            marginTop: "-10px",
+            marginLeft: "10px",
+          }}
+        >
+          <LogoutOutlined
+            sx={{
+              fontSize: "2rem",
+            }}
+          />
+        </IconButton>
+      </Grid>
       <Grid container spacing={1}>
         <Grid item xs={12} sm={6} md={5} lg={3}>
           <Card
@@ -194,8 +246,8 @@ const EmployerJobOffers = () => {
                     <Typography variant="subtitle1">{offer.company}</Typography>
                     <Typography variant="body2">{offer.title}</Typography>
                     <Typography className="location" variant="body2"> <LocationOnIcon/> {offer.location}</Typography>
-                    <Typography variant="subtitle1"> <AttachMoneyIcon />{offer.salar_range}</Typography>
-                    <Typography variant="body2">{offer.contract_type}</Typography>
+                    <Typography variant="subtitle1"> <AttachMoneyIcon />{offer.salaryRange}</Typography>
+                    <Typography variant="body2">{offer.contractType}</Typography>
                     <Typography variant="body2">{offer.description}</Typography>
                     <Stack direction="row" spacing={1}>
                       <Chip label="Edit" color="primary" onClick={() => handleEdit(offer.id)}/>
