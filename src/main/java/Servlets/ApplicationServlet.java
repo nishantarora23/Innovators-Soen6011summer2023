@@ -6,6 +6,7 @@ import Database.JobDAO;
 import Database.UserDAO;
 import Models.JobApplication;
 import Models.Job;
+import Models.MyJob;
 import Models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
