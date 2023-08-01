@@ -1,5 +1,12 @@
 import { injectIntl } from "react-intl";
-import { Box, Button, CardContent, Modal, Typography, withTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  CardContent,
+  Modal,
+  Typography,
+  withTheme,
+} from "@mui/material";
 
 import { TouchApp, Work } from "@mui/icons-material";
 import { useState, useEffect } from "react";
@@ -18,7 +25,7 @@ export interface JobInfo {
   deadline: string;
   submissionDate: string;
   jobstatus: string;
-  id:string;
+  id: string;
 }
 
 const MyJobInfo = () => {
@@ -32,14 +39,18 @@ const MyJobInfo = () => {
     deadline: "",
     submissionDate: "",
     jobstatus: "",
-    id:""
+    id: "",
   });
   const [jobsList, setJobsList] = useState<Array<JobInfo>>([]);
 
   useEffect(() => {
+    fetchJobsList(); // Fetch the jobs list on component mount
+  }, []);
+
+  const fetchJobsList = () => {
     axios
-      .post(`${API_URL}/my-jobs`,{
-        username : getUserName()
+      .post(`${API_URL}/my-jobs`, {
+        username: getUserName(),
       })
       .then((response) => {
         setJobsList(response?.data ?? []);
@@ -48,7 +59,7 @@ const MyJobInfo = () => {
         setJobsList([]);
         console.log(error);
       });
-  }, []);
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -58,20 +69,28 @@ const MyJobInfo = () => {
     setOpen(false);
   };
 
-  const deleteMyJob = (jobInfo : JobInfo) => {
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+
+  const handleAlertClose = () => {
+    setShowDeleteAlert(false);
+  };
+
+  const deleteMyJob = (jobInfo: JobInfo) => {
     axios
-      .post(`${API_URL}/my-jobs`,{
-        username : getUserName(),
-        jobId : jobInfo.id
+      .post(`${API_URL}/application`, {
+        username: getUserName(),
+        jobId: jobInfo.id,
+        ACTION: "REMOVE",
       })
       .then((response) => {
-        setJobsList(response?.data ?? []);
+        fetchJobsList();
+        setShowDeleteAlert(true);
       })
       .catch((error) => {
         setJobsList([]);
         console.log(error);
       });
-  }
+  };
 
   return (
     <>
@@ -94,19 +113,25 @@ const MyJobInfo = () => {
                   }}
                 >
                   {jobInfo.title}
-                  <Box component="span"
-                  sx={{
-                    textTransform: "capitalize",
-                    backgroundColor: jobInfo.jobstatus === "Accepted" ? 'green' : (jobInfo.jobstatus === "Rejected" ? '#C41E3A' : '#e1ad01'),
-                    color:'white',
-                    fontSize: "1.25rem",
-                    padding:"5px 15px",
-                    borderRadius:"10px",
-                    marginLeft : "10px"
-                  }}
-                >
-                {jobInfo.jobstatus}
-                </Box>
+                  <Box
+                    component="span"
+                    sx={{
+                      textTransform: "capitalize",
+                      backgroundColor:
+                        jobInfo.jobstatus === "Accepted"
+                          ? "green"
+                          : jobInfo.jobstatus === "Rejected"
+                          ? "#C41E3A"
+                          : "#e1ad01",
+                      color: "white",
+                      fontSize: "1.25rem",
+                      padding: "5px 15px",
+                      borderRadius: "10px",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    {jobInfo.jobstatus}
+                  </Box>
                 </Typography>
                 <Typography
                   sx={{
@@ -116,7 +141,7 @@ const MyJobInfo = () => {
                 >
                   {jobInfo.username}
                 </Typography>
-      
+
                 <Typography
                   sx={{
                     textTransform: "capitalize",
@@ -132,15 +157,14 @@ const MyJobInfo = () => {
                     fontSize: "1.25rem",
                   }}
                 >
-               Submitted on {jobInfo.submissionDate}
+                  Submitted on {jobInfo.submissionDate}
                 </Typography>
 
                 <Box component="div" sx={{ marginTop: "20px" }}>
                   <Button
                     variant="contained"
                     color="primary"
-                    sx={{ fontSize: "1.1rem",
-                        marginRight : "15px"}}
+                    sx={{ fontSize: "1.1rem", marginRight: "15px" }}
                     onClick={() => {
                       setSelectedJobInfo(jobInfo);
                       handleOpen();
@@ -151,7 +175,7 @@ const MyJobInfo = () => {
 
                   <Button
                     variant="contained"
-                    color= "info"
+                    color="info"
                     sx={{ fontSize: "1.1rem" }}
                     onClick={() => {
                       deleteMyJob(jobInfo);
@@ -159,7 +183,6 @@ const MyJobInfo = () => {
                   >
                     <TouchApp sx={{ marginRight: "10px" }} /> DELETE JOB
                   </Button>
-
                 </Box>
               </CardContent>
             );
@@ -220,6 +243,20 @@ const MyJobInfo = () => {
           <Typography>{selectedJobInfo?.description}</Typography>
         </Box>
       </Modal>
+      <Snackbar
+        open={showDeleteAlert}
+        autoHideDuration={4000} // Adjust the duration as per your preference
+        onClose={handleAlertClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleAlertClose}
+          severity="success"
+        >
+          Job Deleted Successfully
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 };
