@@ -4,7 +4,6 @@ import Commons.Helper;
 import Models.User;
 
 import java.sql.*;
-;
 import java.text.ParseException;
 import java.sql.ResultSet;
 import java.util.ArrayList;

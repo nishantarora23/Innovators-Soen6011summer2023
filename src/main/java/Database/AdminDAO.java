@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import org.json.JSONArray;
 
 import Commons.Helper;
-import util.AdminUtility;
+import util.util.AdminUtility;
 
 public class AdminDAO {
 

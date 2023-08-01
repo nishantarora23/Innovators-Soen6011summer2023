@@ -5,6 +5,7 @@ import Database.ApplicationDao;
 import Database.JobDAO;
 import Database.UserDAO;
 import Models.JobApplication;
+import Models.MyJob;
 import Models.Job;
 import Models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @WebServlet("/application")
 public class ApplicationServlet extends HttpServlet {
@@ -34,10 +37,23 @@ public class ApplicationServlet extends HttpServlet {
         gsonBuilder.setDateFormat("yyyy-MM-dd"); // Set your desired date format pattern
         Gson gson = gsonBuilder.create();
 
-        if("REMOVE".equals(action)){
+        if("REMOVE".equalsIgnoreCase(action)){
             try
             {
                 ApplicationDao.remove(jsonPayload.get("username").getAsString(),jsonPayload.get("jobId").getAsInt());
+                ArrayList<MyJob> appliedJobs = new ArrayList<>();
+                ObjectMapper objectMapper = new ObjectMapper();
+                String json=null;
+        		try {
+        			appliedJobs = ApplicationDao.getMyJobs(jsonPayload.get("username").getAsString());
+        			json = objectMapper.writeValueAsString(appliedJobs);
+        	        response.setContentType("application/json");
+        	        // Write the JSON to the response
+        	        response.getWriter().write(json);
+        		} catch (SQLException e) {
+        			// TODO Auto-generated catch block
+        			e.printStackTrace();
+        		}
             }
             catch (Exception e)
             {
@@ -45,16 +61,28 @@ public class ApplicationServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
             response.setStatus(HttpServletResponse.SC_OK);
-        } else if("ADD".equals(action)){
+        } else if("ADD".equalsIgnoreCase(action)){
             try
             {
-                JobApplication application = gson.fromJson(payloadData, JobApplication.class);
+            	JobApplication application = new JobApplication();
+            	System.out.println(jsonPayload);
+            	application.setApplicantname(jsonPayload.get("applicant").getAsString());
+            	application.setJobId(Integer.valueOf(jsonPayload.get("jobid").getAsString()));
+            	application.setStudentUserName(jsonPayload.get("username").getAsString());
+            	LocalDate today = LocalDate.now();
+
+                 // Format the date to "YYYY-MM-DD"
+                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                 String todayDateString = today.format(formatter);
+                 application.setSubmissionDate(todayDateString);
+                 application.setStatus("PENDING");
+                 application.setNotify(false);
                 ApplicationDao.addApplication(application);
             }
             catch (Exception e)
             {
                 response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
-                throw new RuntimeException(e);
+                System.out.println(e.getMessage());
             }
             response.setStatus(HttpServletResponse.SC_OK);
         }

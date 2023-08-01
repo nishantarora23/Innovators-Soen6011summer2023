@@ -4,14 +4,22 @@ import java.util.Date;
 
 public class JobApplication {
 
-    String username;
-    int jobId;
-    Date submissionDate;
+	int jobId;
+	String applicantName;
+    String submissionDate;
     String status;
-    Boolean notify;
+    String studentUserName;
+    public String getStudentUserName() {
+		return studentUserName;
+	}
+	public void setStudentUserName(String studentUserName) {
+		this.studentUserName = studentUserName;
+	}
 
-    public JobApplication(String username, int jobId, Date submissionDate, String status) {
-        this.username = username;
+	Boolean notify;
+
+    public JobApplication(String username, int jobId, String submissionDate, String status) {
+        this.applicantName = username;
         this.jobId = jobId;
         this.submissionDate = submissionDate;
         this.status = status;
@@ -20,12 +28,12 @@ public class JobApplication {
     public JobApplication()
     {}
 
-    public String getUsername() {
-        return username;
+    public String getApplicantname() {
+        return applicantName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setApplicantname(String applicantName) {
+        this.applicantName = applicantName;
     }
 
     public int getJobId() {
@@ -36,11 +44,11 @@ public class JobApplication {
         this.jobId = jobId;
     }
 
-    public java.sql.Date getSubmissionDate() {
-        return new java.sql.Date(submissionDate.getTime());
+    public String getSubmissionDate() {
+        return this.submissionDate;
     }
 
-    public void setSubmissionDate(Date submissionDate) {
+    public void setSubmissionDate(String submissionDate) {
         this.submissionDate = submissionDate;
     }
 
@@ -58,5 +66,17 @@ public class JobApplication {
 
     public void setNotify(Boolean notify) {
         this.notify = notify;
+    }
+    
+    @Override
+    public String toString() {
+        return "JobApplication{" +
+                "jobId=" + jobId +
+                ", applicantName='" + applicantName + '\'' +
+                ", submissionDate='" + submissionDate + '\'' +
+                ", status='" + status + '\'' +
+                ", studentUserName='" + studentUserName + '\'' +
+                ", notify=" + notify +
+                '}';
     }
 }

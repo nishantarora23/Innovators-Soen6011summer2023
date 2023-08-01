@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import Database.AdminDAO;
-import util.HttpUtil;
+import util.util.HttpUtil;
 
 public class AdminServlet extends HttpServlet{
 

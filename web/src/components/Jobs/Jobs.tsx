@@ -69,7 +69,7 @@ const JobsList = () => {
       jobid : payload.id,
       username : getUserName(),
       applicant : getFullName(),
-      action : 'ADD'
+      ACTION : 'ADD'
     }
     axios.post(`${API_URL}/application`, objectPayload).then(() => {
       setEasyApplyResponseSnackbar({
