@@ -10,14 +10,19 @@ import {
   MenuItem,
   Select,
   Box,
+  IconButton,
+  Avatar,
   NativeSelect,
   Chip,
 } from "@mui/material";
 import { getCompany, getFullName, getAddress, getEmail, getDOB} from "../../../services/userInfoService";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
+    Person4,
+LogoutOutlined,
   Bookmark
 } from "@mui/icons-material";
+import { indigo } from "@mui/material/colors";
 import CreateIcon from '@mui/icons-material/Create';
 import PersonIcon from '@mui/icons-material/Person';
 import { useEffect, useState } from "react";
@@ -33,6 +38,7 @@ interface JobOffer {
     location?: string;
     responsibilities?: string;
     qualifications?:string;
+    deadline?: string;
     status: any;
   };
   
@@ -43,6 +49,11 @@ const EmployerHome = () => {
   const [curStatus, setCurStatus] = useState<any>();
   const navigate = useNavigate();
   const {jobId} = useParams();
+
+  const doLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
 
   useEffect(() => {
     getJobOfferById(jobId?.charAt(1))
@@ -56,16 +67,58 @@ const EmployerHome = () => {
   }
 
   const handleUpdateStatus = () => {
-    const tempJobOffer = {...jobOffer};
-    tempJobOffer.status = curStatus;
-    setJobOffer(tempJobOffer as JobOffer);
-    updateJobOfferHelper(jobOffer)
-        .then(res => alert('Status has been updated'))
+    if(jobOffer){
+        jobOffer.status = curStatus;
+        updateJobOfferHelper(jobOffer)
+        .then(res => {alert('Status has been updated'); window.location.reload()})
         .catch(err => console.log(err));
+    }
   }
 
   return (
     <>
+    <Grid
+        container
+        className="userProfile-container end-container"
+        sx={{
+          justifyContent: "flex-end",
+          marginTop: "-60px",
+          zIndex: 9999,
+        }}
+      >
+        <Avatar
+          sx={{
+            bgcolor: indigo[100],
+            width: "40px",
+            height: "40px",
+            marginTop: "-5px",
+            marginRight: "10px",
+          }}
+        >
+          <Person4 color="primary" />
+        </Avatar>
+        <Typography variant="h6" sx={{ color: indigo[100] }}>
+          {getFullName()}
+        </Typography>
+        <IconButton
+          color="secondary"
+          component={Link}
+          to={"/"}
+          onClick={doLogout}
+          sx={{
+            marginRight: "50px",
+            color: indigo[100],
+            marginTop: "-10px",
+            marginLeft: "10px",
+          }}
+        >
+          <LogoutOutlined
+            sx={{
+              fontSize: "2rem",
+            }}
+          />
+        </IconButton>
+      </Grid>
       <Grid container spacing={1}>
         <Grid item xs={12} sm={6} md={5} lg={3}>
           <Card
@@ -139,6 +192,15 @@ const EmployerHome = () => {
               </Typography>
               <Typography sx={{ color: "#868686" }}>
               {jobOffer?.qualifications}
+              </Typography>
+              <Typography sx={{ color: "#868686" }}>
+              {jobOffer?.responsibilities}
+              </Typography>
+              <Typography sx={{ color: "#868686" }}>
+              {jobOffer?.contractType}
+              </Typography>
+              <Typography sx={{ color: "#868686" }}>
+              {jobOffer?.deadline}
               </Typography>
               <Typography sx={{ color: "#868686" }}>
               {jobOffer?.description}
