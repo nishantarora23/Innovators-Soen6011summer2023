@@ -61,8 +61,7 @@ public class AdminServlet extends HttpServlet{
 				else {
 					response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
 				}
-			}else if(URL.contains("deleteStudent")) {
-					
+			}else if(URL.contains("deleteStudent")) {				
 				int num = AdminDAO.deleteEmployer(studentId);
 				if(num>0) {
 					response.setStatus(HttpServletResponse.SC_OK);
@@ -84,9 +83,33 @@ public class AdminServlet extends HttpServlet{
 
 
 			if(URL.contains("updateEmployer")) {
+				String address = (String)jsonObject.get("address");
+				String company_name = (String)jsonObject.get("company_name");
+				String dob = (String)jsonObject.get("dob");
+				String email = (String)jsonObject.get("email");
+				String name = (String)jsonObject.get("name");
 				String username = (String)jsonObject.get("username");
+				int num = AdminDAO.updateEmployer(address, company_name, dob, email, username, username);
+				if(num>0) {
+					response.setStatus(HttpServletResponse.SC_OK);
+				}
+				else {
+					response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+				}
 			}else if(URL.contains("updateStudent")) {
-				String username = (String)jsonObject.get("username");				
+				String address = (String)jsonObject.get("address");
+				String college_name = (String)jsonObject.get("college_name");
+				String dob = (String)jsonObject.get("dob");
+				String email = (String)jsonObject.get("email");
+				String name = (String)jsonObject.get("name");
+				String username = (String)jsonObject.get("username");
+				int num = AdminDAO.updateStudent(address, college_name, dob, email, username, username);	
+				if(num>0) {
+					response.setStatus(HttpServletResponse.SC_OK);
+				}
+				else {
+					response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+				}
 			}
 		}
 	}

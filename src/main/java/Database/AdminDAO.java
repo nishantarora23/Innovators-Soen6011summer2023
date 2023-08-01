@@ -13,81 +13,134 @@ import util.util.AdminUtility;
 
 public class AdminDAO {
 
-	 static {
-	        try {
-	            Class.forName("com.mysql.cj.jdbc.Driver");
-	        } catch (ClassNotFoundException e) {
-	            throw new RuntimeException(e);
-	        }
-	        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
-	           
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            throw new RuntimeException(e);
-	        }
-	 }
+	static {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+		try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
 
 	public static JSONArray getListOfStudents() {
-		
-        JSONArray arr = new JSONArray();
-        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass))  {
-            String query = "select * from users where user_role = ?;";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, String.valueOf("Student"));
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                arr = AdminUtility.getListOfStudents(rs);
-            } else {
-                System.out.println("no result found");
-            }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return arr;
+
+		JSONArray arr = new JSONArray();
+		try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass))  {
+			String query = "select * from users where user_role = ?;";
+			PreparedStatement stmt = connection.prepareStatement(query);
+			stmt.setString(1, String.valueOf("Student"));
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				arr = AdminUtility.getListOfStudents(rs);
+			} else {
+				System.out.println("no result found");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return arr;
 	}
 
 	public static JSONArray getListOfEmployer() {
 		JSONArray arr = new JSONArray();
-        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass))  {
-            String query = "select * from users where user_role = ?;";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, String.valueOf("Employer"));
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                arr = AdminUtility.getListOfEmployers(rs);
-            } else {
-                System.out.println("no result found");
-            }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return arr;
+		try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass))  {
+			String query = "select * from users where user_role = ?;";
+			PreparedStatement stmt = connection.prepareStatement(query);
+			stmt.setString(1, String.valueOf("Employer"));
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				arr = AdminUtility.getListOfEmployers(rs);
+			} else {
+				System.out.println("no result found");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return arr;
 	}
-	
+
 	public static int deleteEmployer(int username) {
 		String DELETE_QUERY = "DELETE FROM USERS WHERE ID = ?";
 		int n =0;
-        try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
-            PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
-            statement.setInt(1, username);
-            n=statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return n;
+		try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
+			PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
+			statement.setInt(1, username);
+			n=statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return n;
 	}
 	public static int deleteStudent(int username) {
 		String DELETE_QUERY = "DELETE FROM USERS WHERE ID = ?";
 		int n =0;
-        try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
-            PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
-            statement.setInt(1, username);
-            n=statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return n;
+		try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
+			PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
+			statement.setInt(1, username);
+			n=statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return n;
 	}
+
+	public static int updateStudent(String address, String collegeName, String dob, String email, String name, String username) {
+		int rowsUpdated =0;
+		try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
+			String updateQuery = "UPDATE users SET address = ?, college_name = ?, dob = ?, email = ?, name = ? WHERE username = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
+
+			preparedStatement.setString(1, address);
+			preparedStatement.setString(2, collegeName);
+			preparedStatement.setString(3, dob);
+			preparedStatement.setString(4, email);
+			preparedStatement.setString(5, name);
+			preparedStatement.setString(6, username);
+
+			rowsUpdated = preparedStatement.executeUpdate();
+
+			if (rowsUpdated > 0) {
+				System.out.println("User record updated successfully.");
+			} else {
+				System.out.println("User not found or update failed.");
+			}
+		} catch (SQLException e) {
+			System.out.println("Error executing the update query: " + e.getMessage());
+		}
+		return rowsUpdated;
+	}
+
+	public static int updateEmployer(String address, String companyName, String dob, String email, String name, String username) {
+		int rowsUpdated =0;
+		try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
+			String updateQuery = "UPDATE users SET address = ?, company_name = ?, dob = ?, email = ?, name = ? WHERE username = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
+
+			preparedStatement.setString(1, address);
+			preparedStatement.setString(2, companyName);
+			preparedStatement.setString(3, dob);
+			preparedStatement.setString(4, email);
+			preparedStatement.setString(5, name);
+			preparedStatement.setString(6, username);
+
+			rowsUpdated = preparedStatement.executeUpdate();
+
+			if (rowsUpdated > 0) {
+				System.out.println("User record updated successfully.");
+			} else {
+				System.out.println("User not found or update failed.");
+			}
+		} catch (SQLException e) {
+			System.out.println("Error executing the update query: " + e.getMessage());
+		}
+		return rowsUpdated;
+	}
+
 }
