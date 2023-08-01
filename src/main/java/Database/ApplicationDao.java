@@ -16,30 +16,38 @@ public class ApplicationDao {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-//        String query1 = "CREATE DATABASE IF NOT EXISTS soen6011";
-//        String query ="CREATE TABLE IF NOT EXISTS soen6011.applications (\n" +
-//                "  ID int NOT NULL AUTO_INCREMENT,\n" +
-//                "  JOBID int REFERENCES JOBS(ID),\n" +
-//                "  APPLICANT varchar(255) COLLATE utf8mb4_unicode_ci REFERENCES USERS(USERNAME), \n" +
-//                "  SUBMISSIONDATE date DEFAULT NULL,\n" +
-//                "  STATUS varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
-//                "  NOTIFY BOOLEAN DEFAULT FALSE, \n"+
-//                "  PRIMARY KEY (ID)\n" +
-//                ")";
-//
-//        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
-//            PreparedStatement statement1 = connection.prepareStatement(query1);
-//            statement1.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            throw new RuntimeException(e);
-//        }
-//        try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
-//            PreparedStatement statement = connection.prepareStatement(query);
-//            statement.executeUpdate();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
+        String drop = "DROP TABLE soen6011.applications";
+        String query1 = "CREATE DATABASE IF NOT EXISTS soen6011";
+        String query ="CREATE TABLE IF NOT EXISTS soen6011.applications (\n" +
+                "  ID int NOT NULL AUTO_INCREMENT,\n" +
+                "  JOBID int REFERENCES JOBS(ID),\n" +
+                "  APPLICANT varchar(255) COLLATE utf8mb4_unicode_ci REFERENCES USERS(USERNAME), \n" +
+                "  SUBMISSIONDATE date DEFAULT NULL,\n" +
+                "  STATUS varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
+                "  NOTIFY BOOLEAN DEFAULT FALSE, \n"+
+                "  student_username varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
+                "  PRIMARY KEY (ID)\n" +
+                ")";
+        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
+            PreparedStatement statement1 = connection.prepareStatement(drop);
+            statement1.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
+            PreparedStatement statement1 = connection.prepareStatement(query1);
+            statement1.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void addApplication(JobApplication application) throws SQLException {
@@ -127,7 +135,7 @@ public class ApplicationDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                applicants.add(resultSet.getString("APPLICANT"));
+                applicants.add(resultSet.getString("student_username"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -186,7 +194,7 @@ public class ApplicationDao {
         return status;
     }
     public static void updateStatus(String applicant, int jobId,String status) {
-        String query = "Update applications set STATUS=?, Notify=true WHERE APPLICANT = ? and JOBID = ?";
+        String query = "Update applications set STATUS=?, Notify=true WHERE STUDENT_USERNAME = ? and JOBID = ?";
         try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, status);

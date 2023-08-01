@@ -15,8 +15,9 @@ public class ResumeServlet  extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println(request.getParameter("username"));
         String username = request.getParameter("username");
-        String prefix = System.getProperty("user.dir") + "/resources/resume/";
+        String prefix =  getServletContext().getRealPath("/WEB-INF/classes/Resume" );
         String filename = username + ".pdf";
 
         File file = new File(prefix, filename);

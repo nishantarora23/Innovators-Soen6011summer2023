@@ -258,18 +258,18 @@ const Applicants = () => {
             <div>
               <Box sx={styles.cardContainer}>
                 {applicants?.map((offer : Applicants) => (
-                  <Card key={offer.id} sx={styles.card}>
-                    <Typography variant="subtitle1">{offer.fullName}</Typography>
-                    <Typography variant="body2">{offer.user_role}</Typography>
-                    <Typography className="location" variant="body2"> {offer.email}</Typography>
-                    <Typography variant="subtitle1"> <LocationOnIcon/>{offer.address}</Typography>
-                    <Typography variant="body2">{offer.dob}</Typography>
-                    <Typography variant="body2">{offer.college_name}</Typography>
+                  <Card key={offer?.id} sx={styles.card}>
+                    <Typography variant="subtitle1">{offer?.fullName}</Typography>
+                    <Typography variant="body2">{offer?.user_role}</Typography>
+                    <Typography className="location" variant="body2"> {offer?.email}</Typography>
+                    <Typography variant="subtitle1"> <LocationOnIcon/>{offer?.address}</Typography>
+                    <Typography variant="body2">{offer?.dob}</Typography>
+                    <Typography variant="body2">{offer?.college_name}</Typography>
                     <Stack direction="row" spacing={1}>
-                      <Chip label="View Resume" color="primary" onClick={() => handleViewResume(offer.username)}/>
-                      <Chip label="Reject" color="warning" onClick={() => handleReject(offer.id)}/>
-                      <Chip label="Accept Application" color="success" onClick={() => handleAcceptApplicant(offer.username)}/>
-                      <Chip label="Delete Application" color="error" onClick={() => handleDelete(offer.username)}/>
+                      <Chip label="View Resume" color="primary" onClick={() => handleViewResume(offer?.username)}/>
+                      <Chip label="Reject" color="warning" onClick={() => handleReject(offer?.id)}/>
+                      <Chip label="Accept Application" color="success" onClick={() => handleAcceptApplicant(offer?.username)}/>
+                      <Chip label="Delete Application" color="error" onClick={() => handleDelete(offer?.username)}/>
                     </Stack>
                   </Card>
                ))}
