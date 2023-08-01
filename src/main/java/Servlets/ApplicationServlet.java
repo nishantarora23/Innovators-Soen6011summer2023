@@ -104,7 +104,7 @@ public class ApplicationServlet extends HttpServlet {
         String json=null;
         ObjectMapper objectMapper = new ObjectMapper();
         String username = request.getParameter("username");
-        String id = request.getParameter("id");
+        String id = request.getParameter("jobId");
         String action=request.getParameter("action");
         try {
             switch (action) {

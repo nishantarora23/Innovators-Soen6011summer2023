@@ -5,20 +5,74 @@ import {
   Typography,
   Button,
   Grid,
+  IconButton,
+  Avatar,
 } from "@mui/material";
 import { getCompany, getFullName, getAddress, getEmail, getDOB} from "../../../services/userInfoService";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Bookmark
 } from "@mui/icons-material";
+import {Person4,
+LogoutOutlined,
+} from "@mui/icons-material";
 import CreateIcon from '@mui/icons-material/Create';
 import PersonIcon from '@mui/icons-material/Person';
+import { indigo } from "@mui/material/colors";
 
 const EmployerHome = () => {
   const company = getCompany();
   const navigate = useNavigate();
+
+  const doLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+  
   return (
     <>
+    <Grid
+        container
+        className="userProfile-container end-container"
+        sx={{
+          justifyContent: "flex-end",
+          marginTop: "-60px",
+          zIndex: 9999,
+        }}
+      >
+        <Avatar
+          sx={{
+            bgcolor: indigo[100],
+            width: "40px",
+            height: "40px",
+            marginTop: "-5px",
+            marginRight: "10px",
+          }}
+        >
+          <Person4 color="primary" />
+        </Avatar>
+        <Typography variant="h6" sx={{ color: indigo[100] }}>
+          {getFullName()}
+        </Typography>
+        <IconButton
+          color="secondary"
+          component={Link}
+          to={"/"}
+          onClick={doLogout}
+          sx={{
+            marginRight: "50px",
+            color: indigo[100],
+            marginTop: "-10px",
+            marginLeft: "10px",
+          }}
+        >
+          <LogoutOutlined
+            sx={{
+              fontSize: "2rem",
+            }}
+          />
+        </IconButton>
+      </Grid>
       <Grid container spacing={1}>
         <Grid item xs={12} sm={6} md={5} lg={3}>
           <Card

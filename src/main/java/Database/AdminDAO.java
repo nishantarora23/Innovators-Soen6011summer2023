@@ -65,4 +65,29 @@ public class AdminDAO {
         }
         return arr;
 	}
+	
+	public static int deleteEmployer(int username) {
+		String DELETE_QUERY = "DELETE FROM USERS WHERE ID = ?";
+		int n =0;
+        try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
+            PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
+            statement.setInt(1, username);
+            n=statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n;
+	}
+	public static int deleteStudent(int username) {
+		String DELETE_QUERY = "DELETE FROM USERS WHERE ID = ?";
+		int n =0;
+        try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
+            PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
+            statement.setInt(1, username);
+            n=statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n;
+	}
 }
