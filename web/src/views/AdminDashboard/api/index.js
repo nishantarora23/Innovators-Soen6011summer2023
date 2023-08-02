@@ -41,11 +41,17 @@ export const updateStudent = async (payload) => {
   }
 };
 
-export const deleteStudent = async (studentId) => {
-  let URL = `${BASE_URL}/careerconnect/admin/deleteStudent/${studentId}`;
+export const deleteStudent = async (studentId, payload) => {
+  const { username } = payload;
+  let URL = `${BASE_URL}/careerconnect/admin/deleteStudent/${username}`;
   try {
     const response = await fetch(URL, {
-      method: "DELETE",
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
     });
     if (!response.ok) {
       throw new Error(`Network response was not ok ${response}`);
@@ -97,11 +103,17 @@ export const updateEmployer = async (payload) => {
   }
 };
 
-export const deleteEmployer = async (employerId) => {
-  let URL = `${BASE_URL}/careerconnect/admin/deleteEmployer/${employerId}`;
+export const deleteEmployer = async (employerId, payload) => {
+  const { username } = payload;
+  let URL = `${BASE_URL}/careerconnect/admin/deleteEmployer/${username}`;
   try {
     const response = await fetch(URL, {
-      method: "DELETE",
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
     });
     if (!response.ok) {
       throw new Error(`Network response was not ok ${response}`);
@@ -175,7 +187,7 @@ export const deleteJobPost = async (jobId) => {
 // Candidate Applications
 
 export const fetchCandidateApplicationList = async () => {
-  let URL = `${BASE_URL}/careerconnect/admin/listOfCandidateApplications`;
+  let URL = `${BASE_URL}/careerconnect/listOfCandidates`;
   try {
     const response = await fetch(URL);
     if (!response.ok) {
@@ -191,7 +203,7 @@ export const fetchCandidateApplicationList = async () => {
 };
 
 export const updateCandidateApplication = async (payload) => {
-  let URL = `${BASE_URL}/careerconnect/admin/listOfCandidateApplications`;
+  let URL = `${BASE_URL}/careerconnect/listOfCandidates`;
   try {
     const response = await fetch(URL, {
       method: "PATCH",
@@ -214,7 +226,7 @@ export const updateCandidateApplication = async (payload) => {
 };
 
 export const deleteCandidateApplication = async (jobId) => {
-  let URL = `${BASE_URL}/careerconnect/admin/listOfCandidateApplications/${jobId}`;
+  let URL = `${BASE_URL}/careerconnect/listOfCandidates/${jobId}`;
   try {
     const response = await fetch(URL, {
       method: "DELETE",

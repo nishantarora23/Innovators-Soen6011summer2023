@@ -80,8 +80,8 @@ const JobPosting = () => {
     []
   );
 
-  const handleSaveRecord = async ({ exitEditingMode, values }: any) => {
-    await updateJobPost(values)
+  const handleSaveRecord = async ({ row, exitEditingMode, values }: any) => {
+    await updateJobPost({ ...row?.original, ...values })
       .then((res) => {
         setTableData((tableData: any) =>
           tableData?.map((row: any) => (row?.id === values.id ? values : row))

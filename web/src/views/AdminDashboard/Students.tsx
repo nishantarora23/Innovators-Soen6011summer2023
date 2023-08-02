@@ -44,8 +44,8 @@ const Students = ({ selectedType, setSelectedType }: TableProps) => {
     []
   );
 
-  const handleSaveRecord = async ({ exitEditingMode, values }: any) => {
-    await updateStudent(values)
+  const handleSaveRecord = async ({ row, exitEditingMode, values }: any) => {
+    await updateStudent({ ...row?.original, ...values })
       .then((res) => {
         setTableData((tableData: any) =>
           tableData?.map((row: any) => (row?.id === values.id ? values : row))
@@ -58,8 +58,11 @@ const Students = ({ selectedType, setSelectedType }: TableProps) => {
       });
   };
 
-  const handleDeleteRecord = async (id: string) => {
-    await deleteStudent(id)
+  const handleDeleteRecord = async (id: string, username: string) => {
+    const payload = {
+      username,
+    };
+    await deleteStudent(id, payload)
       .then((res) => {
         setTableData((tableData) =>
           tableData?.filter((row: any) => row?.id !== id)

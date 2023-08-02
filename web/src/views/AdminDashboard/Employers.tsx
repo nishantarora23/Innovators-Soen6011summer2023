@@ -48,8 +48,8 @@ const Employers = ({ selectedType, setSelectedType }: TableProps) => {
     []
   );
 
-  const handleSaveRecord = async ({ exitEditingMode, values }: any) => {
-    await updateEmployer(values)
+  const handleSaveRecord = async ({ row, exitEditingMode, values }: any) => {
+    await updateEmployer({ ...row?.original, ...values })
       .then((res) => {
         setTableData((tableData: any) =>
           tableData?.map((row: any) => (row?.id === values.id ? values : row))
@@ -62,8 +62,11 @@ const Employers = ({ selectedType, setSelectedType }: TableProps) => {
       });
   };
 
-  const handleDeleteRecord = async (id: string) => {
-    await deleteEmployer(id)
+  const handleDeleteRecord = async (id: string, username: string) => {
+    const payload = {
+      username,
+    };
+    await deleteEmployer(id, payload)
       .then((res) => {
         setTableData((tableData) =>
           tableData?.filter((row: any) => row?.id !== id)

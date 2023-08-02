@@ -16,56 +16,43 @@ const CandidateApplications = () => {
 
   const columns = useMemo<MRT_ColumnDef[]>(
     () => [
-      // address
-//: 
-// "123 Driver Lane"
-// company_name
-// : 
-// "Amazon"
-// dob
-// : 
-// "1975-10-22"
-// email
-// : 
-// "gustavo.fring@gmail.com"
-// id
-// : 
-// "2"
-// name
-// : 
-// "Gustavo Fring"
       {
-        accessorKey: "name", //access nested data with dot notation
-        header: "Name",
+        accessorKey: "studentName",
+        header: "Student",
         size: 150,
       },
       {
-        accessorKey: "email",
-        header: "Email",
+        accessorKey: "employerName",
+        header: "Employer",
         size: 150,
       },
       {
-        accessorKey: "address", //normal accessorKey
-        header: "Address",
-        size: 200,
-      },
-      {
-        accessorKey: "dob",
-        header: "Date of Birth",
+        accessorKey: "title",
+        header: "Title",
         size: 150,
       },
       {
-        accessorKey: "company_name",
-        header: "Comapny Name",
+        accessorKey: "submissionDate",
+        header: "Submission Date",
         size: 150,
-        
+      },
+      {
+        accessorKey: "status",
+        header: "Status",
+        size: 150,
+        editSelectOptions: [
+          { text: "Accepted", value: "Accepted" },
+          { text: "Rejected", value: "Rejected" },
+          { text: "Pending", value: "Pending" },
+        ],
+        editVariant: "select",
       },
     ],
     []
   );
 
-  const handleSaveRecord = async ({ exitEditingMode, values }: any) => {
-    await updateCandidateApplication(values)
+  const handleSaveRecord = async ({ row, exitEditingMode, values }: any) => {
+    await updateCandidateApplication({ ...row?.original, ...values })
       .then((res) => {
         setTableData((tableData: any) =>
           tableData?.map((row: any) => (row?.id === values.id ? values : row))

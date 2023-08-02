@@ -4,20 +4,29 @@ import { injectIntl } from "react-intl";
 import Footer from "../../components/Footer/Footer";
 import "./AdminDashboard.scss";
 import {
+  Avatar,
   Box,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Toolbar,
+  Button,
+  Card,
+  Grid,
+  IconButton,
+  Typography,
 } from "@mui/material";
 
 // Pages
 import AdminHome from "./AdminHome";
 import JobPosting from "./JobPosting";
 import CandidateApplications from "./CandidateApplications";
+import {
+  AllInbox,
+  Checklist,
+  Home,
+  LogoutOutlined,
+  Person4,
+} from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import { indigo } from "@mui/material/colors";
+import { getFullName } from "../../services/userInfoService";
 
 type Props = {
   intl: any;
@@ -48,53 +57,110 @@ const AdminDashboard = ({ intl }: Props) => {
     }
   };
 
-  const logout = () => {
-    console.log("Logout!");
+  const doLogout = () => {
+    localStorage.clear();
   };
 
   return (
-    <div style={{ height: "calc(100vh - 170px - 90px)" }}>
-      {/* <MenuBar
-        title={intl.formatMessage({ id: "global.app_title" })}
-        noBtn={true}
-      /> */}
-      <Drawer
+    <>
+      <Grid
+        container
+        className="userProfile-container end-container"
         sx={{
-          width: 240,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: 240,
-            boxSizing: "border-box",
-            zIndex: 0,
-          },
+          justifyContent: "flex-end",
+          marginTop: "-60px",
+          zIndex: 1200,
         }}
-        variant="permanent"
-        anchor="left"
       >
-        <Toolbar />
-        <List>
-          {["", "Home", "Job Posting", "Candidate Applications"].map(
-            (text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton
-                  selected={text === selectedView}
-                  onClick={() => setSelectedView(text)}
-                >
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            )
-          )}
-          <Divider />
-          <ListItem disablePadding>
-            <ListItemButton onClick={logout}>
-              <ListItemText primary="Logout" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </Drawer>
-      {getPageContent(selectedView)}
-    </div>
+        <Avatar
+          sx={{
+            bgcolor: indigo[100],
+            width: "40px",
+            height: "40px",
+            marginTop: "-5px",
+            marginRight: "10px",
+          }}
+        >
+          <Person4 color="primary" />
+        </Avatar>
+        <Typography variant="h6" sx={{ color: indigo[100] }}>
+          {getFullName() || "Admin"}
+        </Typography>
+        <IconButton
+          color="secondary"
+          component={Link}
+          to={"/"}
+          onClick={doLogout}
+          sx={{
+            marginRight: "50px",
+            color: indigo[100],
+            marginTop: "-10px",
+            marginLeft: "10px",
+          }}
+        >
+          <LogoutOutlined
+            sx={{
+              fontSize: "2rem",
+            }}
+          />
+        </IconButton>
+      </Grid>
+      <Grid
+        container
+        spacing={1}
+        sx={{
+          marginTop: "10px",
+        }}
+      >
+        <Grid item xs={12} sm={6} md={5} lg={3}>
+          <Card
+            className="sidemenu"
+            sx={{
+              textAlign: "left",
+              margin: "25px",
+              padding: "15px",
+              borderRadius: "10px",
+              border: "1px solid #c4c4c4",
+              height: "calc(100vh - 350px)",
+            }}
+          >
+            {[
+              { text: "Home", icon: Home },
+              { text: "Job Posting", icon: AllInbox },
+              { text: "Candidate Applications", icon: Checklist },
+            ].map(({ text, icon }) => {
+              const Icon = icon;
+              return (
+                <div key={text} className="menus">
+                  <Button
+                    color="primary"
+                    sx={{ fontSize: "0.8rem" }}
+                    onClick={() => setSelectedView(text)}
+                  >
+                    <Icon sx={{ marginRight: "10px" }} /> {text}
+                  </Button>
+                </div>
+              );
+            })}
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={7} lg={9}>
+          <Card
+            sx={{
+              textAlign: "left",
+              margin: "25px 25px 25px 0",
+              padding: "15px",
+              borderRadius: "10px",
+              border: "1px solid #c4c4c4",
+              height: "calc(100vh - 350px)",
+              overflowY: "auto",
+            }}
+          >
+            <Box sx={{ flexGrow: 1 }}>{getPageContent(selectedView)}</Box>
+          </Card>
+        </Grid>
+      </Grid>
+    </>
   );
 };
 
