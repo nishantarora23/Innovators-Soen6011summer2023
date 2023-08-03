@@ -42,8 +42,7 @@ export const updateStudent = async (payload) => {
 };
 
 export const deleteStudent = async (studentId, payload) => {
-  const { username } = payload;
-  let URL = `${BASE_URL}/careerconnect/admin/deleteStudent/${username}`;
+  let URL = `${BASE_URL}/careerconnect/admin/deleteStudent`;
   try {
     const response = await fetch(URL, {
       method: "POST",
@@ -104,8 +103,7 @@ export const updateEmployer = async (payload) => {
 };
 
 export const deleteEmployer = async (employerId, payload) => {
-  const { username } = payload;
-  let URL = `${BASE_URL}/careerconnect/admin/deleteEmployer/${username}`;
+  let URL = `${BASE_URL}/careerconnect/admin/deleteEmployer`;
   try {
     const response = await fetch(URL, {
       method: "POST",

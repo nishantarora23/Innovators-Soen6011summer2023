@@ -46,7 +46,9 @@ const Table = (props: any) => {
           <Tooltip arrow placement="right" title="Delete">
             <IconButton
               color="error"
-              onClick={() => handleDeleteRecord(row.id, row.username)}
+              onClick={() =>
+                handleDeleteRecord(row.original.id, row.original.username)
+              }
             >
               <Delete />
             </IconButton>
