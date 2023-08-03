@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -10,14 +10,22 @@ import {
   ListItem,
   ListItemText,
   CardContent,
+  Button,
+  Snackbar,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
+import MuiAlert, { AlertColor } from '@mui/material/Alert';
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { indigo } from "@mui/material/colors";
-import { Person4 } from "@mui/icons-material";
+import { CloudUpload, Person4, CloudDownload, Delete } from "@mui/icons-material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
-import { getFullName, getUserInfo } from "../../../services/userInfoService";
+import { getEmail, getFullName, getUserInfo, getUserName, getUserRole } from "../../../services/userInfoService";
 import resumeBuilder from '../../../assets/resume_builder.jpg';
 import networking from "../../../assets/networking.jpg"
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../../../constants";
 
 const styles = {
   container: {
@@ -78,12 +86,23 @@ const styles = {
   },
 };
 
+export interface ResumeSnackbar {
+  open: boolean;
+  severity: AlertColor;
+  message: string;
+}
+
 const StudentDetails = () => {
   // Assuming you have the student details as variables
   const studentName = "John Doe";
   const university = "ABC University";
   const address = "123 Main St, City, Country";
   const dob = "1995-08-25"; // Assuming Date of Birth is in the format YYYY-MM-DD
+  const [resumeSnackbar, setResumeSnackbar] = useState<ResumeSnackbar>({
+    open: false,
+    severity: "info",
+    message: ""
+  });
 
   // Formatting Date of Birth
   const formattedDOB = new Date(dob).toLocaleDateString("en-US", {
@@ -155,8 +174,98 @@ const StudentDetails = () => {
     },
   ];
 
+  const handleResumeUpload = () => {
+    document.getElementById("fileInput")?.click();
+  };
+
+  const handleFileChange = (event: any) => {
+    console.log(event);
+    if (event?.target?.files?.length) {
+      const formData = new FormData();
+      formData.append('username', getUserName() ?? "");
+      formData.append('fullName', getFullName() ?? "");
+      formData.append('email', getEmail() ?? "");
+      formData.append('userRole', getUserRole() ?? "");
+      formData.append('resume', event.target.files[0]);
+      axios.post(`${API_URL}/upload-resume/${getUserName()}`, formData).then(() => {
+        setResumeSnackbar({
+          open: true,
+          severity: "success",
+          message: "Resume uploaded sucessfully."
+        });
+      }).catch((error) => {
+        setResumeSnackbar({
+          open: true,
+          severity: "error",
+          message: "Resume uploaded failed."
+        });
+        console.log(error);
+      });
+    }
+  };
+
+  const handleResumeDownload = () => {
+    const payload = {
+      username: getUserName()
+    }
+    axios.post(`${API_URL}/viewResume`, payload).then(() => {
+      setResumeSnackbar({
+        open: true,
+        severity: "success",
+        message: "Resume downloaded sucessfully."
+      });
+    }).catch(() => {
+      setResumeSnackbar({
+        open: true,
+        severity: "error",
+        message: "Resume download failed. You may not have any resume"
+      });
+    })
+  }
+
+  const handleResumeDelete = () => {
+    const payload = {
+      username: getUserName()
+    }
+    axios.post(`${API_URL}/deleteResume`, payload).then(() => {
+      setResumeSnackbar({
+        open: true,
+        severity: "success",
+        message: "Resume delete sucessfully."
+      });
+    }).catch(() => {
+      setResumeSnackbar({
+        open: true,
+        severity: "error",
+        message: "Resume delete failed."
+      });
+    })
+  }
+ 
   return (
     <Box component="div" sx={styles.container}>
+      <Snackbar
+        open={resumeSnackbar.open}
+        autoHideDuration={3000}
+        onClose={() => {
+          setResumeSnackbar({
+            open: false,
+            severity: "info",
+            message: ""
+          })
+        }}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        sx={{
+          marginTop: "5rem"
+        }}
+      >
+        <MuiAlert severity={resumeSnackbar.severity}>
+          {resumeSnackbar.message}
+        </MuiAlert>
+      </Snackbar>
       <Typography variant="h4" sx={styles.heading}>
         <EventNoteIcon sx={styles.icon} />
         Student Details
@@ -216,7 +325,52 @@ const StudentDetails = () => {
           <Typography variant="body2">{address}</Typography>
         </Box>
       </Card> */}
-
+      <Box component="div" sx={{ float: "right", marginTop: "-10rem" }}>
+        <Typography variant="body1">
+          <Typography
+            sx={{ marginLeft: "12px", fontSize: "1.25rem", fontWeight: "bold" }}
+          >
+            Resume
+          </Typography>
+          <Tooltip title="Upload resume">
+            <IconButton
+              size="large"
+              aria-label="upload resume"
+              sx={{ color: "#9c27b0" }}
+            >
+              <CloudUpload
+                sx={{ fontSize: "2rem" }}
+                onClick={handleResumeUpload}
+              />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Download resume">
+            <IconButton
+              color="primary"
+              size="large"
+              aria-label="download resume"
+            >
+              <CloudDownload
+                sx={{ fontSize: "2rem" }}
+                onClick={handleResumeDownload}
+              />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete resume">
+            <IconButton color="error" size="large" aria-label="delete resume">
+              <Delete sx={{ fontSize: "2rem" }} onClick={handleResumeDelete} />
+            </IconButton>
+          </Tooltip>
+        </Typography>
+        <input
+          id="fileInput"
+          className="custom-file-input"
+          type="file"
+          accept=".pdf,.doc,.docx"
+          onChange={handleFileChange}
+          hidden
+        />
+      </Box>
       {/* Career Resources */}
       <Typography variant="h5" sx={styles.sectionHeading}>
         <EventNoteIcon sx={styles.icon} />
@@ -240,7 +394,6 @@ const StudentDetails = () => {
           </Card>
         ))}
       </Box>
-
       {/* Featured Workshops and Webinars */}
       <Typography variant="h5" sx={styles.sectionHeading}>
         <EventNoteIcon sx={styles.icon} />

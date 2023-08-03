@@ -66,24 +66,24 @@ public class AdminDAO {
 		return arr;
 	}
 
-	public static int deleteEmployer(int username) {
-		String DELETE_QUERY = "DELETE FROM USERS WHERE ID = ?";
+	public static int deleteEmployer(String username) {
+		String DELETE_QUERY = "DELETE FROM USERS WHERE USERNAME = ?";
 		int n =0;
 		try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
 			PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
-			statement.setInt(1, username);
+			statement.setString(1, username);
 			n=statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return n;
 	}
-	public static int deleteStudent(int username) {
-		String DELETE_QUERY = "DELETE FROM USERS WHERE ID = ?";
+	public static int deleteStudent(String username) {
+		String DELETE_QUERY = "DELETE FROM USERS WHERE USERNAME = ?";
 		int n =0;
 		try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
 			PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
-			statement.setInt(1, username);
+			statement.setString(1, username);
 			n=statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -94,7 +94,7 @@ public class AdminDAO {
 	public static int updateStudent(String address, String collegeName, String dob, String email, String name, String username) {
 		int rowsUpdated =0;
 		try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
-			String updateQuery = "UPDATE users SET address = ?, college_name = ?, dob = ?, email = ?, name = ? WHERE username = ?";
+			String updateQuery = "UPDATE users SET address = ?, college_name = ?, dob = ?, email = ?, fullname = ? WHERE username = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
 
 			preparedStatement.setString(1, address);
@@ -120,7 +120,7 @@ public class AdminDAO {
 	public static int updateEmployer(String address, String companyName, String dob, String email, String name, String username) {
 		int rowsUpdated =0;
 		try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
-			String updateQuery = "UPDATE users SET address = ?, company_name = ?, dob = ?, email = ?, name = ? WHERE username = ?";
+			String updateQuery = "UPDATE users SET address = ?, company_name = ?, dob = ?, email = ?, fullname = ? WHERE username = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
 
 			preparedStatement.setString(1, address);
@@ -141,6 +141,25 @@ public class AdminDAO {
 			System.out.println("Error executing the update query: " + e.getMessage());
 		}
 		return rowsUpdated;
+	}
+
+	public static JSONArray getListOfCandidates() {
+		JSONArray arr = new JSONArray();
+		try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass))  {
+			String query = "SELECT A.APPLICANT, A.JOBID, E.EMPLOYER, E.TITLE, A.STATUS, A.SUBMISSIONDATE FROM "
+					+ "APPLICATIONS A, JOBS E WHERE A.JOBID = E.ID;";
+			PreparedStatement stmt = connection.prepareStatement(query);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				arr = AdminUtility.getListOfCandidates(rs);
+			} else {
+				System.out.println("no result found");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return arr;
 	}
 
 }
