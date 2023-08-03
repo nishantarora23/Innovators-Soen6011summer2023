@@ -11,11 +11,19 @@ public class Job {
     private String deadline;
     private String contractType;
     private String username;
+    private String name;
 
-    private String status = "active";
+    public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	private String status = "active";
 
     public Job(int ID, String title, String salaryRange, String responsibilities, String qualifications,
-               String location, String description, String deadline, String contractType, String employerID,String status) {
+               String location, String description, String deadline, String contractType, String employerID,String status,String name) {
         this.ID = ID;
         this.title = title;
         this.salaryRange = salaryRange;
@@ -27,6 +35,7 @@ public class Job {
         this.contractType = contractType;
         this.username = employerID;
         this.status =status;
+        this.name =name;
     }
     public Job()
     {}
