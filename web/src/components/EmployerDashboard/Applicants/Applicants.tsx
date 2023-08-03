@@ -126,12 +126,6 @@ const Applicants = () => {
   }, []);
 
   const handleReject = (username: any) => {
-    rejectApplication(username, id?.charAt(1))
-        .then(res => {console.log(res); window.location.reload()})
-        .catch(err => console.error(err));
-  }
-
-  const handleDelete = (username: any) => {
     deleteApplication(username, id?.charAt(1))
         .then((res) => {console.log(res); window.location.reload()})
         .catch(err => console.error(err))
@@ -267,9 +261,8 @@ const Applicants = () => {
                     <Typography variant="body2">{offer?.college_name}</Typography>
                     <Stack direction="row" spacing={1}>
                       <Chip label="View Resume" color="primary" onClick={() => handleViewResume(offer?.username)}/>
-                      <Chip label="Reject" color="warning" onClick={() => handleReject(offer?.id)}/>
+                      <Chip label="Reject" color="warning" onClick={() => handleReject(offer?.username)}/>
                       <Chip label="Accept Application" color="success" onClick={() => handleAcceptApplicant(offer?.username)}/>
-                      <Chip label="Delete Application" color="error" onClick={() => handleDelete(offer?.username)}/>
                     </Stack>
                   </Card>
                ))}
