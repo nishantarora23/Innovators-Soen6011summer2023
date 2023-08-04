@@ -52,10 +52,14 @@ const CandidateApplications = () => {
   );
 
   const handleSaveRecord = async ({ row, exitEditingMode, values }: any) => {
-    await updateCandidateApplication({ ...row?.original, ...values })
+    const userID = row?.original?.candidateID;
+    const newData = { ...row?.original, ...values };
+    await updateCandidateApplication(newData)
       .then((res) => {
         setTableData((tableData: any) =>
-          tableData?.map((row: any) => (row?.id === values.id ? values : row))
+          tableData?.map((row: any) =>
+            row?.candidateID === userID ? newData : row
+          )
         );
         console.log("Application Updated Successfully");
       })
@@ -65,11 +69,15 @@ const CandidateApplications = () => {
       });
   };
 
-  const handleDeleteRecord = async (id: string) => {
-    await deleteCandidateApplication(id)
+  const handleDeleteRecord = async (row: any) => {
+    const { candidateID } = row;
+    const payload = {
+      candidateID,
+    };
+    await deleteCandidateApplication(payload)
       .then((res) => {
         setTableData((tableData) =>
-          tableData?.filter((row: any) => row?.id !== id)
+          tableData?.filter((row: any) => row?.candidateID !== candidateID)
         );
         console.log("Application Deleted Successfully");
       })

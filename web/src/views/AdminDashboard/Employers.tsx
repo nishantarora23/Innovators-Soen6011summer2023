@@ -49,10 +49,14 @@ const Employers = ({ selectedType, setSelectedType }: TableProps) => {
   );
 
   const handleSaveRecord = async ({ row, exitEditingMode, values }: any) => {
-    await updateEmployer({ ...row?.original, ...values })
+    const userID = row?.original?.username;
+    const newData = { ...row?.original, ...values };
+    await updateEmployer(newData)
       .then((res) => {
         setTableData((tableData: any) =>
-          tableData?.map((row: any) => (row?.id === values.id ? values : row))
+          tableData?.map((row: any) =>
+            row?.username === userID ? newData : row
+          )
         );
         console.log("Student Updated Successfully");
       })
@@ -62,14 +66,15 @@ const Employers = ({ selectedType, setSelectedType }: TableProps) => {
       });
   };
 
-  const handleDeleteRecord = async (id: string, username: string) => {
+  const handleDeleteRecord = async (row: any) => {
+    const { username } = row;
     const payload = {
       username,
     };
-    await deleteEmployer(id, payload)
+    await deleteEmployer(payload)
       .then((res) => {
         setTableData((tableData) =>
-          tableData?.filter((row: any) => row?.id !== id)
+          tableData?.filter((row: any) => row?.username !== username)
         );
         console.log("Student Deleted Successfully");
       })

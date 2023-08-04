@@ -6,7 +6,7 @@ import "./AdminDashboard.scss";
 import { deleteJobPost, fetchJobPostList, updateJobPost } from "./api";
 
 const JobPosting = () => {
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [fetchedData, setFetchedData] = useState(false);
 
@@ -81,10 +81,12 @@ const JobPosting = () => {
   );
 
   const handleSaveRecord = async ({ row, exitEditingMode, values }: any) => {
-    await updateJobPost({ ...row?.original, ...values })
+    const userID = row?.original?.jobId;
+    const newData = { ...row?.original, ...values };
+    await updateJobPost(newData)
       .then((res) => {
         setTableData((tableData: any) =>
-          tableData?.map((row: any) => (row?.id === values.id ? values : row))
+          tableData?.map((row: any) => (row?.jobId === userID ? newData : row))
         );
         console.log("Job Post Updated Successfully");
       })
@@ -94,11 +96,15 @@ const JobPosting = () => {
       });
   };
 
-  const handleDeleteRecord = async (id: string) => {
-    await deleteJobPost(id)
+  const handleDeleteRecord = async (row: any) => {
+    const { jobId } = row;
+    const payload = {
+      jobId,
+    };
+    await deleteJobPost(payload)
       .then((res) => {
-        setTableData((tableData) =>
-          tableData?.filter((row: any) => row?.id !== id)
+        setTableData((tableData: any) =>
+          tableData?.filter((row: any) => row?.jobId !== jobId)
         );
         console.log("Job Post Deleted Successfully");
       })
