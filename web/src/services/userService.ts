@@ -82,7 +82,7 @@ export const selectCandidateForInterview = (username: string, jobId: any) =>{
     ACTION: "SELECT",
     username,
     jobId,
-    status: "Selected"
+    status: "Accepted"
   }
   return axios.post(`${API_URL}/application`, payload);
 }
