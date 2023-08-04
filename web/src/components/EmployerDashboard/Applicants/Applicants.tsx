@@ -126,7 +126,7 @@ const Applicants = () => {
   }, []);
 
   const handleReject = (username: any) => {
-    deleteApplication(username, id?.charAt(1))
+    rejectApplication(username, id?.charAt(1))
         .then((res) => {console.log(res); window.location.reload()})
         .catch(err => console.error(err))
   }

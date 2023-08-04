@@ -129,7 +129,7 @@ public class ApplicationDao {
         ArrayList<String> applicants = new ArrayList<>();
 
         try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
-            String sql = "SELECT * FROM soen6011.applications where JOBID = ?";
+            String sql = "SELECT * FROM soen6011.applications where JOBID = ? and STATUS = \"PENDING\"";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, jobId);
             ResultSet resultSet = statement.executeQuery();
