@@ -146,7 +146,7 @@ public class AdminDAO {
 	public static JSONArray getListOfCandidates() {
 		JSONArray arr = new JSONArray();
 		try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass))  {
-			String query = "SELECT A.APPLICANT, A.JOBID, E.EMPLOYER, E.TITLE, A.STATUS, A.SUBMISSIONDATE FROM "
+			String query = "SELECT A.ID, A.APPLICANT, A.JOBID, E.EMPLOYER, E.TITLE, A.STATUS, A.SUBMISSIONDATE, E.EMPLOYER_USERNAME, A.STUDENT_USERNAME FROM "
 					+ "APPLICATIONS A, JOBS E WHERE A.JOBID = E.ID;";
 			PreparedStatement stmt = connection.prepareStatement(query);
 			ResultSet rs = stmt.executeQuery();

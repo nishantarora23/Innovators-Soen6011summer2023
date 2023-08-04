@@ -197,7 +197,7 @@ const StudentDetails = () => {
         setResumeSnackbar({
           open: true,
           severity: "error",
-          message: "Resume uploaded failed."
+          message: "Resume upload failed."
         });
         console.log(error);
       });
@@ -208,11 +208,19 @@ const StudentDetails = () => {
     const payload = {
       username: getUserName()
     }
-    axios.post(`${API_URL}/viewResume`, payload).then(() => {
+    axios.post(`${API_URL}/viewResume`, payload, { responseType: 'blob' }) .then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data])); // Create a Blob from the response data
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'resume.pdf'; // Set the desired filename for the downloaded file
+      document.body.appendChild(a);
+      a.click();
+      a.remove(); // Clean up the temporary element
+      window.URL.revokeObjectURL(url);
       setResumeSnackbar({
         open: true,
-        severity: "success",
-        message: "Resume downloaded sucessfully."
+        severity: 'success',
+        message: 'Resume downloaded successfully.',
       });
     }).catch(() => {
       setResumeSnackbar({
@@ -256,7 +264,7 @@ const StudentDetails = () => {
         }}
         anchorOrigin={{
           vertical: "top",
-          horizontal: "right",
+          horizontal: "center",
         }}
         sx={{
           marginTop: "5rem"
@@ -294,7 +302,7 @@ const StudentDetails = () => {
           <Typography variant="h6">
             {getUserInfo("userRole") +
               " at " +
-              (getUserInfo("cName") ?? getUserInfo("collegeName"))}
+              (getUserInfo("collegeName") ?? getUserInfo("cName"))}
           </Typography>
           <Box sx={styles.detail}>
             <EventNoteIcon sx={styles.icon} />

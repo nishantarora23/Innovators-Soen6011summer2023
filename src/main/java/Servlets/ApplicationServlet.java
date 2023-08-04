@@ -18,6 +18,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -66,11 +68,23 @@ public class ApplicationServlet extends HttpServlet {
 		} else if("ADD".equalsIgnoreCase(action)){
 			try
 			{
+				//check if resume is there or not
+				String username = jsonPayload.get("username").getAsString();
+				String prefix =  getServletContext().getRealPath("/WEB-INF/classes/Resume" );
+				String filename = username + ".pdf";
+
+				File file = new File(prefix, filename);
+
+				if (!file.exists()) {
+					// Handle the case when the file does not exist
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					return;
+				}
+
 				JobApplication application = new JobApplication();
-				System.out.println(jsonPayload);
 				application.setApplicantname(jsonPayload.get("applicant").getAsString());
 				application.setJobId(Integer.valueOf(jsonPayload.get("jobid").getAsString()));
-				application.setStudentUserName(jsonPayload.get("username").getAsString());
+				application.setStudentUserName(username);
 				LocalDate today = LocalDate.now();
 
 				// Format the date to "YYYY-MM-DD"
@@ -93,9 +107,9 @@ public class ApplicationServlet extends HttpServlet {
 			{
 				int num = ApplicationDao.updateStatus(jsonPayload.get("username").getAsString(),jsonPayload.get("jobId").getAsInt(),jsonPayload.get("status").getAsString());
 				User user = UserDAO.getUser(jsonPayload.get("username").getAsString());
-				
+
 				Job job = JobDAO.getJobId(jsonPayload.get("jobId").getAsInt());
-			
+
 				if(num>0) {
 					EmailSender.sendEmail(user,job);
 				}

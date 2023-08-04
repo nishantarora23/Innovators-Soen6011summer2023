@@ -60,15 +60,18 @@ public class AdminUtility {
         JSONArray candidateArray = new JSONArray();
 
         do {
-            JSONObject employerObject = new JSONObject();
-            employerObject.put("studentName", rs.getString("APPLICANT"));
-            employerObject.put("jobid", rs.getString("JOBID"));
-            employerObject.put("employerName", rs.getString("EMPLOYER"));
-            employerObject.put("title", rs.getString("TITLE"));
-            employerObject.put("status", rs.getString("STATUS"));
-            employerObject.put("submissionDate", rs.getString("SUBMISSIONDATE"));
+            JSONObject candidateObject = new JSONObject();
+            candidateObject.put("studentName", rs.getString("APPLICANT"));
+            candidateObject.put("jobid", rs.getString("JOBID"));
+            candidateObject.put("employerName", rs.getString("EMPLOYER"));
+            candidateObject.put("title", rs.getString("TITLE"));
+            candidateObject.put("status", rs.getString("STATUS"));
+            candidateObject.put("submissionDate", rs.getString("SUBMISSIONDATE"));
+            candidateObject.put("candidateID", rs.getString("ID"));
+            candidateObject.put("employer_username", rs.getString("EMPLOYER_USERNAME"));
+            candidateObject.put("student_username", rs.getString("STUDENT_USERNAME"));
 
-            candidateArray.put(employerObject);
+            candidateArray.put(candidateObject);
         }
         while(rs.next());
 

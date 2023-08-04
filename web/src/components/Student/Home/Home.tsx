@@ -11,7 +11,12 @@ import {
   Avatar,
   IconButton,
 } from "@mui/material";
-import { getFullName, getUserName, getEmail, getUserRole } from "../../../services/userInfoService";
+import {
+  getFullName,
+  getUserName,
+  getEmail,
+  getUserRole,
+} from "../../../services/userInfoService";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Article,
@@ -21,11 +26,11 @@ import {
   Person4,
   LogoutOutlined,
   CloudUpload,
-  Home
+  Home,
 } from "@mui/icons-material";
 import { indigo } from "@mui/material/colors";
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertColor } from '@mui/material/Alert';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertColor } from "@mui/material/Alert";
 import { useState } from "react";
 import JobsList from "../../Jobs/Jobs";
 import MyJobs from "../../MyJobs/MyJobs";
@@ -34,7 +39,7 @@ import { QUICK_CV_URL, API_URL } from "../../../constants";
 import axios from "axios";
 import "./Home.css";
 
-export interface ResumeSnackbar {
+export interface ResumeAlert {
   open: boolean;
   severity: AlertColor;
   message: string;
@@ -43,10 +48,10 @@ export interface ResumeSnackbar {
 const StudentHome = () => {
   const navigate = useNavigate();
   const [screen, setScreen] = useState("home");
-  const [resumeSnackbar, setResumeSnackbar] = useState<ResumeSnackbar>({
+  const [resumeAlert, setResumeAlert] = useState<ResumeAlert>({
     open: false,
     severity: "info",
-    message: ""
+    message: "",
   });
 
   const doLogout = () => {
@@ -62,25 +67,28 @@ const StudentHome = () => {
     console.log(event);
     if (event?.target?.files?.length) {
       const formData = new FormData();
-      formData.append('username', getUserName() ?? "");
-      formData.append('fullName', getFullName() ?? "");
-      formData.append('email', getEmail() ?? "");
-      formData.append('userRole', getUserRole() ?? "");
-      formData.append('resume', event.target.files[0]);
-      axios.post(`${API_URL}/upload-resume/${getUserName()}`, formData).then(() => {
-        setResumeSnackbar({
-          open: true,
-          severity: "success",
-          message: "Resume uploaded sucessfully."
+      formData.append("username", getUserName() ?? "");
+      formData.append("fullName", getFullName() ?? "");
+      formData.append("email", getEmail() ?? "");
+      formData.append("userRole", getUserRole() ?? "");
+      formData.append("resume", event.target.files[0]);
+      axios
+        .post(`${API_URL}/upload-resume/${getUserName()}`, formData)
+        .then(() => {
+          setResumeAlert({
+            open: true,
+            severity: "success",
+            message: "Resume uploaded sucessfully.",
+          });
+        })
+        .catch((error) => {
+          setResumeAlert({
+            open: true,
+            severity: "error",
+            message: "Resume uploaded failed.",
+          });
+          console.log(error);
         });
-      }).catch((error) => {
-        setResumeSnackbar({
-          open: true,
-          severity: "error",
-          message: "Resume uploaded failed."
-        });
-        console.log(error);
-      });
     }
   };
 
@@ -217,9 +225,26 @@ const StudentHome = () => {
                 onChange={handleFileChange}
                 hidden
               />
-              <Snackbar open={resumeSnackbar.open} autoHideDuration={3000}>
-                <MuiAlert severity={resumeSnackbar.severity}>
-                  {resumeSnackbar.message}
+              <Snackbar
+                open={resumeAlert.open}
+                autoHideDuration={3000}
+                onClose={() => {
+                  setResumeAlert({
+                    open: false,
+                    severity: "info",
+                    message: "",
+                  });
+                }}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+                sx={{
+                  marginTop: "5rem",
+                }}
+              >
+                <MuiAlert severity={resumeAlert.severity}>
+                  {resumeAlert.message}
                 </MuiAlert>
               </Snackbar>
             </div>
