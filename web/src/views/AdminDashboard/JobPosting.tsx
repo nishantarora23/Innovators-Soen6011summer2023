@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { type MRT_ColumnDef } from "material-react-table";
+import { toast } from "react-toastify";
 import Table from "../../components/Table/Table";
 
 import "./AdminDashboard.scss";
@@ -81,14 +82,17 @@ const JobPosting = () => {
   );
 
   const handleSaveRecord = async ({ row, exitEditingMode, values }: any) => {
-    const userID = row?.original?.jobId;
+    const userID = row?.original?.id;
     const newData = { ...row?.original, ...values };
     await updateJobPost(newData)
       .then((res) => {
+        if (res && res.error) {
+          return toast.error(res.error);
+        }
         setTableData((tableData: any) =>
-          tableData?.map((row: any) => (row?.jobId === userID ? newData : row))
+          tableData?.map((row: any) => (row?.id === userID ? newData : row))
         );
-        console.log("Job Post Updated Successfully");
+        toast.success("Student Updated Successfully");
       })
       .catch((error) => console.log(error))
       .finally(() => {
@@ -97,18 +101,24 @@ const JobPosting = () => {
   };
 
   const handleDeleteRecord = async (row: any) => {
-    const { jobId } = row;
+    const { id } = row;
     const payload = {
-      jobId,
+      id,
     };
     await deleteJobPost(payload)
       .then((res) => {
+        if (res && res.error) {
+          return toast.error(res.error);
+        }
         setTableData((tableData: any) =>
-          tableData?.filter((row: any) => row?.jobId !== jobId)
+          tableData?.filter((row: any) => row?.id !== id)
         );
-        console.log("Job Post Deleted Successfully");
+        toast.success("Job Post Deleted Successfully");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      });
   };
 
   useEffect(() => {
@@ -117,9 +127,11 @@ const JobPosting = () => {
       setLoading(true);
       try {
         const data = await fetchJobPostList();
+        if (data.error) return toast.error(data.error);
         setTableData(data);
       } catch (error: any) {
         console.log(error.message);
+        toast.error(error.message);
       } finally {
         setFetchedData(true);
         setLoading(false);

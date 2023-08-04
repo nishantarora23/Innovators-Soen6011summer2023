@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { type MRT_ColumnDef } from "material-react-table";
+import { toast } from "react-toastify";
 import Table from "../../components/Table/Table";
 
 import "./AdminDashboard.scss";
@@ -56,14 +57,20 @@ const CandidateApplications = () => {
     const newData = { ...row?.original, ...values };
     await updateCandidateApplication(newData)
       .then((res) => {
+        if (res && res.error) {
+          return toast.error(res.error);
+        }
         setTableData((tableData: any) =>
           tableData?.map((row: any) =>
             row?.candidateID === userID ? newData : row
           )
         );
-        console.log("Application Updated Successfully");
+        toast.success("Application Updated Successfully");
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      })
       .finally(() => {
         exitEditingMode();
       });
@@ -76,12 +83,18 @@ const CandidateApplications = () => {
     };
     await deleteCandidateApplication(payload)
       .then((res) => {
+        if (res && res.error) {
+          return toast.error(res.error);
+        }
         setTableData((tableData) =>
           tableData?.filter((row: any) => row?.candidateID !== candidateID)
         );
-        console.log("Application Deleted Successfully");
+        toast.success("Application Deleted Successfully");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      });
   };
   useEffect(() => {
     const fetchCandidateApplications = async () => {
@@ -89,9 +102,11 @@ const CandidateApplications = () => {
       setLoading(true);
       try {
         const data = await fetchCandidateApplicationList();
+        if (data.error) return toast.error(data.error);
         setTableData(data);
       } catch (error: any) {
         console.log(error.message);
+        toast.error(error.message);
       } finally {
         setFetchedData(true);
         setLoading(false);

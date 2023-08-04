@@ -27,6 +27,8 @@ import {
 import { Link } from "react-router-dom";
 import { indigo } from "@mui/material/colors";
 import { getFullName } from "../../services/userInfoService";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type Props = {
   intl: any;
@@ -160,6 +162,18 @@ const AdminDashboard = ({ intl }: Props) => {
           </Card>
         </Grid>
       </Grid>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 };

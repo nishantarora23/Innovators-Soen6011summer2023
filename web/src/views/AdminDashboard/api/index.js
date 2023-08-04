@@ -13,8 +13,7 @@ export const fetchStudentEnrolled = async () => {
       return data;
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -36,8 +35,7 @@ export const updateStudent = async (payload) => {
       return data;
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -59,7 +57,7 @@ export const deleteStudent = async (payload) => {
       return data;
     }
   } catch (error) {
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -76,7 +74,7 @@ export const fetchEmployersRegistered = async () => {
       return data;
     }
   } catch (error) {
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -98,7 +96,7 @@ export const updateEmployer = async (payload) => {
       return data;
     }
   } catch (error) {
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -120,7 +118,7 @@ export const deleteEmployer = async (payload) => {
       return data;
     }
   } catch (error) {
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -137,8 +135,7 @@ export const fetchJobPostList = async () => {
       return data;
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -160,8 +157,7 @@ export const updateJobPost = async (payload) => {
       return data;
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -183,7 +179,7 @@ export const deleteJobPost = async (payload) => {
       return data;
     }
   } catch (error) {
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -200,8 +196,7 @@ export const fetchCandidateApplicationList = async () => {
       return data;
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -223,8 +218,7 @@ export const updateCandidateApplication = async (payload) => {
       return data;
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -246,6 +240,6 @@ export const deleteCandidateApplication = async (payload) => {
       return data;
     }
   } catch (error) {
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
