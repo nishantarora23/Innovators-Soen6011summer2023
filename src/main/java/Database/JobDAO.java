@@ -13,6 +13,7 @@ public class JobDAO {
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
+        String drop = "DROP TABLE soen6011.jobs";
             String query1 = "CREATE DATABASE IF NOT EXISTS soen6011";
             String query = "CREATE TABLE IF NOT EXISTS soen6011.jobs (\n" +
                     "  ID int NOT NULL AUTO_INCREMENT,\n" +
@@ -28,6 +29,13 @@ public class JobDAO {
                     "  STATUS varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT \"active\",\n" +
                     "  PRIMARY KEY (ID)\n" +
                     ")";
+        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
+            PreparedStatement statement1 = connection.prepareStatement(drop);
+            statement1.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
             try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
                 PreparedStatement statement1 = connection.prepareStatement(query1);
                 statement1.executeUpdate();
@@ -81,10 +89,11 @@ public class JobDAO {
                 job.setLocation(resultSet.getString("LOCATION"));
                 job.setQualifications(resultSet.getString("QUALIFICATIONS"));
                 job.setResponsibilities(resultSet.getString("RESPONSIBILITIES"));
-                job.setUsername(resultSet.getString("EMPLOYER"));
+                job.setUsername(resultSet.getString("EMPLOYER_USERNAME"));
                 job.setSalaryRange(resultSet.getString("SALARY_RANGE"));
                 job.setTitle(resultSet.getString("TITLE"));
                 job.setStatus(resultSet.getString("STATUS"));
+                job.setName(resultSet.getString("EMPLOYER"));
                 jobList.add(job);
             }
         } catch (SQLException e) {
@@ -164,7 +173,7 @@ public class JobDAO {
     public static void update(Job job) {
         try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
             String query = "Update jobs set TITLE=? , SALARY_RANGE=?, RESPONSIBILITIES=?, QUALIFICATIONS=?, LOCATION=?, " +
-                    "DESCRIPTION=?, DEADLINE=?, CONTRACT_TYPE=?, EMPLOYER_USERNAME=?, STATUS=? WHERE Id = ?";
+                    "DESCRIPTION=?, DEADLINE=?, CONTRACT_TYPE=?, STATUS=?, EMPLOYER = ? WHERE Id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, job.getTitle());
             statement.setString(2, job.getSalaryRange());
@@ -174,8 +183,8 @@ public class JobDAO {
             statement.setString(6, job.getDescription());
             statement.setString(7, job.getDeadline());
             statement.setString(8, job.getContractType());
-            statement.setString(9, job.getUsername());
-            statement.setString(10,job.getStatus());
+            statement.setString(9,job.getStatus());
+            statement.setString(10, job.getName());    
             statement.setString(11, Integer.toString(job.getID()));
             statement.executeUpdate();
         } catch (SQLException e) {

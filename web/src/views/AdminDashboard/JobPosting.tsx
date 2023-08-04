@@ -63,8 +63,8 @@ const JobPosting = () => {
         size: 150,
       },
       {
-        accessorKey: "username",
-        header: "Username",
+        accessorKey: "name",
+        header: "Name",
         size: 150,
       },
       {
@@ -101,7 +101,7 @@ const JobPosting = () => {
   };
 
   const handleDeleteRecord = async (row: any) => {
-    const { id } = row;
+    const id = row?.id;
     const payload = {
       id,
     };

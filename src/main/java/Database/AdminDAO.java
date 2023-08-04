@@ -146,7 +146,7 @@ public class AdminDAO {
 	public static JSONArray getListOfCandidates() {
 		JSONArray arr = new JSONArray();
 		try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass))  {
-			String query = "SELECT A.APPLICANT, A.JOBID, E.EMPLOYER, E.TITLE, A.STATUS, A.SUBMISSIONDATE FROM "
+			String query = "SELECT A.ID, A.APPLICANT, A.JOBID, E.EMPLOYER, E.TITLE, A.STATUS, A.SUBMISSIONDATE, E.EMPLOYER_USERNAME, A.STUDENT_USERNAME FROM "
 					+ "APPLICATIONS A, JOBS E WHERE A.JOBID = E.ID;";
 			PreparedStatement stmt = connection.prepareStatement(query);
 			ResultSet rs = stmt.executeQuery();
@@ -161,5 +161,57 @@ public class AdminDAO {
 		}
 		return arr;
 	}
+
+	public static int deleteJobOffer(int id) {
+		String DELETE_QUERY = "DELETE FROM JOBS WHERE ID = ?";
+		int n =0;
+		try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
+			PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
+			statement.setInt(1, id);
+			n=statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return n;
+	}
+
+	public static int deleteCandidate(int id) {
+		String DELETE_QUERY = "DELETE FROM APPLICATIONS WHERE ID = ?";
+		int n =0;
+		try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
+			PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
+			statement.setInt(1, id);
+			n=statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return n;
+	}
+
+	public static int updateCandidate(int id, String studentName, String status) {
+		
+		String updateCandidate = "UPDATE APPLICATIONS SET APPLICANT = ?, STATUS = ? WHERE ID = ?;";
+		int rowsUpdated =0;
+		try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
+			PreparedStatement preparedStatement = connection.prepareStatement(updateCandidate);
+
+			preparedStatement.setString(1, studentName);
+			preparedStatement.setString(2, status);
+			preparedStatement.setInt(3, id);
+
+			rowsUpdated = preparedStatement.executeUpdate();
+
+			if (rowsUpdated > 0) {
+				System.out.println("User record updated successfully.");
+			} else {
+				System.out.println("User not found or update failed.");
+			}
+		} catch (SQLException e) {
+			System.out.println("Error executing the update query: " + e.getMessage());
+		}
+		return rowsUpdated;
+		
+	}
+
 
 }

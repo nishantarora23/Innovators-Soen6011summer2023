@@ -18,7 +18,7 @@ export interface EasyApplyResponseSnackbar {
 export interface JobInfo {
   title: string;
   description: string;
-  username: string;
+  name: string;
   location: string;
   qualifications: string;
   deadline: string;
@@ -30,7 +30,7 @@ const JobsList = () => {
   const [selectedJobInfo, setSelectedJobInfo] = useState<JobInfo>({
     title: "",
     description: "",
-    username: "",
+    name: "",
     location: "",
     qualifications: "",
     deadline: "",
@@ -98,7 +98,7 @@ const JobsList = () => {
           jobsList.map((jobInfo) => {
             return (
               <CardContent
-                key={jobInfo.username}
+                key={jobInfo.name}
                 sx={{
                   borderBottom: "1px solid #868686",
                 }}
@@ -119,7 +119,7 @@ const JobsList = () => {
                     fontSize: "1.25rem",
                   }}
                 >
-                  {jobInfo.username}
+                  {jobInfo.name}
                 </Typography>
                 <Typography
                   sx={{
@@ -177,7 +177,7 @@ const JobsList = () => {
             {selectedJobInfo?.title}
           </Typography>
           <p id="modal-description">
-            {selectedJobInfo?.username} . {selectedJobInfo?.location}
+            {selectedJobInfo?.name} . {selectedJobInfo?.location}
           </p>
           <Typography>
             <Work sx={{ marginTop: "10px", marginRight: "10px" }} />
@@ -207,9 +207,6 @@ const JobsList = () => {
               sx={{ marginRight: "20px" }}
             >
               Easy Apply
-            </Button>
-            <Button variant="contained" onClick={handleClose}>
-              Save
             </Button>
           </Box>
         </Box>
