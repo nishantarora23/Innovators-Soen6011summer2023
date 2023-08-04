@@ -62,8 +62,8 @@ const JobPosting = () => {
         size: 150,
       },
       {
-        accessorKey: "username",
-        header: "Username",
+        accessorKey: "name",
+        header: "Name",
         size: 150,
       },
       {
@@ -81,7 +81,7 @@ const JobPosting = () => {
   );
 
   const handleSaveRecord = async ({ row, exitEditingMode, values }: any) => {
-    const userID = row?.original?.jobId;
+    const userID = row?.original?.id;
     const newData = { ...row?.original, ...values };
     await updateJobPost(newData)
       .then((res) => {
@@ -97,14 +97,14 @@ const JobPosting = () => {
   };
 
   const handleDeleteRecord = async (row: any) => {
-    const { jobId } = row;
+    const id = row?.id;
     const payload = {
-      jobId,
+      id,
     };
     await deleteJobPost(payload)
       .then((res) => {
         setTableData((tableData: any) =>
-          tableData?.filter((row: any) => row?.jobId !== jobId)
+          tableData?.filter((row: any) => row?.id !== id)
         );
         console.log("Job Post Deleted Successfully");
       })
