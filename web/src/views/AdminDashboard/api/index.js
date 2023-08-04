@@ -143,10 +143,10 @@ export const fetchJobPostList = async () => {
 };
 
 export const updateJobPost = async (payload) => {
-  let URL = `${BASE_URL}/careerconnect/jobOffer`;
+  let URL = `${BASE_URL}/careerconnect/admin/updateJobOffer`;
   try {
     const response = await fetch(URL, {
-      method: "PATCH",
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -166,7 +166,7 @@ export const updateJobPost = async (payload) => {
 };
 
 export const deleteJobPost = async (payload) => {
-  let URL = `${BASE_URL}/careerconnect/deleteJobOffer`;
+  let URL = `${BASE_URL}/careerconnect/admin/deleteJobOffer`;
   try {
     const response = await fetch(URL, {
       method: "POST",
@@ -206,10 +206,10 @@ export const fetchCandidateApplicationList = async () => {
 };
 
 export const updateCandidateApplication = async (payload) => {
-  let URL = `${BASE_URL}/careerconnect/admin/listOfCandidates`;
+  let URL = `${BASE_URL}/careerconnect/admin/updateCandidate`;
   try {
     const response = await fetch(URL, {
-      method: "PATCH",
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

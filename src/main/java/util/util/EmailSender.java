@@ -11,8 +11,8 @@ import Models.User;
 public class EmailSender {
 
     public static void sendEmail(User user, Job job) {
-        final String senderEmail = "abc@gmail.com"; // Replace with your sender email
-        final String senderPassword = "SEP"; // Replace with your sender email password
+    	final String senderEmail = "abc@gmail.com"; // Replace with your sender email
+        final String senderPassword = "password"; // Replace with your sender email password
         final String recipientEmail = user.getEmail(); // Replace with recipient email
         
         // Set up properties for the email server
