@@ -190,7 +190,7 @@ export const deleteJobPost = async (payload) => {
 // Candidate Applications
 
 export const fetchCandidateApplicationList = async () => {
-  let URL = `${BASE_URL}/careerconnect/listOfCandidates`;
+  let URL = `${BASE_URL}/careerconnect/admin/listOfCandidates`;
   try {
     const response = await fetch(URL);
     if (!response.ok) {
@@ -206,7 +206,7 @@ export const fetchCandidateApplicationList = async () => {
 };
 
 export const updateCandidateApplication = async (payload) => {
-  let URL = `${BASE_URL}/careerconnect/listOfCandidates`;
+  let URL = `${BASE_URL}/careerconnect/admin/listOfCandidates`;
   try {
     const response = await fetch(URL, {
       method: "PATCH",
@@ -229,7 +229,7 @@ export const updateCandidateApplication = async (payload) => {
 };
 
 export const deleteCandidateApplication = async (payload) => {
-  let URL = `${BASE_URL}/careerconnect/deleteListOfCandidates`;
+  let URL = `${BASE_URL}/careerconnect/admin/deleteListOfCandidates`;
   try {
     const response = await fetch(URL, {
       method: "POST",

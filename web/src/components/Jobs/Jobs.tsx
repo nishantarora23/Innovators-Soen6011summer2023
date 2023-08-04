@@ -81,7 +81,7 @@ const JobsList = () => {
       setEasyApplyResponseSnackbar({
         open: true,
         severity: "error",
-        message: "Job apply failed."
+        message: "Upload your resume to apply for jobs!"
       });
     });
   };

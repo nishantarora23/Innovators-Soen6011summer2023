@@ -47,7 +47,7 @@ public class JobDAO {
 
         try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
             String query = "INSERT INTO jobs (TITLE, SALARY_RANGE, RESPONSIBILITIES, QUALIFICATIONS, LOCATION, " +
-                    "DESCRIPTION, DEADLINE, CONTRACT_TYPE, EMPLOYER) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "DESCRIPTION, DEADLINE, CONTRACT_TYPE, EMPLOYER_USERNAME,EMPLOYER) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
             PreparedStatement statement = connection.prepareStatement(query);
                 statement.setString(1, job.getTitle());
                 statement.setString(2, job.getSalaryRange());
@@ -58,6 +58,7 @@ public class JobDAO {
                 statement.setString(7, job.getDeadline());
                 statement.setString(8, job.getContractType());
                 statement.setString(9, job.getUsername());
+                statement.setString(10, job.getName());
                 statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,7 +68,7 @@ public class JobDAO {
         ArrayList<Job> jobList = new ArrayList<>();
 
         try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
-            String sql = "SELECT * FROM soen6011.jobs";
+            String sql = "SELECT * FROM soen6011.jobs ORDER BY ID DESC";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
@@ -94,7 +95,7 @@ public class JobDAO {
     }
 
     public static ArrayList<Job> getJob(String username){
-        String GET_JOB_QUERY = "SELECT * FROM JOBS WHERE employer = ?";
+        String GET_JOB_QUERY = "SELECT * FROM JOBS WHERE employer_username = ?";
         ArrayList<Job> jobList = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
             PreparedStatement statement = connection.prepareStatement(GET_JOB_QUERY);
@@ -142,6 +143,7 @@ public class JobDAO {
                 job.setSalaryRange(resultSet.getString("SALARY_RANGE"));
                 job.setTitle(resultSet.getString("TITLE"));
                 job.setStatus(resultSet.getString("STATUS"));
+                job.setName(resultSet.getString("EMPLOYER"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -162,7 +164,7 @@ public class JobDAO {
     public static void update(Job job) {
         try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
             String query = "Update jobs set TITLE=? , SALARY_RANGE=?, RESPONSIBILITIES=?, QUALIFICATIONS=?, LOCATION=?, " +
-                    "DESCRIPTION=?, DEADLINE=?, CONTRACT_TYPE=?, EMPLOYER=?, STATUS=? WHERE Id = ?";
+                    "DESCRIPTION=?, DEADLINE=?, CONTRACT_TYPE=?, EMPLOYER_USERNAME=?, STATUS=? WHERE Id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, job.getTitle());
             statement.setString(2, job.getSalaryRange());
