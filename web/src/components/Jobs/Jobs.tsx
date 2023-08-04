@@ -208,9 +208,6 @@ const JobsList = () => {
             >
               Easy Apply
             </Button>
-            <Button variant="contained" onClick={handleClose}>
-              Save
-            </Button>
           </Box>
         </Box>
       </Modal>

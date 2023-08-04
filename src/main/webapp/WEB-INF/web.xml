@@ -70,6 +70,14 @@
         <servlet-name>ResumeServlet</servlet-name>
         <url-pattern>/resume/</url-pattern>
     </servlet-mapping>
+		<servlet-mapping>
+        <servlet-name>ResumeServlet</servlet-name>
+        <url-pattern>/deleteResume</url-pattern>
+    </servlet-mapping>
+		<servlet-mapping>
+        <servlet-name>ResumeServlet</servlet-name>
+        <url-pattern>/viewResume</url-pattern>
+    </servlet-mapping>
 	<servlet-mapping>
         <servlet-name>UploadServlet</servlet-name>
         <url-pattern>/upload-resume/*</url-pattern>
