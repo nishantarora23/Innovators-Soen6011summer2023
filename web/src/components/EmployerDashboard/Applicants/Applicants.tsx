@@ -127,7 +127,7 @@ const Applicants = () => {
 
   const handleReject = (username: any) => {
     rejectApplication(username, id?.charAt(1))
-        .then((res) => {console.log(res); window.location.reload()})
+        .then((res) => {alert("Applicant rejected"); window.location.reload()})
         .catch(err => console.error(err))
   }
 
@@ -146,7 +146,7 @@ const Applicants = () => {
 
   const handleAcceptApplicant = (username : any) => {
     selectCandidateForInterview(username, id?.charAt(1))
-        .then((res) => console.log(res))
+        .then((res) => {alert("Applicant Accepted")})
         .catch(err => console.error(err))
   }
 
