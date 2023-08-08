@@ -105,11 +105,7 @@ const StudentDetails = () => {
   });
 
   // Formatting Date of Birth
-  const formattedDOB = new Date(dob).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const formattedDOB = getDOB()?.substring(0,11);
 
   // Placeholder data for job recommendations, alumni success stories, and featured workshops and webinars
   const jobRecommendations = [
