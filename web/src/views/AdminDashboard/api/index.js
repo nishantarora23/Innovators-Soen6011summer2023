@@ -1,6 +1,8 @@
 const BASE_URL = "http://localhost:8080";
 
-// Students Enrolled
+// Functions for managing students enrolled
+
+// Fetches a list of enrolled students
 
 export const fetchStudentEnrolled = async () => {
   let URL = `${BASE_URL}/careerconnect/admin/listOfStudent`;
@@ -13,12 +15,12 @@ export const fetchStudentEnrolled = async () => {
       return data;
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
-
+// Updates a student's information
 export const updateStudent = async (payload) => {
+  // Construct the URL for updating student data
   let URL = `${BASE_URL}/careerconnect/admin/updateStudent`;
   try {
     const response = await fetch(URL, {
@@ -36,16 +38,21 @@ export const updateStudent = async (payload) => {
       return data;
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
-
-export const deleteStudent = async (studentId) => {
-  let URL = `${BASE_URL}/careerconnect/admin/deleteStudent/${studentId}`;
+// Deletes a student's record
+export const deleteStudent = async (payload) => {
+  // Construct the URL for deleting student data
+  let URL = `${BASE_URL}/careerconnect/admin/deleteStudent`;
   try {
     const response = await fetch(URL, {
-      method: "DELETE",
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
     });
     if (!response.ok) {
       throw new Error(`Network response was not ok ${response}`);
@@ -54,7 +61,7 @@ export const deleteStudent = async (studentId) => {
       return data;
     }
   } catch (error) {
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -71,7 +78,7 @@ export const fetchEmployersRegistered = async () => {
       return data;
     }
   } catch (error) {
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -93,15 +100,20 @@ export const updateEmployer = async (payload) => {
       return data;
     }
   } catch (error) {
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
-export const deleteEmployer = async (employerId) => {
-  let URL = `${BASE_URL}/careerconnect/admin/deleteEmployer/${employerId}`;
+export const deleteEmployer = async (payload) => {
+  let URL = `${BASE_URL}/careerconnect/admin/deleteEmployer`;
   try {
     const response = await fetch(URL, {
-      method: "DELETE",
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
     });
     if (!response.ok) {
       throw new Error(`Network response was not ok ${response}`);
@@ -110,7 +122,7 @@ export const deleteEmployer = async (employerId) => {
       return data;
     }
   } catch (error) {
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
@@ -127,16 +139,15 @@ export const fetchJobPostList = async () => {
       return data;
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
 export const updateJobPost = async (payload) => {
-  let URL = `${BASE_URL}/careerconnect/jobOffer`;
+  let URL = `${BASE_URL}/careerconnect/admin/updateJobOffer`;
   try {
     const response = await fetch(URL, {
-      method: "PATCH",
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -150,16 +161,20 @@ export const updateJobPost = async (payload) => {
       return data;
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
-export const deleteJobPost = async (jobId) => {
-  let URL = `${BASE_URL}/careerconnect/jobOffer/${jobId}`;
+export const deleteJobPost = async (payload) => {
+  let URL = `${BASE_URL}/careerconnect/admin/deleteJobOffer`;
   try {
     const response = await fetch(URL, {
-      method: "DELETE",
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
     });
     if (!response.ok) {
       throw new Error(`Network response was not ok ${response}`);
@@ -168,14 +183,14 @@ export const deleteJobPost = async (jobId) => {
       return data;
     }
   } catch (error) {
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
 // Candidate Applications
 
 export const fetchCandidateApplicationList = async () => {
-  let URL = `${BASE_URL}/careerconnect/admin/listOfCandidateApplications`;
+  let URL = `${BASE_URL}/careerconnect/admin/listOfCandidates`;
   try {
     const response = await fetch(URL);
     if (!response.ok) {
@@ -185,16 +200,15 @@ export const fetchCandidateApplicationList = async () => {
       return data;
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
 export const updateCandidateApplication = async (payload) => {
-  let URL = `${BASE_URL}/careerconnect/admin/listOfCandidateApplications`;
+  let URL = `${BASE_URL}/careerconnect/admin/updateCandidate`;
   try {
     const response = await fetch(URL, {
-      method: "PATCH",
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -208,16 +222,20 @@ export const updateCandidateApplication = async (payload) => {
       return data;
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    return { error: "Something went wrong!" };
   }
 };
 
-export const deleteCandidateApplication = async (jobId) => {
-  let URL = `${BASE_URL}/careerconnect/admin/listOfCandidateApplications/${jobId}`;
+export const deleteCandidateApplication = async (payload) => {
+  let URL = `${BASE_URL}/careerconnect/admin/deleteListOfCandidates`;
   try {
     const response = await fetch(URL, {
-      method: "DELETE",
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
     });
     if (!response.ok) {
       throw new Error(`Network response was not ok ${response}`);
@@ -226,6 +244,6 @@ export const deleteCandidateApplication = async (jobId) => {
       return data;
     }
   } catch (error) {
-    return error;
+    return { error: "Something went wrong!" };
   }
 };

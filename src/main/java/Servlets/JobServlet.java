@@ -113,7 +113,6 @@ public class JobServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ArrayList<Job> jobs = null;
-        System.out.println("inside get");
         String json=null;
         ObjectMapper objectMapper = new ObjectMapper();
         String username = request.getParameter("username");
@@ -139,7 +138,6 @@ public class JobServlet extends HttpServlet {
         }
         // Set the content type of the response
         response.setContentType("application/json");
-        System.out.println(json);
         // Write the JSON to the response
         response.getWriter().write(json);
     }

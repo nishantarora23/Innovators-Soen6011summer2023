@@ -7,7 +7,7 @@ import { Button, Grid, TextField, TextareaAutosize } from "@mui/material";
 import { injectIntl } from "react-intl";
 import { addJobOfferHelper, updateJobOfferHelper } from "../../services/userService";
 import MenuBar from "../MenuBar/MenuBar";
-import { getUserName } from "../../services/userInfoService";
+import { getFullName, getUserName } from "../../services/userInfoService";
 
 import { getJobOfferById } from "../../services/userService";
 
@@ -74,6 +74,7 @@ type Props = {
     const onSubmit = (data: any) => {
       const addOrUpdateJobOffer = async () => {
         data.username = getUserName();
+        data.name = getFullName();
         await setErrorAdding(false);
         await setLoading(true);
         await setFormData({ ...formData, ...data });
@@ -81,12 +82,12 @@ type Props = {
         try {
           if (jobId) {
             await updateJobOfferHelper(jobOffer)
-            .then((res) => navigate('/employer/jobOffers'))
-            .catch(err => console.log(err));
+            .then((res) => {alert("Job Offer Updated");navigate('/employer/jobOffers');})
+            .catch(err => alert("Job Offer not Updated"));
           } else {
             await addJobOfferHelper(data)
-            .then((res) => navigate('/employer/home'))
-            .catch(err => console.log(err));
+            .then((res) => {alert("Job Offer Added");navigate('/employer/home');})
+            .catch(err => alert("Job Offer not added"));
           }
         } catch (err) {
           console.error("Error adding/updating job offer:", err);

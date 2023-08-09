@@ -10,30 +10,43 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import Database.AdminDAO;
+import Database.JobDAO;
+import Models.Job;
 import util.util.HttpUtil;
 
-public class AdminServlet extends HttpServlet{
+public class AdminServlet extends HttpServlet {
 
+	// Handle GET requests
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		final String URL = request.getRequestURI();
 		JSONArray array = new JSONArray();
-		if(URL.endsWith("listOfStudent")) {
+
+		// Based on the URL, determine the operation to perform
+		if (URL.endsWith("listOfStudent")) {
 			try {
 				array = AdminDAO.getListOfStudents();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-		else {
+		} else if (URL.endsWith("listOfCandidates")) {
+			try {
+				System.out.println("came here");
+				array = AdminDAO.getListOfCandidates();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
 			try {
 				array = AdminDAO.getListOfEmployer();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+
+		// Set response content type and write JSON array
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
@@ -43,73 +56,121 @@ public class AdminServlet extends HttpServlet{
 	}
 
 	@Override
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		final String URL = request.getRequestURI();
-		
-		String pathInfo = request.getPathInfo();
-		int studentId=0;
-		if (pathInfo != null && pathInfo.length() > 1) {
-			 studentId = Integer.parseInt(pathInfo.substring(1));
-		}
-		if(studentId!=0) {
-			if(URL.contains("deleteEmployer")) {
-				
-				int num = AdminDAO.deleteEmployer(studentId);
-				if(num>0) {
-					response.setStatus(HttpServletResponse.SC_OK);
-				}
-				else {
-					response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
-				}
-			}else if(URL.contains("deleteStudent")) {				
-				int num = AdminDAO.deleteEmployer(studentId);
-				if(num>0) {
-					response.setStatus(HttpServletResponse.SC_OK);
-				}
-				else {
-					response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
-				}
+	protected void doPost(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+
+		final String URL = req.getRequestURI();
+		String data = HttpUtil.readFromRequest(req);
+		JSONObject jsonObject = new JSONObject(data);
+
+		// Based on the URL, determine the operation to perform
+		if (URL.contains("updateEmployer")) {
+			// Extract data from JSON and update employer details
+			// Handle response based on update result
+			String username = (String) jsonObject.get("username");
+			String address = (String) jsonObject.get("address");
+			String company_name = (String) jsonObject.get("company_name");
+			String dob = (String) jsonObject.get("dob");
+			String email = (String) jsonObject.get("email");
+			String name = (String) jsonObject.get("name");
+
+			int num = AdminDAO.updateEmployer(address, company_name, dob, email, name, username);
+			if (num > 0) {
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
 			}
-		}
 
-		}
+		} else if (URL.contains("updateStudent")) {
+			// Extract data from JSON and update student details
+			// Handle response based on update result
+			String username = (String) jsonObject.get("username");
+			String address = (String) jsonObject.get("address");
+			String college_name = (String) jsonObject.get("college_name");
+			String dob = (String) jsonObject.get("dob");
+			String email = (String) jsonObject.get("email");
+			String name = (String) jsonObject.get("name");
+			int num = AdminDAO.updateStudent(address, college_name, dob, email, name, username);
+			if (num > 0) {
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+			}
+		} else if (URL.contains("deleteEmployer")) {
+			String username = (String) jsonObject.get("username");
+			int num = AdminDAO.deleteEmployer(username);
+			if (num > 0) {
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+			}
+		} else if (URL.contains("deleteStudent")) {
+			String username = (String) jsonObject.get("username");
+			int num = AdminDAO.deleteStudent(username);
+			if (num > 0) {
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+			}
+		} else if (URL.contains("deleteJobOffer")) {
+			int id = (int) jsonObject.get("id");
+			int num = AdminDAO.deleteJobOffer(id);
+			if (num > 0) {
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+			}
+		} else if (URL.contains("updateJobOffer")) {
 
-		@Override
-		protected void doPost(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+			int id = (int) jsonObject.get("id");
+			String contractType = jsonObject.getString("contractType");
+			String deadline = jsonObject.getString("deadline");
+			String description = jsonObject.getString("description");
+			String location = jsonObject.getString("location");
+			String username = jsonObject.isNull("username") ? null : jsonObject.getString("username");
+			String qualifications = jsonObject.getString("qualifications");
+			String responsibilities = jsonObject.getString("responsibilities");
+			String salaryRange = jsonObject.getString("salaryRange");
+			String status = jsonObject.isNull("status") ? null : jsonObject.getString("status");
+			String title = jsonObject.getString("title");
+			String name = jsonObject.getString("name");
+			Job updatedJob = new Job(id, title, salaryRange, responsibilities, qualifications,
+					location, description, deadline, contractType, name, status,username);
+			try {
+				JobDAO.update(updatedJob);
+			} catch (Exception e) {
+				response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+				throw new RuntimeException(e);
+			}
+			response.setStatus(HttpServletResponse.SC_OK);
 
-			final String URL = req.getRequestURI();
-			String data = HttpUtil.readFromRequest(req);
-			JSONObject jsonObject = new JSONObject(data);
+		} else if (URL.contains("updateCandidate")) {
 
+			int id = jsonObject.getInt("candidateID");
+			String employerName = jsonObject.getString("employerName");
+			String employerUsername = jsonObject.getString("employer_username");
+			String jobID = jsonObject.getString("jobid");
+			String status = jsonObject.getString("status");
+			String studentName = jsonObject.getString("studentName");
+			String studentUsername = jsonObject.getString("student_username");
+			String submissionDate = jsonObject.getString("submissionDate");
+			String title = jsonObject.getString("title");
+			int num = AdminDAO.updateCandidate(id, studentName, status);
+			if (num > 0) {
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+			}
 
-			if(URL.contains("updateEmployer")) {
-				String address = (String)jsonObject.get("address");
-				String company_name = (String)jsonObject.get("company_name");
-				String dob = (String)jsonObject.get("dob");
-				String email = (String)jsonObject.get("email");
-				String name = (String)jsonObject.get("name");
-				String username = (String)jsonObject.get("username");
-				int num = AdminDAO.updateEmployer(address, company_name, dob, email, username, username);
-				if(num>0) {
-					response.setStatus(HttpServletResponse.SC_OK);
-				}
-				else {
-					response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
-				}
-			}else if(URL.contains("updateStudent")) {
-				String address = (String)jsonObject.get("address");
-				String college_name = (String)jsonObject.get("college_name");
-				String dob = (String)jsonObject.get("dob");
-				String email = (String)jsonObject.get("email");
-				String name = (String)jsonObject.get("name");
-				String username = (String)jsonObject.get("username");
-				int num = AdminDAO.updateStudent(address, college_name, dob, email, username, username);	
-				if(num>0) {
-					response.setStatus(HttpServletResponse.SC_OK);
-				}
-				else {
-					response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
-				}
+		} else if (URL.contains("deleteListOfCandidates")) {
+
+			int id = (int) jsonObject.getInt("candidateID");
+
+			int num = AdminDAO.deleteCandidate(id);
+			if (num > 0) {
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
 			}
 		}
 	}
+}

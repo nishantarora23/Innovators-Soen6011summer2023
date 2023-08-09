@@ -43,6 +43,8 @@ const MyJobInfo = () => {
   });
   const [jobsList, setJobsList] = useState<Array<JobInfo>>([]);
 
+  
+
   useEffect(() => {
     fetchJobsList(); // Fetch the jobs list on component mount
   }, []);
@@ -172,17 +174,19 @@ const MyJobInfo = () => {
                   >
                     <TouchApp sx={{ marginRight: "10px" }} /> View
                   </Button>
-
-                  <Button
-                    variant="contained"
-                    color="info"
-                    sx={{ fontSize: "1.1rem" }}
-                    onClick={() => {
-                      deleteMyJob(jobInfo);
-                    }}
-                  >
-                    <TouchApp sx={{ marginRight: "10px" }} /> DELETE JOB
-                  </Button>
+                  {jobInfo.jobstatus === "PENDING" && (
+                    <Button
+                      variant="contained"
+                      color="info"
+                      sx={{ fontSize: "1.1rem" }}
+                      onClick={() => {
+                        deleteMyJob(jobInfo);
+                      }}
+                    >
+                      <TouchApp sx={{ marginRight: "10px" }} /> DELETE
+                      APPLICATION
+                    </Button>
+                  )}
                 </Box>
               </CardContent>
             );

@@ -13,50 +13,52 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-
 @MultipartConfig
 public class UploadServlet extends HttpServlet {
 	private static final String RESUME_DIRECTORY = "Resume";
 
+	// Handle POST requests for file uploads
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// Get the upload path where files will be stored on the server
 		String uploadPath = getServletContext().getRealPath("/WEB-INF/classes/" + RESUME_DIRECTORY);
-	
+		// Create the upload directory if it doesn't exist
+
 		File uploadDir = new File(uploadPath);
 		if (!uploadDir.exists()) {
 			uploadDir.mkdir();
 		}
-		 String requestURI = request.getRequestURI();
-	        String contextPath = request.getContextPath();
-	        String servletPath = request.getServletPath();
-	        String pathInfo = request.getPathInfo();
-	        String username ="";
+		// Get the URI and path information from the request
+		String requestURI = request.getRequestURI();
+		String pathInfo = request.getPathInfo();
+		String username = "";
+		// Extract the username from the path info
+		if (pathInfo != null && pathInfo.length() > 1) {
+			username = pathInfo.substring(1);
 
-	        if (pathInfo != null && pathInfo.length() > 1) {
-	            // Remove the leading slash from the pathInfo
-	            username = pathInfo.substring(1);
-	            
-	        } else {
-	            // Handle the case where the URL doesn't contain the expected format
-	            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid URL format");
-	            return;
-	        }
-
+		} else {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid URL format");
+			return;
+		}
+		// Get the uploaded file part
 		Part part = request.getPart("resume");
 		if (part != null) {
-		    String desiredFileName = username+".pdf"; // Replace this with your desired file name
-		    String filePath = uploadPath + File.separator + desiredFileName;
-		    try (InputStream input = part.getInputStream()) {
-		    	System.out.println("File Path "+filePath);
-		        Files.copy(input, new File(filePath).toPath());
-		    }
+			// Define the desired file name based on the username
+			String desiredFileName = username + ".pdf";
+			String filePath = uploadPath + File.separator + desiredFileName;
+			// Copy the contents of the uploaded file to the server's file path
+
+			try (InputStream input = part.getInputStream()) {
+				System.out.println("File Path " + filePath);
+				Files.copy(input, new File(filePath).toPath());
+			}
 		} else {
-		    // Handle the case when the "resumeFile" part is not found in the request
-		    System.out.println("No 'resumeFile' part in the request");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "\"No 'resumeFile' part in the request\"");
+			return;
+
 		}
 
-		// Optionally, you can perform additional processing with the uploaded file here.
-
+		// Indicate a successful upload
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 }

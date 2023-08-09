@@ -23,7 +23,13 @@ const Table = (props: any) => {
       enableStickyFooter
       muiTableContainerProps={{
         sx: {
-          maxHeight: "calc(100vh - 90px - 170px - 180px)",
+          maxHeight: "calc(100vh - 190px - 170px - 180px)",
+        },
+      }}
+      muiTablePaperProps={{
+        sx: {
+          borderRadius: "7px",
+          padding: "5px",
         },
       }}
       onEditingRowSave={handleSaveRecord}
@@ -40,7 +46,7 @@ const Table = (props: any) => {
           <Tooltip arrow placement="right" title="Delete">
             <IconButton
               color="error"
-              onClick={() => handleDeleteRecord(row.id)}
+              onClick={() => handleDeleteRecord(row.original)}
             >
               <Delete />
             </IconButton>

@@ -9,32 +9,33 @@ import axios from "axios";
 import { API_URL } from "../../constants";
 import { getFullName, getUserName } from "../../services/userInfoService";
 
+// Define interface for the Snackbar state
 export interface EasyApplyResponseSnackbar {
   open: boolean;
   severity: AlertColor;
   message: string;
 }
-
+// Define interface for the job information
 export interface JobInfo {
   title: string;
   description: string;
-  username: string;
+  name: string;
   location: string;
   qualifications: string;
   deadline: string;
   id: string;
 }
-
+// Define the JobsList component
 const JobsList = () => {
   const [open, setOpen] = useState(false);
   const [selectedJobInfo, setSelectedJobInfo] = useState<JobInfo>({
     title: "",
     description: "",
-    username: "",
+    name: "",
     location: "",
     qualifications: "",
     deadline: "",
-    id : ""
+    id: "",
   });
   const [jobsList, setJobsList] = useState<Array<JobInfo>>([]);
   const [easyApplyResponseSnackbar, setEasyApplyResponseSnackbar] =
@@ -43,7 +44,7 @@ const JobsList = () => {
       severity: "info",
       message: "",
     });
-
+  // Fetch jobs list from API on component mount
   useEffect(() => {
     axios
       .get(`${API_URL}/jobOffer`)
@@ -63,29 +64,32 @@ const JobsList = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
+  // Handle easy apply for a job
   const handleEasyApply = (payload: JobInfo) => {
     const objectPayload = {
-      jobid : payload.id,
-      username : getUserName(),
-      applicant : getFullName(),
-      ACTION : 'ADD'
-    }
-    axios.post(`${API_URL}/application`, objectPayload).then(() => {
-      setEasyApplyResponseSnackbar({
-        open: true,
-        severity: "success",
-        message: "Applied for job sucessfully."
+      jobid: payload.id,
+      username: getUserName(),
+      applicant: getFullName(),
+      ACTION: "ADD",
+    };
+    axios
+      .post(`${API_URL}/application`, objectPayload)
+      .then(() => {
+        setEasyApplyResponseSnackbar({
+          open: true,
+          severity: "success",
+          message: "Applied for job sucessfully.",
+        });
+      })
+      .catch(() => {
+        setEasyApplyResponseSnackbar({
+          open: true,
+          severity: "error",
+          message: "Upload your resume to apply for jobs!",
+        });
       });
-    }).catch(() => {
-      setEasyApplyResponseSnackbar({
-        open: true,
-        severity: "error",
-        message: "Job apply failed."
-      });
-    });
   };
-
+  // Render the JobsList component UI
   return (
     <>
       <Snackbar open={easyApplyResponseSnackbar.open} autoHideDuration={3000}>
@@ -98,7 +102,7 @@ const JobsList = () => {
           jobsList.map((jobInfo) => {
             return (
               <CardContent
-                key={jobInfo.username}
+                key={jobInfo.name}
                 sx={{
                   borderBottom: "1px solid #868686",
                 }}
@@ -119,7 +123,7 @@ const JobsList = () => {
                     fontSize: "1.25rem",
                   }}
                 >
-                  {jobInfo.username}
+                  {jobInfo.name}
                 </Typography>
                 <Typography
                   sx={{
@@ -177,7 +181,7 @@ const JobsList = () => {
             {selectedJobInfo?.title}
           </Typography>
           <p id="modal-description">
-            {selectedJobInfo?.username} . {selectedJobInfo?.location}
+            {selectedJobInfo?.name} . {selectedJobInfo?.location}
           </p>
           <Typography>
             <Work sx={{ marginTop: "10px", marginRight: "10px" }} />
@@ -203,13 +207,12 @@ const JobsList = () => {
           <Box component="div" sx={{ float: "right" }}>
             <Button
               variant="contained"
-              onClick={() => {handleEasyApply(selectedJobInfo)}}
+              onClick={() => {
+                handleEasyApply(selectedJobInfo);
+              }}
               sx={{ marginRight: "20px" }}
             >
               Easy Apply
-            </Button>
-            <Button variant="contained" onClick={handleClose}>
-              Save
             </Button>
           </Box>
         </Box>

@@ -1,8 +1,7 @@
 @import "../../variables.scss";
 
 .pageContainer {
-  width: calc(100% - 240px);
-  left: 240px;
+  max-width: calc(100vw - 458px);
   padding: 10px $spacing-06 0;
   box-sizing: border-box;
   position: absolute;

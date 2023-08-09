@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { type MRT_ColumnDef } from "material-react-table";
+import { toast } from "react-toastify";
 import Table from "../../components/Table/Table";
 
 import "./AdminDashboard.scss";
 import { deleteJobPost, fetchJobPostList, updateJobPost } from "./api";
 
 const JobPosting = () => {
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [fetchedData, setFetchedData] = useState(false);
 
@@ -62,8 +63,8 @@ const JobPosting = () => {
         size: 150,
       },
       {
-        accessorKey: "username",
-        header: "Username",
+        accessorKey: "name",
+        header: "Name",
         size: 150,
       },
       {
@@ -80,13 +81,18 @@ const JobPosting = () => {
     []
   );
 
-  const handleSaveRecord = async ({ exitEditingMode, values }: any) => {
-    await updateJobPost(values)
+  const handleSaveRecord = async ({ row, exitEditingMode, values }: any) => {
+    const userID = row?.original?.id;
+    const newData = { ...row?.original, ...values };
+    await updateJobPost(newData)
       .then((res) => {
+        if (res && res.error) {
+          return toast.error(res.error);
+        }
         setTableData((tableData: any) =>
-          tableData?.map((row: any) => (row?.id === values.id ? values : row))
+          tableData?.map((row: any) => (row?.id === userID ? newData : row))
         );
-        console.log("Job Post Updated Successfully");
+        toast.success("Student Updated Successfully");
       })
       .catch((error) => console.log(error))
       .finally(() => {
@@ -94,15 +100,25 @@ const JobPosting = () => {
       });
   };
 
-  const handleDeleteRecord = async (id: string) => {
-    await deleteJobPost(id)
+  const handleDeleteRecord = async (row: any) => {
+    const id = row?.id;
+    const payload = {
+      id,
+    };
+    await deleteJobPost(payload)
       .then((res) => {
-        setTableData((tableData) =>
+        if (res && res.error) {
+          return toast.error(res.error);
+        }
+        setTableData((tableData: any) =>
           tableData?.filter((row: any) => row?.id !== id)
         );
-        console.log("Job Post Deleted Successfully");
+        toast.success("Job Post Deleted Successfully");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      });
   };
 
   useEffect(() => {
@@ -111,9 +127,11 @@ const JobPosting = () => {
       setLoading(true);
       try {
         const data = await fetchJobPostList();
+        if (data.error) return toast.error(data.error);
         setTableData(data);
       } catch (error: any) {
         console.log(error.message);
+        toast.error(error.message);
       } finally {
         setFetchedData(true);
         setLoading(false);

@@ -16,38 +16,38 @@ public class ApplicationDao {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        String drop = "DROP TABLE soen6011.applications";
-        String query1 = "CREATE DATABASE IF NOT EXISTS soen6011";
-        String query ="CREATE TABLE IF NOT EXISTS soen6011.applications (\n" +
-                "  ID int NOT NULL AUTO_INCREMENT,\n" +
-                "  JOBID int REFERENCES JOBS(ID),\n" +
-                "  APPLICANT varchar(255) COLLATE utf8mb4_unicode_ci REFERENCES USERS(USERNAME), \n" +
-                "  SUBMISSIONDATE date DEFAULT NULL,\n" +
-                "  STATUS varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
-                "  NOTIFY BOOLEAN DEFAULT FALSE, \n"+
-                "  student_username varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
-                "  PRIMARY KEY (ID)\n" +
-                ")";
-        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
-            PreparedStatement statement1 = connection.prepareStatement(drop);
-            statement1.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
-            PreparedStatement statement1 = connection.prepareStatement(query1);
-            statement1.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+//        String drop = "DROP TABLE soen6011.applications";
+//        String query1 = "CREATE DATABASE IF NOT EXISTS soen6011";
+//        String query ="CREATE TABLE IF NOT EXISTS soen6011.applications (\n" +
+//                "  ID int NOT NULL AUTO_INCREMENT,\n" +
+//                "  JOBID int REFERENCES JOBS(ID),\n" +
+//                "  APPLICANT varchar(255) COLLATE utf8mb4_unicode_ci REFERENCES USERS(USERNAME), \n" +
+//                "  SUBMISSIONDATE date DEFAULT NULL,\n" +
+//                "  STATUS varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
+//                "  NOTIFY BOOLEAN DEFAULT FALSE, \n"+
+//                "  student_username varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n" +
+//                "  PRIMARY KEY (ID)\n" +
+//                ")";
+//        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
+//            PreparedStatement statement1 = connection.prepareStatement(drop);
+//            statement1.executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            throw new RuntimeException(e);
+//        }
+//        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
+//            PreparedStatement statement1 = connection.prepareStatement(query1);
+//            statement1.executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            throw new RuntimeException(e);
+//        }
+//        try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
+//            PreparedStatement statement = connection.prepareStatement(query);
+//            statement.executeUpdate();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     public static void addApplication(JobApplication application) throws SQLException {
@@ -129,7 +129,7 @@ public class ApplicationDao {
         ArrayList<String> applicants = new ArrayList<>();
 
         try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
-            String sql = "SELECT * FROM soen6011.applications where JOBID = ?";
+            String sql = "SELECT * FROM soen6011.applications where JOBID = ? and STATUS = \"PENDING\"";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, jobId);
             ResultSet resultSet = statement.executeQuery();
@@ -193,17 +193,19 @@ public class ApplicationDao {
         }
         return status;
     }
-    public static void updateStatus(String applicant, int jobId,String status) {
+    public static int updateStatus(String applicant, int jobId,String status) {
         String query = "Update applications set STATUS=?, Notify=true WHERE STUDENT_USERNAME = ? and JOBID = ?";
+        int num = 0;
         try (Connection connection = DriverManager.getConnection(Helper.url,Helper.uname,Helper.pass)) {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, status);
             statement.setString(2, applicant);
             statement.setInt(3,jobId);
-            statement.executeUpdate();
+            num = statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return num;
     }
     public static HashMap<Integer,String> getNotifications(String username) throws SQLException {
         HashMap<Integer,String> notification = new HashMap<>();

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { type MRT_ColumnDef } from "material-react-table";
+import { toast } from "react-toastify";
 import Table from "../../components/Table/Table";
 import {
   deleteEmployer,
@@ -48,29 +49,49 @@ const Employers = ({ selectedType, setSelectedType }: TableProps) => {
     []
   );
 
-  const handleSaveRecord = async ({ exitEditingMode, values }: any) => {
-    await updateEmployer(values)
+  const handleSaveRecord = async ({ row, exitEditingMode, values }: any) => {
+    const userID = row?.original?.username;
+    const newData = { ...row?.original, ...values };
+    await updateEmployer(newData)
       .then((res) => {
+        if (res && res.error) {
+          return toast.error(res.error);
+        }
         setTableData((tableData: any) =>
-          tableData?.map((row: any) => (row?.id === values.id ? values : row))
+          tableData?.map((row: any) =>
+            row?.username === userID ? newData : row
+          )
         );
-        console.log("Student Updated Successfully");
+        toast.success("Emplpoyer Updated Successfully");
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      })
       .finally(() => {
         exitEditingMode();
       });
   };
 
-  const handleDeleteRecord = async (id: string) => {
-    await deleteEmployer(id)
+  const handleDeleteRecord = async (row: any) => {
+    const { username } = row;
+    const payload = {
+      username,
+    };
+    await deleteEmployer(payload)
       .then((res) => {
+        if (res && res.error) {
+          return toast.error(res.error);
+        }
         setTableData((tableData) =>
-          tableData?.filter((row: any) => row?.id !== id)
+          tableData?.filter((row: any) => row?.username !== username)
         );
-        console.log("Student Deleted Successfully");
+        toast.success("Employer Deleted Successfully");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      });
   };
 
   useEffect(() => {
@@ -79,9 +100,11 @@ const Employers = ({ selectedType, setSelectedType }: TableProps) => {
       setLoading(true);
       try {
         const data = await fetchEmployersRegistered();
+        if (data.error) return toast.error(data.error);
         setTableData(data);
       } catch (error: any) {
         console.log(error.message);
+        toast.error(error.message);
       } finally {
         setFetchedData(true);
         setLoading(false);
