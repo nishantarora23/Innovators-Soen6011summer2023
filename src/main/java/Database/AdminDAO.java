@@ -19,12 +19,13 @@ public class AdminDAO {
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-		try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
+		/*try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+		 */
 	}
 
 	public static JSONArray getListOfStudents() {

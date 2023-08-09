@@ -10,11 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import Commons.Helper;
 import Database.AdminDAO;
 import Database.JobDAO;
 import Models.Job;
@@ -62,8 +57,6 @@ public class AdminServlet extends HttpServlet{
 		final String URL = req.getRequestURI();
 		String data = HttpUtil.readFromRequest(req);
 		JSONObject jsonObject = new JSONObject(data);
-		String payloadData = Helper.getPayload(req);
-		JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
 
 		if(URL.contains("updateEmployer")) {
 			String username = (String)jsonObject.get("username");
