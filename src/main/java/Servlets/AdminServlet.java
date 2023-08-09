@@ -123,15 +123,15 @@ public class AdminServlet extends HttpServlet{
 			String deadline = jsonObject.getString("deadline");
 			String description = jsonObject.getString("description");
 			String location = jsonObject.getString("location");
-			String name = jsonObject.isNull("username") ? null : jsonObject.getString("username");
+			String username = jsonObject.isNull("username") ? null : jsonObject.getString("username");
 			String qualifications = jsonObject.getString("qualifications");
 			String responsibilities = jsonObject.getString("responsibilities");
 			String salaryRange = jsonObject.getString("salaryRange");
 			String status = jsonObject.isNull("status") ? null : jsonObject.getString("status");
 			String title = jsonObject.getString("title");
-//			String username = jsonObject.getString("username");
+			String name = jsonObject.getString("name");
 			Job updatedJob = new Job(id, title, salaryRange, responsibilities, qualifications,
-					location, description, deadline, contractType, "", status,name);
+					location, description, deadline, contractType, name, status,username);
 			try
 			{
 				JobDAO.update(updatedJob);
