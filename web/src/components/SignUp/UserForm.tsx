@@ -132,11 +132,24 @@ const RoleForm = ({ page, setPage, formData, setFormData, intl }: Props) => {
           })}
         </Grid>
         <Grid container className="button-container">
-          <Button variant="contained" onClick={() => setPage(page - 1)}>
-            {intl.formatMessage({
-              id: "userForm.button.back",
-            })}
+          <Button
+            variant="contained"
+            className="back-button"
+            onClick={() => setPage(page - 1)}
+            style={{
+              backgroundColor: "#FF5733", // Custom background color
+              color: "#FFF", // Text color
+              fontWeight: "bold", // Bold text
+              borderRadius: "8px", // Rounded corners
+              padding: "10px 20px", // Padding
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Box shadow
+              transition: "background-color 0.3s, transform 0.2s", // Transition effects
+              cursor: "pointer", // Pointer cursor on hover
+            }}
+          >
+            &#8592; {intl.formatMessage({ id: "userForm.button.back" })}
           </Button>
+
           <Button
             variant="contained"
             type="submit"

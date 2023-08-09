@@ -43,6 +43,8 @@ const MyJobInfo = () => {
   });
   const [jobsList, setJobsList] = useState<Array<JobInfo>>([]);
 
+  
+
   useEffect(() => {
     fetchJobsList(); // Fetch the jobs list on component mount
   }, []);

@@ -8,17 +8,20 @@ import {
   IconButton,
   Avatar,
 } from "@mui/material";
-import { getCompany, getFullName, getAddress, getEmail, getDOB} from "../../../services/userInfoService";
-import { Link, useNavigate } from "react-router-dom";
 import {
-  Bookmark
-} from "@mui/icons-material";
-import {Person4,
-LogoutOutlined,
-} from "@mui/icons-material";
-import CreateIcon from '@mui/icons-material/Create';
-import PersonIcon from '@mui/icons-material/Person';
+  getCompany,
+  getFullName,
+  getAddress,
+  getEmail,
+  getDOB,
+} from "../../../services/userInfoService";
+import { Link, useNavigate } from "react-router-dom";
+import { Bookmark } from "@mui/icons-material";
+import { Person4, LogoutOutlined } from "@mui/icons-material";
+import CreateIcon from "@mui/icons-material/Create";
+import PersonIcon from "@mui/icons-material/Person";
 import { indigo } from "@mui/material/colors";
+
 
 const EmployerHome = () => {
   const company = getCompany();
@@ -28,10 +31,10 @@ const EmployerHome = () => {
     localStorage.clear();
     navigate("/login");
   };
-  
+
   return (
     <>
-    <Grid
+      <Grid
         container
         className="userProfile-container end-container"
         sx={{
@@ -126,27 +129,34 @@ const EmployerHome = () => {
               borderRadius: "10px",
               border: "1px solid #c4c4c4",
               height: "70vh",
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)", // Adding a subtle shadow
+              transition: "box-shadow 0.3s ease-in-out",
+              "&:hover": {
+                boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)", // Slightly elevated shadow on hover
+              },
             }}
           >
             <CardContent>
               <Typography
                 variant="h4"
-                sx={{ textTransform: "capitalize", fontWeight: "bold" }}
+                sx={{
+                  textTransform: "capitalize",
+                  fontWeight: "bold",
+                  marginBottom: 1,
+                }}
               >
                 {getFullName()}
               </Typography>
-              <Typography variant="h6">
-                HR at {company ? company : 'Amazon'}
+              <Typography variant="h6" color="primary" gutterBottom>
+                HR at {company || "Amazon"}
               </Typography>
-              <Typography sx={{ color: "#868686" }}>
+              <Typography sx={{ color: "#868686", marginBottom: 1 }}>
                 {getAddress()}
               </Typography>
-              <Typography sx={{ color: "#868686" }}>
+              <Typography sx={{ color: "#868686", marginBottom: 1 }}>
                 {getEmail()}
               </Typography>
-              <Typography sx={{ color: "#868686" }}>
-                {getDOB()}
-              </Typography>
+              <Typography sx={{ color: "#868686" }}>{getDOB()?.substring(0, 12)}</Typography>
             </CardContent>
           </Card>
         </Grid>
