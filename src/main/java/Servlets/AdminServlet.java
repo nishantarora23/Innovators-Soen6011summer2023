@@ -135,7 +135,7 @@ public class AdminServlet extends HttpServlet {
 			String name = jsonObject.getString("name");
 			Job updatedJob = new Job(id, title, salaryRange, responsibilities, qualifications,
 					location, description, deadline, contractType, name, status,username);
-			try
+			try {
 				JobDAO.update(updatedJob);
 			} catch (Exception e) {
 				response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
