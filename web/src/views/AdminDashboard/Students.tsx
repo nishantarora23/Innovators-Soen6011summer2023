@@ -13,7 +13,7 @@ const Students = ({ selectedType, setSelectedType }: TableProps) => {
   const [tableData, setTableData] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [fetchedData, setFetchedData] = useState(false);
-
+  // Define the columns for the table
   const columns = useMemo<MRT_ColumnDef[]>(
     () => [
       {
@@ -44,10 +44,13 @@ const Students = ({ selectedType, setSelectedType }: TableProps) => {
     ],
     []
   );
-
+  // Function to handle saving a record
   const handleSaveRecord = async ({ row, exitEditingMode, values }: any) => {
+    // Get user ID from the row data
     const userID = row?.original?.username;
+    // Merge new data with the existing row data
     const newData = { ...row?.original, ...values };
+    // Attempt to update the student record
     await updateStudent(newData)
       .then((res) => {
         if (res && res.error) {
@@ -68,7 +71,7 @@ const Students = ({ selectedType, setSelectedType }: TableProps) => {
         exitEditingMode();
       });
   };
-
+  // Function to handle deleting a record
   const handleDeleteRecord = async (row: any) => {
     const { username } = row;
     const payload = {

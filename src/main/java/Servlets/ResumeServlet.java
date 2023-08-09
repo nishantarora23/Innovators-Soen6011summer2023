@@ -19,55 +19,54 @@ import java.io.*;
 
 @WebServlet(name = "ResumeServlet", urlPatterns = { "/resume", "/deleteResume", "/viewResume" })
 
-public class ResumeServlet  extends HttpServlet {
-
+public class ResumeServlet extends HttpServlet {
+	// Handle POST requests
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		final String URL = request.getRequestURI();
 		JsonObject jsonPayload = new Gson().fromJson(Helper.getPayload(request), JsonObject.class);
 		String username = jsonPayload.get("username").getAsString();
-		String prefix =  getServletContext().getRealPath("/WEB-INF/classes/Resume" );
-		
-		if(URL.contains("deleteResume")) {
-			if(ResumeUtility.deleteResume(prefix, username)) {
+		String prefix = getServletContext().getRealPath("/WEB-INF/classes/Resume");
+		// Delete user's resume file
+		if (URL.contains("deleteResume")) {
+			if (ResumeUtility.deleteResume(prefix, username)) {
 				response.setStatus(HttpServletResponse.SC_OK);
 				return;
-			}
-			else {
+			} else {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unable to delete file");
 				return;
 			}
-		}
-		else if(URL.contains("viewResume")) {
-	        File pdfFile = new File(prefix, username + ".pdf");
-	        
-	        if (pdfFile.exists()) {
-	            response.setContentType("application/pdf");
-	            response.setHeader("Content-Disposition", "inline; filename=\"" + pdfFile.getName() + "\"");
-	            
-	            try (InputStream inputStream = new FileInputStream(pdfFile);
-	                 OutputStream outputStream = response.getOutputStream()) {
-	                 
-	                byte[] buffer = new byte[4096];
-	                int bytesRead;
-	                
-	                while ((bytesRead = inputStream.read(buffer)) != -1) {
-	                    outputStream.write(buffer, 0, bytesRead);
-	                }
-	            }
-	        } else {
-	            response.getWriter().write("PDF file not found.");
-	        }
-		}
+		} else if (URL.contains("viewResume")) {
+			File pdfFile = new File(prefix, username + ".pdf");
+			// Stream the PDF file for viewing in the browser
+			if (pdfFile.exists()) {
+				response.setContentType("application/pdf");
+				response.setHeader("Content-Disposition", "inline; filename=\"" + pdfFile.getName() + "\"");
 
+				try (InputStream inputStream = new FileInputStream(pdfFile);
+						OutputStream outputStream = response.getOutputStream()) {
+
+					byte[] buffer = new byte[4096];
+					int bytesRead;
+
+					while ((bytesRead = inputStream.read(buffer)) != -1) {
+						outputStream.write(buffer, 0, bytesRead);
+					}
+				}
+			} else {
+				response.getWriter().write("PDF file not found.");
+			}
+		}
 
 	}
 
+	// Handle GET requests
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String username = request.getParameter("username");
-		String prefix =  getServletContext().getRealPath("/WEB-INF/classes/Resume" );
+		String prefix = getServletContext().getRealPath("/WEB-INF/classes/Resume");
 		String filename = username + ".pdf";
 
 		File file = new File(prefix, filename);

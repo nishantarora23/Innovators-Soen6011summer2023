@@ -1,6 +1,8 @@
 const BASE_URL = "http://localhost:8080";
 
-// Students Enrolled
+// Functions for managing students enrolled
+
+// Fetches a list of enrolled students
 
 export const fetchStudentEnrolled = async () => {
   let URL = `${BASE_URL}/careerconnect/admin/listOfStudent`;
@@ -16,8 +18,9 @@ export const fetchStudentEnrolled = async () => {
     return { error: "Something went wrong!" };
   }
 };
-
+// Updates a student's information
 export const updateStudent = async (payload) => {
+  // Construct the URL for updating student data
   let URL = `${BASE_URL}/careerconnect/admin/updateStudent`;
   try {
     const response = await fetch(URL, {
@@ -38,8 +41,9 @@ export const updateStudent = async (payload) => {
     return { error: "Something went wrong!" };
   }
 };
-
+// Deletes a student's record
 export const deleteStudent = async (payload) => {
+  // Construct the URL for deleting student data
   let URL = `${BASE_URL}/careerconnect/admin/deleteStudent`;
   try {
     const response = await fetch(URL, {

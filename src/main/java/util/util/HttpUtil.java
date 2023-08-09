@@ -11,6 +11,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 public class HttpUtil {
+    // Read the content from the provided HttpServletRequest
 
     public static String readFromRequest(HttpServletRequest req) throws IOException {
         // Read from request
@@ -24,6 +25,7 @@ public class HttpUtil {
         return buffer.toString();
 
     }
+    // Convert a ResultSet to a JSONArray of JSON objects
 
     public static JSONArray convertResultSetToArray(ResultSet rs) throws SQLException {
         JSONArray json = new JSONArray();

@@ -15,12 +15,15 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 @WebServlet("/login")
-public class LoginServlet extends HttpServlet{
+public class LoginServlet extends HttpServlet {
+    // Handle POST requests for user login
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String payloadData = Helper.getPayload(request);
         User user = null;
         JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
+
+        // Get user information from the DAO based on provided username and password
 
         user = UserDAO.getUser(jsonPayload.get("username").getAsString(), jsonPayload.get("password").getAsString());
         Gson gson = new Gson();
