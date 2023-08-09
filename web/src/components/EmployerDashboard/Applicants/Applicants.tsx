@@ -1,35 +1,48 @@
-import { injectIntl } from "react-intl";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
   Typography,
   Button,
   Grid,
+  Avatar,
+  IconButton,
   Box,
   Stack,
   Chip,
-  IconButton,
-  Avatar,
 } from "@mui/material";
-import { getCompany, getFullName, getAddress, getEmail, getDOB} from "../../../services/userInfoService";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-    Person4,
-LogoutOutlined,
-  Bookmark
+  Person4,
+  LogoutOutlined,
+  Bookmark,
+  Create,
+  Person,
+  AttachMoney,
+  LocationOn,
 } from "@mui/icons-material";
-import CreateIcon from '@mui/icons-material/Create';
-import PersonIcon from '@mui/icons-material/Person';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { indigo } from "@mui/material/colors";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import CreateIcon from "@mui/icons-material/Create";
+import PersonIcon from "@mui/icons-material/Person";
+import SchoolIcon from "@mui/icons-material/School";
+import {
+  getCompany,
+  getFullName,
+  getAddress,
+  getEmail,
+  getDOB,
+  getUserName,
+} from "../../../services/userInfoService";
+import {
+  getApplicats,
+  rejectApplication,
+  getApplicantResume,
+  selectCandidateForInterview,
+} from "../../../services/userService";
 
-import { getMyJobOffers, deleteJobOffer, getApplicats, getApplicantResume, selectCandidateForInterview, deleteApplication, rejectApplication } from "../../../services/userService";
-import { getUserName } from "../../../services/userInfoService";
-
-import './Applicants.scss';
-import { useEffect, useState } from "react";
-import axios from "axios";
+import "./Applicants.scss";
+import { injectIntl } from "react-intl";
+import { styled } from "@mui/material/styles";
 
 const styles = {
   container: {
@@ -62,7 +75,7 @@ const styles = {
   cardContainer: {
     display: "flex-block",
     flexWrap: "wrap",
-    width: '100%'
+    width: "100%",
   },
   card: {
     flex: 1,
@@ -70,7 +83,7 @@ const styles = {
     margin: "10px",
     borderRadius: "10px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    cursor: "pointer"
+    cursor: "pointer",
   },
   avatar: {
     width: 80,
@@ -95,14 +108,45 @@ interface Applicants {
   fullName?: string;
   username?: string;
   password?: string;
-  user_role?: string;
+  userRole?: string;
   role_id?: string;
   email?: string;
   address?: string;
   dob?: string;
-  college_name?: string;
-};
+  collegeName?: string;
+}
 
+const StyledPrimaryChip = styled(Chip)(({ theme }) => ({
+  fontSize: "16px",
+  fontWeight: "bold",
+  padding: "8px 16px",
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.common.white,
+  "&:hover": {
+    backgroundColor: theme.palette.primary.dark,
+  },
+}));
+const StyledErrorChip = styled(Chip)(({ theme }) => ({
+  fontSize: "16px",
+  fontWeight: "bold",
+  padding: "8px 16px",
+  backgroundColor: theme.palette.error.main,
+  color: theme.palette.common.white,
+  "&:hover": {
+    backgroundColor: theme.palette.error.dark,
+  },
+}));
+
+const StyledSuccessChip = styled(Chip)(({ theme }) => ({
+  fontSize: "1.2rem",
+  fontWeight: "bold",
+  padding: "10px 20px",
+  backgroundColor: theme.palette.success.main,
+  color: theme.palette.common.white,
+  "&:hover": {
+    backgroundColor: theme.palette.success.dark,
+  },
+}));
 
 const Applicants = () => {
   const company = getCompany();
@@ -117,42 +161,47 @@ const Applicants = () => {
   };
 
   useEffect(() => {
-    const username :any = getUserName();
+    const username: any = getUserName();
     getApplicats(username, id?.charAt(1))
       .then((res) => {
         setApplicants(res.data);
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   }, []);
 
   const handleReject = (username: any) => {
     rejectApplication(username, id?.charAt(1))
-        .then((res) => {alert("Applicant rejected"); window.location.reload()})
-        .catch(err => console.error(err))
-  }
+      .then((res) => {
+        alert("Applicant rejected");
+        window.location.reload();
+      })
+      .catch((err) => console.error(err));
+  };
 
-  const handleViewResume =  async (username : string | undefined) => {
-    if(username){
+  const handleViewResume = async (username: string | undefined) => {
+    if (username) {
       getApplicantResume(username)
-        .then(res => {
-          const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
+        .then((res) => {
+          const pdfBlob = new Blob([res.data], { type: "application/pdf" });
           const pdfUrl = URL.createObjectURL(pdfBlob);
 
-          window.open(pdfUrl, '_blank');
+          window.open(pdfUrl, "_blank");
         })
-        .catch(err => console.error(err));
+        .catch((err) => console.error(err));
     }
-  }
+  };
 
-  const handleAcceptApplicant = (username : any) => {
+  const handleAcceptApplicant = (username: any) => {
     selectCandidateForInterview(username, id?.charAt(1))
-        .then((res) => {alert("Applicant Accepted")})
-        .catch(err => console.error(err))
-  }
+      .then((res) => {
+        alert("Applicant Accepted");
+      })
+      .catch((err) => console.error(err));
+  };
 
   return (
     <>
-    <Grid
+      <Grid
         container
         className="userProfile-container end-container"
         sx={{
@@ -194,7 +243,7 @@ const Applicants = () => {
           />
         </IconButton>
       </Grid>
-      <Grid container spacing={1}>
+      <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={5} lg={3}>
           <Card
             sx={{
@@ -251,21 +300,100 @@ const Applicants = () => {
           >
             <div>
               <Box sx={styles.cardContainer}>
-                {applicants?.map((offer : Applicants) => (
-                  <Card key={offer?.id} sx={styles.card}>
-                    <Typography variant="subtitle1">{offer?.fullName}</Typography>
-                    <Typography variant="body2">{offer?.user_role}</Typography>
-                    <Typography className="location" variant="body2"> {offer?.email}</Typography>
-                    <Typography variant="subtitle1"> <LocationOnIcon/>{offer?.address}</Typography>
-                    <Typography variant="body2">{offer?.dob}</Typography>
-                    <Typography variant="body2">{offer?.college_name}</Typography>
-                    <Stack direction="row" spacing={1}>
-                      <Chip label="View Resume" color="primary" onClick={() => handleViewResume(offer?.username)}/>
-                      <Chip label="Reject" color="warning" onClick={() => handleReject(offer?.username)}/>
-                      <Chip label="Accept Application" color="success" onClick={() => handleAcceptApplicant(offer?.username)}/>
-                    </Stack>
+                {applicants?.map((offer: Applicants) => (
+                  <Card
+                    key={offer?.id}
+                    sx={{
+                      textAlign: "left",
+                      margin: "10px",
+                      padding: "20px",
+                      borderRadius: "10px",
+                      border: "1px solid #c4c4c4",
+                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)", // Adding a subtle shadow
+                      transition: "box-shadow 0.3s ease-in-out",
+                      "&:hover": {
+                        boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)", // Slightly elevated shadow on hover
+                      },
+                    }}
+                  >
+                    <CardContent>
+                      <Typography
+                        variant="h6"
+                        sx={{ fontSize: "1.7rem", fontWeight: "bold" }}
+                      >
+                        {offer?.fullName}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontSize: "1.2rem",
+                          color: "#3f51b5",
+                          marginBottom: "1rem",
+                        }}
+                      >
+                        {offer?.email}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontSize: "1.3rem",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <LocationOn
+                          sx={{ fontSize: "1.6rem", marginRight: "8px" }}
+                        />
+                        {offer?.address}
+                      </Typography>
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "0.5rem",
+                          marginTop: "0.5rem",
+                        }}
+                      >
+                        <SchoolIcon
+                          sx={{
+                            fontSize: "1.6rem",
+                            marginRight: "8px",
+                            color: "#868686",
+                          }}
+                        />
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            fontSize: "1.2rem",
+                            color: "#868686",
+                            marginLeft: "4px", // Add left margin for spacing
+                          }}
+                        >
+                          {offer?.collegeName}
+                        </Typography>
+                      </Box>
+                      <Stack
+                        direction="row"
+                        spacing={3}
+                        sx={{ marginTop: "1rem" }}
+                      >
+                        <StyledPrimaryChip
+                          label="View Resume"
+                          onClick={() => handleViewResume(offer?.username)}
+                        />
+                        <StyledErrorChip
+                          label="Reject"
+                          onClick={() => handleReject(offer?.username)}
+                        />
+                        <StyledSuccessChip
+                          label="Accept Application"
+                          onClick={() => handleAcceptApplicant(offer?.username)}
+                        />
+                      </Stack>
+                    </CardContent>
                   </Card>
-               ))}
+                ))}
               </Box>
             </div>
           </Card>
