@@ -11,10 +11,10 @@ import Models.User;
 public class EmailSender {
 
     public static void sendEmail(User user, Job job) {
-    	final String senderEmail = "abc@gmail.com"; // Replace with your sender email
+        final String senderEmail = "abc@gmail.com"; // Replace with your sender email
         final String senderPassword = "password"; // Replace with your sender email password
         final String recipientEmail = user.getEmail(); // Replace with recipient email
-        
+
         // Set up properties for the email server
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
@@ -42,17 +42,17 @@ public class EmailSender {
             // Set the email subject and content
             message.setSubject("Important Update Regarding Your Application");
             message.setText("Dear " + user.getFullName() + ",\r\n"
-            	    + "\r\n"
-            	    + "Your application for " + job.getTitle() + " at " + job.getName() + " has been updated. Please log in to CareerConnect for more details.\r\n"
-            	    + "\r\n"
-            	    + "Best regards,\r\n"
-            	    + "CareerConnect Team\r\n"
-            	    + "CareerConnect Support\r\n"
-            	    + "Email: support@careerconnect.com\r\n"
-            	    + "Phone: +123-456-7890\r\n"
-            	    + "\r\n\n"
-            	    + "***This is an automatically generated message from the system; please do not email back***");
-
+                    + "\r\n"
+                    + "Your application for " + job.getTitle() + " at " + job.getName()
+                    + " has been updated. Please log in to CareerConnect for more details.\r\n"
+                    + "\r\n"
+                    + "Best regards,\r\n"
+                    + "CareerConnect Team\r\n"
+                    + "CareerConnect Support\r\n"
+                    + "Email: support@careerconnect.com\r\n"
+                    + "Phone: +123-456-7890\r\n"
+                    + "\r\n\n"
+                    + "***This is an automatically generated message from the system; please do not email back***");
 
             // Send the email
             Transport.send(message);
@@ -66,5 +66,3 @@ public class EmailSender {
 
     }
 }
-
-
