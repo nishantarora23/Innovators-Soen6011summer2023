@@ -1,6 +1,7 @@
 plugins {
 	id 'com.adarshr.test-logger' version '3.2.0'
 	id 'org.unbroken-dome.test-sets' version '4.0.0'
+	id 'jacoco-report-aggregation'
     id 'java'
     id 'war'
 }
@@ -47,6 +48,13 @@ configurations {
 
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
+}
+
+jacocoTestReport {
+    reports {
+        html.required = true
+		html.destination file("${buildDir}/jacoco")
+    }
 }
 
 dependencies {
