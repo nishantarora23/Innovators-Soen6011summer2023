@@ -15,14 +15,27 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
-import MuiAlert, { AlertColor } from '@mui/material/Alert';
+import MuiAlert, { AlertColor } from "@mui/material/Alert";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { indigo } from "@mui/material/colors";
-import { CloudUpload, Person4, CloudDownload, Delete } from "@mui/icons-material";
+import {
+  CloudUpload,
+  Person4,
+  CloudDownload,
+  Delete,
+} from "@mui/icons-material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
-import { getEmail, getFullName, getUserInfo, getUserName, getUserRole } from "../../../services/userInfoService";
-import resumeBuilder from '../../../assets/resume_builder.jpg';
-import networking from "../../../assets/networking.jpg"
+import {
+  getDOB,
+  getEmail,
+  getFullName,
+  getUserInfo,
+  getUserName,
+  getUserRole,
+} from "../../../services/userInfoService";
+import resumeBuilder from "../../../assets/resume_builder.jpg";
+import networking from "../../../assets/networking.jpg";
+import success from "../../../assets/success.jpeg";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../../constants";
@@ -61,13 +74,14 @@ const styles = {
   },
   card: {
     flex: 1,
-    padding: "20px",
-    margin: "10px",
-    borderRadius: "10px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    padding: "10px",
+    margin: "5px",
+    borderRadius: "5px",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     maxWidth: "300px",
-    cursor: "pointer"
+    cursor: "pointer",
   },
+
   avatar: {
     width: 80,
     height: 80,
@@ -101,11 +115,11 @@ const StudentDetails = () => {
   const [resumeSnackbar, setResumeSnackbar] = useState<ResumeSnackbar>({
     open: false,
     severity: "info",
-    message: ""
+    message: "",
   });
 
   // Formatting Date of Birth
-  const formattedDOB = getDOB()?.substring(0,11);
+  const formattedDOB = getDOB()?.substring(0, 11);
 
   // Placeholder data for job recommendations, alumni success stories, and featured workshops and webinars
   const jobRecommendations = [
@@ -125,8 +139,9 @@ const StudentDetails = () => {
       role: "Software Engineer",
       company: "Tech Innovations",
       location: "City",
-      testimonial: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-      image: "https://via.placeholder.com/300x180", // Replace with actual alumni photo
+      testimonial:
+        "Through the platform's intuitive portal, I secured an amazing job opportunity, making my transition from student to professional a breeze",
+      image: success, // Replace with actual alumni photo
     },
     // Add more alumni success stories here...
   ];
@@ -178,74 +193,83 @@ const StudentDetails = () => {
     console.log(event);
     if (event?.target?.files?.length) {
       const formData = new FormData();
-      formData.append('username', getUserName() ?? "");
-      formData.append('fullName', getFullName() ?? "");
-      formData.append('email', getEmail() ?? "");
-      formData.append('userRole', getUserRole() ?? "");
-      formData.append('resume', event.target.files[0]);
-      axios.post(`${API_URL}/upload-resume/${getUserName()}`, formData).then(() => {
-        setResumeSnackbar({
-          open: true,
-          severity: "success",
-          message: "Resume uploaded sucessfully."
+      formData.append("username", getUserName() ?? "");
+      formData.append("fullName", getFullName() ?? "");
+      formData.append("email", getEmail() ?? "");
+      formData.append("userRole", getUserRole() ?? "");
+      formData.append("resume", event.target.files[0]);
+      axios
+        .post(`${API_URL}/upload-resume/${getUserName()}`, formData)
+        .then(() => {
+          setResumeSnackbar({
+            open: true,
+            severity: "success",
+            message: "Resume uploaded sucessfully.",
+          });
+        })
+        .catch((error) => {
+          setResumeSnackbar({
+            open: true,
+            severity: "error",
+            message: "Resume upload failed.",
+          });
+          console.log(error);
         });
-      }).catch((error) => {
-        setResumeSnackbar({
-          open: true,
-          severity: "error",
-          message: "Resume upload failed."
-        });
-        console.log(error);
-      });
     }
   };
 
   const handleResumeDownload = () => {
     const payload = {
-      username: getUserName()
-    }
-    axios.post(`${API_URL}/viewResume`, payload, { responseType: 'blob' }) .then((response) => {
-      const url = window.URL.createObjectURL(new Blob([response.data])); // Create a Blob from the response data
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'resume.pdf'; // Set the desired filename for the downloaded file
-      document.body.appendChild(a);
-      a.click();
-      a.remove(); // Clean up the temporary element
-      window.URL.revokeObjectURL(url);
-      setResumeSnackbar({
-        open: true,
-        severity: 'success',
-        message: 'Resume downloaded successfully.',
+      username: getUserName(),
+    };
+    axios
+      .post(`${API_URL}/viewResume`, payload, { responseType: "blob" })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data])); // Create a Blob from the response data
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "resume.pdf"; // Set the desired filename for the downloaded file
+        document.body.appendChild(a);
+        a.click();
+        a.remove(); // Clean up the temporary element
+        window.URL.revokeObjectURL(url);
+        setResumeSnackbar({
+          open: true,
+          severity: "success",
+          message: "Resume downloaded successfully.",
+        });
+      })
+      .catch(() => {
+        setResumeSnackbar({
+          open: true,
+          severity: "error",
+          message: "Resume download failed. You may not have any resume",
+        });
       });
-    }).catch(() => {
-      setResumeSnackbar({
-        open: true,
-        severity: "error",
-        message: "Resume download failed. You may not have any resume"
-      });
-    })
-  }
+  };
 
   const handleResumeDelete = () => {
     const payload = {
-      username: getUserName()
-    }
-    axios.post(`${API_URL}/deleteResume`, payload).then(() => {
-      setResumeSnackbar({
-        open: true,
-        severity: "success",
-        message: "Resume delete sucessfully."
+      username: getUserName(),
+    };
+    axios
+      .post(`${API_URL}/deleteResume`, payload)
+      .then(() => {
+        setResumeSnackbar({
+          open: true,
+          severity: "success",
+          message: "Resume delete sucessfully.",
+        });
+      })
+      .catch(() => {
+        setResumeSnackbar({
+          open: true,
+          severity: "error",
+          message: "Resume delete failed.",
+        });
       });
-    }).catch(() => {
-      setResumeSnackbar({
-        open: true,
-        severity: "error",
-        message: "Resume delete failed."
-      });
-    })
-  }
- 
+  };
+
   return (
     <Box component="div" sx={styles.container}>
       <Snackbar
@@ -255,15 +279,15 @@ const StudentDetails = () => {
           setResumeSnackbar({
             open: false,
             severity: "info",
-            message: ""
-          })
+            message: "",
+          });
         }}
         anchorOrigin={{
           vertical: "top",
           horizontal: "center",
         }}
         sx={{
-          marginTop: "5rem"
+          marginTop: "5rem",
         }}
       >
         <MuiAlert severity={resumeSnackbar.severity}>
@@ -451,11 +475,15 @@ const StudentDetails = () => {
               alt={alumni.name}
               sx={styles.media}
             />
-            <Typography variant="subtitle1">{alumni.name}</Typography>
-            <Typography variant="body2">
+            <Typography variant="subtitle1" style={{ marginBottom: "5px" }}>
+              {alumni.name}
+            </Typography>
+            <Typography variant="body2" style={{ marginBottom: "5px" }}>
               {alumni.role} at {alumni.company}
             </Typography>
-            <Typography variant="body2">{alumni.testimonial}</Typography>
+            <Typography variant="body2" style={{ marginBottom: "5px" }}>
+              {alumni.testimonial}
+            </Typography>
           </Card>
         ))}
       </Box>

@@ -1,5 +1,6 @@
 package Servlets;
 
+import Commons.Helper;
 import Database.JobDAO;
 import Models.Job;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ import static org.mockito.Mockito.*;
 public class JobServletTest{
 
     @Test
-    public void testPost() throws IOException, ServletException {
+    public void testGet() throws IOException, ServletException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         Job job =new Job();
@@ -37,8 +38,22 @@ public class JobServletTest{
             verify(request, atLeast(1)).getParameter("username");
             writer.flush();
             assertTrue(stringWriter.toString().contains(job.getTitle()));
-        } catch (ServletException e) {
-            throw e;
+        }
+
+    }
+    @Test
+    public void testPost() throws IOException {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        try (MockedStatic<Helper> utilities = Mockito.mockStatic(Helper.class)) {
+            utilities.when(() -> Helper.getPayload(any())).thenReturn("{\"ACTION\":\"ADD\"}");
+
+            when(request.getParameter("id")).thenReturn("2");
+
+            try (MockedStatic<JobDAO> ignored = Mockito.mockStatic(JobDAO.class)) {
+                new JobServlet().doPost(request, response);
+            }
+            verify(response, atLeast(1)).setStatus(HttpServletResponse.SC_OK);
         }
 
     }

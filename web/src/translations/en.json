@@ -18,7 +18,7 @@
   "userForm.form.label.dob": "Date of Birth*",
   "userForm.form.label.cName": "Company Name*",
   "userForm.form.label.cEmail": "Company Email*",
-  "userForm.form.label.collegeName":"College/University Name*",
+  "userForm.form.label.collegeName": "College/University Name*",
   "userForm.form.error.address.required": "Address is required",
   "userForm.form.error.fullName.required": "Name is required",
   "userForm.form.error.username.required": "Username is required",
@@ -49,7 +49,7 @@
   "employerForm.addJobOffer.label.contractType": "Contract Type",
   "employerForm.addJobOffer.label.deadline": "Deadline to Apply",
   "employerForm.addJobOffer.button.add": "Add Job Offer",
-  "employerForm.addJobOffer.button.back":"Back",
+  "employerForm.addJobOffer.button.back": "Back",
   "employerForm.addJobOffer.button.update": "Update Job Offer",
   "employerForm.addJobOffer.error.title.required": "Job title is required",
   "employerForm.addJobOffer.error.description.required": "Description is required",
@@ -70,5 +70,12 @@
   "global.copyright": "Copyright © CAREERCONNECT 2023",
   "global.my_dashboard": "Back To Dashboard",
   "global.back_to_home": "Back To Home Page",
-  "navigation.dashboard": "Dashboard"
+  "navigation.dashboard": "Dashboard",
+  "disclaimerForm.title": "Disclaimer Agreement",
+  "disclaimerForm.label": "Before you proceed, please carefully read and acknowledge the following disclaimers:",
+  "disclaimerForm.website.title": "Website Usage Disclaimer",
+  "disclaimerForm.website.description": "By using this website, you understand and agree that the information provided is for general informational purposes only. The website owner is not responsible for any inaccuracies or omissions in the content.",
+  "disclaimerForm.professional.title": "Professional Advice Disclaimer",
+  "disclaimerForm.professional.description": "Any information provided on this website is not intended as professional advice. You should consult with a qualified professional for any specific concerns or advice related to your individual situation.",
+  "disclaimerForm.agree.label": "I have read and understood the disclaimers and agree to their terms."  
 }

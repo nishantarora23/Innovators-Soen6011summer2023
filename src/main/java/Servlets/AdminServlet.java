@@ -10,11 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import Commons.Helper;
 import Database.AdminDAO;
 import Database.JobDAO;
 import Models.Job;
@@ -66,8 +61,6 @@ public class AdminServlet extends HttpServlet {
 		final String URL = req.getRequestURI();
 		String data = HttpUtil.readFromRequest(req);
 		JSONObject jsonObject = new JSONObject(data);
-		String payloadData = Helper.getPayload(req);
-		JsonObject jsonPayload = new Gson().fromJson(payloadData, JsonObject.class);
 
 		// Based on the URL, determine the operation to perform
 		if (URL.contains("updateEmployer")) {
@@ -133,16 +126,16 @@ public class AdminServlet extends HttpServlet {
 			String deadline = jsonObject.getString("deadline");
 			String description = jsonObject.getString("description");
 			String location = jsonObject.getString("location");
-			String name = jsonObject.isNull("username") ? null : jsonObject.getString("username");
+			String username = jsonObject.isNull("username") ? null : jsonObject.getString("username");
 			String qualifications = jsonObject.getString("qualifications");
 			String responsibilities = jsonObject.getString("responsibilities");
 			String salaryRange = jsonObject.getString("salaryRange");
 			String status = jsonObject.isNull("status") ? null : jsonObject.getString("status");
 			String title = jsonObject.getString("title");
-			// String username = jsonObject.getString("username");
+			String name = jsonObject.getString("name");
 			Job updatedJob = new Job(id, title, salaryRange, responsibilities, qualifications,
-					location, description, deadline, contractType, "", status, name);
-			try {
+					location, description, deadline, contractType, name, status,username);
+			try
 				JobDAO.update(updatedJob);
 			} catch (Exception e) {
 				response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
