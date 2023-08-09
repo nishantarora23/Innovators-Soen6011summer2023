@@ -13,7 +13,6 @@ public class JobDAO {
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
-        String drop = "DROP TABLE soen6011.jobs";
             String query1 = "CREATE DATABASE IF NOT EXISTS soen6011";
             String query = "CREATE TABLE IF NOT EXISTS soen6011.jobs (\n" +
                     "  ID int NOT NULL AUTO_INCREMENT,\n" +
@@ -29,13 +28,6 @@ public class JobDAO {
                     "  STATUS varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT \"active\",\n" +
                     "  PRIMARY KEY (ID)\n" +
                     ")";
-        try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname,Helper.pass)) {
-            PreparedStatement statement1 = connection.prepareStatement(drop);
-            statement1.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
             try (Connection connection = DriverManager.getConnection(Helper.url, Helper.uname, Helper.pass)) {
                 PreparedStatement statement1 = connection.prepareStatement(query1);
                 statement1.executeUpdate();
